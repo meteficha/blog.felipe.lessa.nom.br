@@ -9,8 +9,8 @@ body {
 }
 
 div#header {
-    margin-bottom: 30px;
-    padding: 0px 0px 12px 0px;
+    margin-bottom: 24px;
+    padding: 12px 0px 12px 0px;
 }
 
 div#header a {
@@ -135,7 +135,7 @@ div.info {
     color: #555;
     font-size: 14pt;
     font-style: italic;
-    margin-top: -18px;
+    margin-top: -12px;
 }
 
 .post-list {
@@ -185,10 +185,6 @@ div.info {
 
 .post-teaser h1, .post-teaser h2, .post-teaser h3, .post-teaser h4, .post-teaser h5, .post-teaser h6 {
     margin: 12px 0;
-}
-
-.post-teaser h2 {
-    margin-bottom: 24px;
 }
 
 .post-teaser .post-title {
