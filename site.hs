@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-import Data.Monoid (mappend)
+import Data.Monoid ((<>))
 import Hakyll
 
 main :: IO ()
@@ -21,6 +21,7 @@ main = hakyll $ do
   match "posts/*" $ do
     route $ setExtension "html"
     compile $ pandocCompiler
+      >>= saveSnapshot "content"
       >>= loadAndApplyTemplate "templates/post.html"  postCtx
       >>= loadAndApplyTemplate "templates/default.html" postCtx
       >>= relativizeUrls
@@ -28,10 +29,10 @@ main = hakyll $ do
   create ["archive.html"] $ do
     route idRoute
     compile $ do
-      posts <- recentFirst =<< loadAll "posts/*"
+      posts <- recentFirst =<< loadAllSnapshots "posts/*" "content"
       let archiveCtx =
-            listField "posts" postCtx (return posts) `mappend`
-            constField "title" "Archives"            `mappend`
+            listField "posts" postCtx (return posts) <>
+            constField "title" "Archives"            <>
             defaultContext
 
       makeItem ""
@@ -42,10 +43,10 @@ main = hakyll $ do
   match "index.html" $ do
     route idRoute
     compile $ do
-      posts <- recentFirst =<< loadAll "posts/*"
+      posts <- recentFirst =<< loadAllSnapshots "posts/*" "content"
       let indexCtx =
-            listField "posts" postCtx (return posts) `mappend`
-            constField "title" "Home"                `mappend`
+            listField "posts" postCtx (return posts) <>
+            constField "title" "Home"                <>
             defaultContext
 
       getResourceBody
@@ -56,8 +57,41 @@ main = hakyll $ do
   match "templates/*" $
     compile templateCompiler
 
+  create ["atom.xml"] $
+    renderFeed renderAtom
+
+  create ["rss.xml"] $
+    renderFeed renderRss
+
 
 postCtx :: Context String
 postCtx =
-  dateField "date" "%B %e, %Y" `mappend`
+  dateField "date" "%B %e, %Y"                 <>
+  mapContext makePreview (bodyField "preview") <>
   defaultContext
+
+
+makePreview :: String -> String
+makePreview = (++ "...") . unwords . take 40 . words . stripTags
+
+
+----------------------------------------------------------------------
+
+
+renderFeed :: (FeedConfiguration -> Context String -> [Item String] -> Compiler (Item String)) -> Rules ()
+renderFeed renderer = do
+  route idRoute
+  compile $ do
+    let feedCtx = postCtx <> bodyField "description"
+    posts <- recentFirst =<< loadAllSnapshots "posts/*" "content"
+    renderer feedConf feedCtx (take 10 posts)
+
+feedConf :: FeedConfiguration
+feedConf =
+  FeedConfiguration
+    { feedTitle       = "Felipe Lessa"
+    , feedDescription = "Some random blog posts"
+    , feedAuthorName  = "Felipe Almeida Lessa"
+    , feedAuthorEmail = "felipe.lessa@gmail.com"
+    , feedRoot        = "http://blog.felipe.lessa.nom.br"
+    }
