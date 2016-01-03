@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+import Data.List (isPrefixOf)
 import Data.Monoid ((<>))
 import Hakyll
 
@@ -32,7 +33,7 @@ main = hakyll $ do
       posts <- recentFirst =<< loadAllSnapshots "posts/*" "content"
       let archiveCtx =
             listField "posts" postCtx (return posts) <>
-            constField "title" "Archives"            <>
+            constField "title" "Archives"             <>
             defaultContext
 
       makeItem ""
@@ -43,10 +44,10 @@ main = hakyll $ do
   match "index.html" $ do
     route idRoute
     compile $ do
-      posts <- recentFirst =<< loadAllSnapshots "posts/*" "content"
+      posts <- fmap (take 7) . recentFirst =<< loadAllSnapshots "posts/*" "content"
       let indexCtx =
             listField "posts" postCtx (return posts) <>
-            constField "title" "Home"                <>
+            constField "title" "Latest posts"        <>
             defaultContext
 
       getResourceBody
@@ -68,11 +69,13 @@ postCtx :: Context String
 postCtx =
   dateField "date" "%B %e, %Y"                 <>
   mapContext makePreview (bodyField "preview") <>
+  mapContext makeTeaser  (bodyField "teaser")  <>
   defaultContext
-
-
-makePreview :: String -> String
-makePreview = (++ "...") . unwords . take 40 . words . stripTags
+  where
+    makePreview = (++ "...") . unwords . take 40 . words . stripTags
+    makeTeaser = demoteHeaders . takeUntilMore
+    takeUntilMore xss@(x:xs) = if "<!--more-->" `isPrefixOf` xss then "" else x : takeUntilMore xs
+    takeUntilMore ""         = "" :: String
 
 
 ----------------------------------------------------------------------

@@ -16,6 +16,8 @@ where_ $ exists $
 return person
 ```
 
+<!--more-->
+
 Enjoy! =)
 
 PS: I'll try to post more in the future, so keep tuned =).
