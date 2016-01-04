@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Esqueleto now supports IN and EXISTS</title>
+	<atom:link href="http://blog.felipe.lessa.nom.br?feed=rss2&#038;p=83" rel="self" type="application/rss+xml" />
+	<link>http://blog.felipe.lessa.nom.br/?p=83</link>
+	<description>Some random blog posts</description>
+	<lastBuildDate>Thu, 19 Nov 2015 11:51:35 +0000</lastBuildDate>
+		<sy:updatePeriod>hourly</sy:updatePeriod>
+		<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=3.8.5</generator>
+	<item>
+		<title>By: Felipe Lessa</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=83#comment-277</link>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+		<pubDate>Wed, 05 Dec 2012 19:25:13 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=83#comment-277</guid>
+		<description><![CDATA[Erik: I guess you can always simulate IN and EXISTS using joins, but the query may get uglier and/or more inefficient on your backend.]]></description>
+		<content:encoded><![CDATA[<p>Erik: I guess you can always simulate IN and EXISTS using joins, but the query may get uglier and/or more inefficient on your backend.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Erik de Castro Lopo</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=83#comment-273</link>
+		<dc:creator><![CDATA[Erik de Castro Lopo]]></dc:creator>
+		<pubDate>Sat, 01 Dec 2012 01:03:47 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=83#comment-273</guid>
+		<description><![CDATA[select $
+from $ \(person, post) -&gt;
+         where_ (post ^. BlogPostAuthorId ==. person ^. PersonId)
+         return person]]></description>
+		<content:encoded><![CDATA[<p>select $<br />
+from $ \(person, post) -&gt;<br />
+         where_ (post ^. BlogPostAuthorId ==. person ^. PersonId)<br />
+         return person</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Erik de Castro Lopo</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=83#comment-272</link>
+		<dc:creator><![CDATA[Erik de Castro Lopo]]></dc:creator>
+		<pubDate>Sat, 01 Dec 2012 01:02:12 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=83#comment-272</guid>
+		<description><![CDATA[Isn&#039;t this just the same as writing:
+
+&lt;code&gt;
+select $ from $ \(person, post) -&gt;
+    where_ (post ^. BlogPostAuthorId ==. person ^. PersonId)
+    return person
+&lt;/code&gt;]]></description>
+		<content:encoded><![CDATA[<p>Isn&#8217;t this just the same as writing:</p>
+<div class="codecolorer-container text default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="text codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">select $ from $ \(person, post) -&gt;<br />
+&nbsp; &nbsp; where_ (post ^. BlogPostAuthorId ==. person ^. PersonId)<br />
+&nbsp; &nbsp; return person</div></div>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>

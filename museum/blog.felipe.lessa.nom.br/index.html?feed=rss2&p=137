@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Using Caps Lock as Menu/Apps keys on Emacs</title>
+	<atom:link href="http://blog.felipe.lessa.nom.br?feed=rss2&#038;p=137" rel="self" type="application/rss+xml" />
+	<link>http://blog.felipe.lessa.nom.br/?p=137</link>
+	<description>Some random blog posts</description>
+	<lastBuildDate>Thu, 19 Nov 2015 11:51:35 +0000</lastBuildDate>
+		<sy:updatePeriod>hourly</sy:updatePeriod>
+		<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=3.8.5</generator>
+	<item>
+		<title>By: Felipe Lessa</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=137#comment-4252</link>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+		<pubDate>Tue, 22 Sep 2015 19:07:12 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=137#comment-4252</guid>
+		<description><![CDATA[That straightforward way is using xmodmap. Check here for some examples: https://wiki.archlinux.org/index.php/Xmodmap. However, xmodmap won’t play well with GNOME, as your settings will get periodically overwritten.]]></description>
+		<content:encoded><![CDATA[<p>That straightforward way is using xmodmap. Check here for some examples: <a href="https://wiki.archlinux.org/index.php/Xmodmap" rel="nofollow">https://wiki.archlinux.org/index.php/Xmodmap</a>. However, xmodmap won’t play well with GNOME, as your settings will get periodically overwritten.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Andreas Hoenen</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=137#comment-4244</link>
+		<dc:creator><![CDATA[Andreas Hoenen]]></dc:creator>
+		<pubDate>Sun, 20 Sep 2015 09:27:50 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=137#comment-4244</guid>
+		<description><![CDATA[Hi Felipe,
+you mention a straightforward way of assigning the Hyper and Super keys to different modifiers (e.g. by moving one to Mod3), care to give the details?
+I have set CapsLock to Hyper like you tried, but the only way of putting it to Mod3 I know of is to patch file &quot;/usr/share/X11/xkb/symbols/capslock&quot;, which has the disadvantage that it is under OS control and thus will be reverted every time the OS (Debian) package gets upgraded:
+
+$ diff capslock~ capslock
+--- capslock~	2015-09-18 21:32:39.000000000 +0200
++++ capslock	2015-09-19 20:22:25.978356155 +0200
+@@ -48,7 +48,7 @@
+ hidden partial modifier_keys
+ xkb_symbols &quot;hyper&quot; {
+     key  { [ Hyper_L ] };
+-    modifier_map Mod4 {  };
++    modifier_map Mod3 {  };
+ };
+ 
+ hidden partial modifier_keys]]></description>
+		<content:encoded><![CDATA[<p>Hi Felipe,<br />
+you mention a straightforward way of assigning the Hyper and Super keys to different modifiers (e.g. by moving one to Mod3), care to give the details?<br />
+I have set CapsLock to Hyper like you tried, but the only way of putting it to Mod3 I know of is to patch file &#8220;/usr/share/X11/xkb/symbols/capslock&#8221;, which has the disadvantage that it is under OS control and thus will be reverted every time the OS (Debian) package gets upgraded:</p>
+<p>$ diff capslock~ capslock<br />
+&#8212; capslock~	2015-09-18 21:32:39.000000000 +0200<br />
++++ capslock	2015-09-19 20:22:25.978356155 +0200<br />
+@@ -48,7 +48,7 @@<br />
+ hidden partial modifier_keys<br />
+ xkb_symbols &#8220;hyper&#8221; {<br />
+     key  { [ Hyper_L ] };<br />
+-    modifier_map Mod4 {  };<br />
++    modifier_map Mod3 {  };<br />
+ };</p>
+<p> hidden partial modifier_keys</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>

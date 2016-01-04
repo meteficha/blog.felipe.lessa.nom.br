@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Felipe Lessa &#187; Uncategorized</title>
+	<atom:link href="http://blog.felipe.lessa.nom.br?feed=rss2&#038;cat=1" rel="self" type="application/rss+xml" />
+	<link>http://blog.felipe.lessa.nom.br</link>
+	<description>Some random blog posts</description>
+	<lastBuildDate>Sat, 02 Jan 2016 18:10:42 +0000</lastBuildDate>
+	<language>en-US</language>
+		<sy:updatePeriod>hourly</sy:updatePeriod>
+		<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=3.8.5</generator>
+	<item>
+		<title>Using stack on NixOS</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=146</link>
+		<comments>http://blog.felipe.lessa.nom.br/?p=146#comments</comments>
+		<pubDate>Tue, 22 Sep 2015 15:37:23 +0000</pubDate>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=146</guid>
+		<description><![CDATA[I&#8217;ve got myself a new laptop recently and decided to try NixOS. It&#8217;s been a great experience so far, but there are some rough edges. One of them is stack not completely working out of the box for my projects. &#8230; <a href="http://blog.felipe.lessa.nom.br/?p=146">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>I&#8217;ve got myself a new laptop recently and decided to try NixOS.  It&#8217;s<br />
+been a great experience so far, but there are some rough edges.  One<br />
+of them is stack not completely working out of the box for my<br />
+projects.</p>
+<p><span id="more-146"></span></p>
+<p>The reason is that some Haskell packages depend on system C libraries,<br />
+but neither stack nor Cabal-the-library are able to find them on<br />
+NixOS.  As an example, you won&#8217;t find /usr/lib/libz.so on my system.<br />
+Instead, right now it&#8217;s at<br />
+/nix/store/2zmlykvqx69q5bh1l3jqyhrj2493vqdx-zlib-1.2.8/lib/libz.so.</p>
+<p>Being a NixOS newbie, I&#8217;ve tried some solutions but none of them<br />
+worked.  I&#8217;ve then asked for Peter Simon&#8217;s help, which he gladly and<br />
+swiftly provided (thanks, Peter!).  For my use case, I&#8217;ve adapted his<br />
+suggestions into the following script:</p>
+<div class="codecolorer-container bash default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="bash codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #666666; font-style: italic;">#!/usr/bin/env bash</span><br />
+<span style="color: #007800;">ZLIB</span>=<span style="color: #ff0000;">&quot;<span style="color: #007800;">$(nix-build --no-out-link &quot;&lt;nixpkgs&gt;&quot; -A zlib)</span>&quot;</span><br />
+<span style="color: #007800;">PSQL</span>=<span style="color: #ff0000;">&quot;<span style="color: #007800;">$(nix-build --no-out-link &quot;&lt;nixpkgs&gt;&quot; -A postgresql)</span>&quot;</span><br />
+<span style="color: #7a0874; font-weight: bold;">exec</span> stack &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; \<br />
+&nbsp; &nbsp; &nbsp;<span style="color: #660033;">--extra-lib-dirs</span>=<span style="color: #800000;">${ZLIB}</span><span style="color: #000000; font-weight: bold;">/</span>lib <span style="color: #660033;">--extra-include-dirs</span>=<span style="color: #800000;">${ZLIB}</span><span style="color: #000000; font-weight: bold;">/</span>include \<br />
+&nbsp; &nbsp; &nbsp;<span style="color: #660033;">--extra-lib-dirs</span>=<span style="color: #800000;">${PSQL}</span><span style="color: #000000; font-weight: bold;">/</span>lib <span style="color: #660033;">--extra-include-dirs</span>=<span style="color: #800000;">${PSQL}</span><span style="color: #000000; font-weight: bold;">/</span>include \<br />
+&nbsp; &nbsp; &nbsp;<span style="color: #007800;">$*</span></div></div>
+<p>My transitive dependencies need zlib and postgresql libraries, so I<br />
+use nix-build to find out where these packages are and pass their<br />
+directories to stack explicitly.</p>
+<p>This solution is not without drawbacks.  The biggest one is that your<br />
+built Haskell libraries will be hardcoded to these C libraries, but<br />
+NixOS doesn&#8217;t know anything about this dependency.  If you upgrade<br />
+your system and garbage collect the old C libraries, you&#8217;ll have to<br />
+recompile the Haskell libraries (probably with rm -R<br />
+~/.stack/snapshots).  However, I quite like its conciseness, and one<br />
+doesn&#8217;t need to understand much about NixOS&#8217;s internals to use it.</p>
+<p>At the moment this hack is serving me well.  If you&#8217;re reading this<br />
+blog post more than a couple of months after I wrote it, take a look<br />
+around to see if a better solution has been developed in the mean time :).</p>
+]]></content:encoded>
+			<wfw:commentRss>http://blog.felipe.lessa.nom.br/?feed=rss2&#038;p=146</wfw:commentRss>
+		<slash:comments>4</slash:comments>
+		</item>
+		<item>
+		<title>Using Caps Lock as Menu/Apps keys on Emacs</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=137</link>
+		<comments>http://blog.felipe.lessa.nom.br/?p=137#comments</comments>
+		<pubDate>Thu, 03 Sep 2015 15:28:02 +0000</pubDate>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=137</guid>
+		<description><![CDATA[I&#8217;m an ergoemacs-mode user, a mode that changes most key bindings so that they put less strain on your hands.  For example, it uses Alt instead of Ctrl most of the time, which is easier to press: use your curled &#8230; <a href="http://blog.felipe.lessa.nom.br/?p=137">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>I&#8217;m an <a href="http://ergoemacs.github.io/" target="_blank">ergoemacs-mode</a> user, a mode that changes most key bindings so that they put less strain on your hands.  For example, it uses Alt instead of Ctrl most of the time, which is easier to press: use your curled thumb instead of a <a href="http://ergoemacs.org/emacs/swap_CapsLock_Ctrl.html" target="_blank">karate chop</a>.  Also, many commands are activated by first pressing the Menu/Apps key (that key near the Right Ctrl which usually opens the context menu).  For example, pressing Menu then T allows you to switch buffers.</p>
+<p>However, the keyboard on my new notebook doesn&#8217;t have a dedicated Menu key.  Instead, one needs to press Fn+Right Ctrl, which is of course extremely painful.</p>
+<div style="width: 475px" class="wp-caption aligncenter"><a href="https://goo.gl/photos/cHPvwWs6D5LPnfxB8" target="_blank"><img alt="" src="http://i.imgur.com/IDQDiau.jpg" width="465" height="320" /></a><p class="wp-caption-text">Menu key hidden on the Right Ctrl.</p></div>
+<p>&nbsp;</p>
+<p>I&#8217;ve found a workaround, though.  A very hackish workaround.</p>
+<p><span id="more-137"></span>The <a href="http://ergoemacs.github.io/faq.html" target="_blank">ergoemacs-mode FAQ</a> suggests using Caps Lock as a Menu/Apps key for Mac users.  Using xmodmap it&#8217;s trivial to make Caps Lock a Menu key:</p>
+<pre>$ xmodmap -e "keycode 66 = Menu"</pre>
+<p>However, using xmodmap properly with Gnome is nigh impossible.  It&#8217;s recommend to use xkb instead, but xkb doesn&#8217;t support mapping Caps Lock to the Menu key out-of-the-box (<a href="https://bugs.freedesktop.org/show_bug.cgi?id=91867" target="_blank">at least not yet</a>).  At this point, having wandered through many documentation pages, I&#8217;ve decided to try using some of the xkb options that already exist.</p>
+<p>At first I tried setting Caps Lock as the Hyper key.  However, by default the Hyper key gets the same modifier code as the Super key (which is usually the key with the Windows logo).  There&#8217;s a straightforward way of separating them, but I couldn&#8217;t find a way to make it play nice with Gnome.  And even if I could, it&#8217;s not clear to me if I could use the Hyper key as a substitute for the Menu key on emacs.</p>
+<p>When ready to admit defeat, I&#8217;ve set the Caps Lock behavior to &#8220;Caps Lock is disabled&#8221; in preparation of trying a hack using xmodmap.  Much to my surprise, I accidentally discovered that emacs then began treating the disabled Caps Lock key as &lt;VoidSymbol&gt;! The gears started turning in my head, then I added the following line to my ~/.emacs file:</p>
+<pre>(define-key key-translation-map (kbd "&lt;VoidSymbol&gt;") (kbd "&lt;menu&gt;"))</pre>
+<p>Surprisingly, it worked!  Now pressing Caps Lock then T will switch buffers, for example.  As a bonus, pressing Caps Lock accidentally while on another application won&#8217;t do anything.</p>
+<p>It&#8217;s not clear to me how fragile this hack really is.  I&#8217;ll update this blog post if I ever find some drawback to it.  But right now it seems to work quite nicely.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://blog.felipe.lessa.nom.br/?feed=rss2&#038;p=137</wfw:commentRss>
+		<slash:comments>2</slash:comments>
+		</item>
+		<item>
+		<title>Changing NetworkManager route metrics</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=129</link>
+		<comments>http://blog.felipe.lessa.nom.br/?p=129#comments</comments>
+		<pubDate>Sat, 30 May 2015 02:35:14 +0000</pubDate>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=129</guid>
+		<description><![CDATA[If you use NetworkManager with more than one interface, you probably want to control the metric of their routes. Here&#8217;s one way you can do it. Background I got a PCI Express WiFi card (wlan0) and a USB WiFi dongle &#8230; <a href="http://blog.felipe.lessa.nom.br/?p=129">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>If you use NetworkManager with more than one interface, you probably want to control the metric of their routes. Here&#8217;s one way you can do it.</p>
+<p><span id="more-129"></span></p>
+<h2>Background</h2>
+<p>I got a PCI Express WiFi card (wlan0) and a USB WiFi dongle (wlan1). On my system, NetworkManager will activate both at the same time. Then it gives metric 600 to the first one to be activated, and 601 to the second one.</p>
+<p>What I wanted was to say: hey, NetworkManager, use metric 500 for wlan1 and 600 for wlan0. It doesn&#8217;t look like this is supported, though. Also, DuckDuckGo and Google didn&#8217;t help me much.</p>
+<p>Digging through the <a href="https://www.mankier.com/5/nm-settings" target="_blank">nm-settings(5) man page</a>, though, I found the route-metric option.  It&#8217;s not ideal because it&#8217;s applied to a connection, not to a device.  But it works fine for my use case as each WiFi interface is connected to a different WiFi network.</p>
+<h2>Step 1: Find out which are your connections</h2>
+<p>Use the nmcli helper to list your connections:</p>
+<pre>$ nmcli connection
+NAME       UUID                                  TYPE             DEVICE
+Network 1  f0ed603c-f3c3-4acb-b54b-bb857bd9c5b5  802-11-wireless  wlan0       
+Network 2  2b4b7240-36bd-407a-a3aa-169abb0ce6c4  802-11-wireless  wlan1</pre>
+<p>As you can see here, each interface is using a different connection.</p>
+<h2>Step 2: Set the connection&#8217;s default route metric</h2>
+<p>For example, to set the wlan1 interface&#8217;s default route metric to 500, just change its connection:</p>
+<pre>$ nmcli connection modify uuid 2b4b7240-36bd-407a-a3aa-169abb0ce6c4 ipv4.route-metric 500
+$ nmcli connection modify uuid 2b4b7240-36bd-407a-a3aa-169abb0ce6c4 ipv6.route-metric 500
+$ nmcli connection show   uuid 2b4b7240-36bd-407a-a3aa-169abb0ce6c4 | grep route-metric
+ipv4.route-metric:                      500
+ipv6.route-metric:                      500</pre>
+<h2>Step 3: Check that your routing table is correct</h2>
+<p>NetworkManager should automatically change the route&#8217;s metric:</p>
+<pre>$ ip route
+default via 192.168.25.1 dev wlan1  proto static  metric 500 
+default via 192.168.0.1 dev wlan0  proto static  metric 600 
+192.168.0.0/24 dev wlan0  proto kernel  scope link  src 192.168.0.111  metric 600 
+192.168.25.0/24 dev wlan1  proto kernel  scope link  src 192.168.25.69  metric 500</pre>
+<p>If it didn&#8217;t, try restarting NetworkManager.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://blog.felipe.lessa.nom.br/?feed=rss2&#038;p=129</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>Abstracting permissions with Yesod</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=7</link>
+		<comments>http://blog.felipe.lessa.nom.br/?p=7#comments</comments>
+		<pubDate>Mon, 16 Jan 2012 11:55:04 +0000</pubDate>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[Haskell]]></category>
+		<category><![CDATA[Yesod]]></category>
+
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=7</guid>
+		<description><![CDATA[Yesod is a terrific framework for web applications in Haskell.  It has many, many built-in features.  One of them is that there&#8217;s nice support for authentication and authorization.  In this post I&#8217;m interested in talking about how you could write &#8230; <a href="http://blog.felipe.lessa.nom.br/?p=7">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p><a href="http://www.yesodweb.com/">Yesod</a> is a terrific framework for web applications in <a href="http://www.haskell.org/">Haskell</a>.  It has many, many built-in features.  One of them is that there&#8217;s nice support for authentication and authorization.  In this post I&#8217;m interested in talking about how you could write your authorization code such that it&#8217;s harder to make mistakes.</p>
+<p><span id="more-7"></span></p>
+<p>As shown on the <a href="http://www.yesodweb.com/blog/2012/01/blog-example">recent example</a> of creating a blog web app, Yesod&#8217;s approach to authorization lies within the <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> function:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #06c; font-weight: bold;">class</span> <span style="color: #339933; font-weight: bold;">...</span> <span style="color: #339933; font-weight: bold;">=&gt;</span> Yesod a <span style="color: #06c; font-weight: bold;">where</span><br />
+&nbsp; <span style="color: #339933; font-weight: bold;">...</span><br />
+&nbsp; isAuthorized <span style="color: #339933; font-weight: bold;">::</span> Route a <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: #cccc00; font-weight: bold;">Bool</span> <span style="color: #339933; font-weight: bold;">-&gt;</span> GHandler s a AuthResult<br />
+&nbsp; <span style="color: #339933; font-weight: bold;">...</span></div></div>
+<p>So <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> takes a <code class="codecolorer haskell default"><span class="haskell">Route a</span></code>, such as <code class="codecolorer haskell default"><span class="haskell">EntryR <span style="color: red;">10</span></span></code>, and a <code class="codecolorer haskell default"><span class="haskell"><span style="color: #cccc00; font-weight: bold;">Bool</span></span></code> telling if the request may do writes (e.g. POST or PUT) or not (e.g. GET or HEAD).  It must return an <code class="codecolorer haskell default"><span class="haskell">AuthResult</span></code> that decides if the user is <code class="codecolorer haskell default"><span class="haskell">Authorized</span></code>, <code class="codecolorer haskell default"><span class="haskell">Unauthorized</span></code> or if he needs to be authenticated first (<code class="codecolorer haskell default"><span class="haskell">AuthenticationRequired</span></code>).</p>
+<p>While keeping authorization code in a single place is nice, using <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> alone makes it very difficult to test your authorization code.  Using the <a href="http://www.yesodweb.com/blog/2012/01/blog-example">blog example</a> again, only the admin should be able to create blog posts.  So let&#8217;s take a look at the example code that decides if the user should be authorized to post to the blog:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">isAuthorized BlogR True <span style="color: #339933; font-weight: bold;">=</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+&nbsp; mauth <span style="color: #339933; font-weight: bold;">&lt;-</span> maybeAuth<br />
+&nbsp; <span style="color: #06c; font-weight: bold;">case</span> mauth <span style="color: #06c; font-weight: bold;">of</span><br />
+&nbsp; &nbsp; Nothing <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="font-weight: bold;">return</span> AuthenticationRequired<br />
+&nbsp; &nbsp; Just <span style="color: green;">&#40;</span><span style="color: #339933; font-weight: bold;">_,</span> user<span style="color: green;">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">|</span> isAdmin user <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="font-weight: bold;">return</span> Authorized<br />
+&nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">|</span> <span style="font-weight: bold;">otherwise</span> &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">-&gt;</span> unauthorizedI MsgNotAnAdmin</div></div>
+<p>There are many things going on here:</p>
+<ol>
+<li>There&#8217;s authentication code that checks if the current user is logged in via <code class="codecolorer haskell default"><span class="haskell">maybeAuth</span></code>.</li>
+<li>If the user is not logged in, it returns <code class="codecolorer haskell default"><span class="haskell">AuthenticationRequired</span></code>.</li>
+<li>Otherwise the user&#8217;s credentials are checked to see if he should be authorized or not.</li>
+</ol>
+<p>Step 1 is pretty standard housekeeping-style code.  Steps 2 and 3, however, are part of your business logic that decides who should be able to do what.  This means that you should be able to create (a) an unit test that asserts that the admin can create blog posts and (b) an unit test that asserts that a non-admin can&#8217;t create blog posts.  Unfortunately, with the code above writing unit tests is really difficult.  You not only need to artificially run the <code class="codecolorer haskell default"><span class="haskell">GHandler</span></code> monad (boring), but you need to fake the current session so that Step 1&#8242;s <code class="codecolorer haskell default"><span class="haskell">maybeAuth</span></code> gets the right information (difficult).  Even then, your <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> function is allowed to do anything, since it&#8217;s inside <code class="codecolorer haskell default"><span class="haskell">GHandler</span></code>.</p>
+<p>Enter permissions.  What we&#8217;re really trying to say in the code above is that (a) to create a blog post you need the &#8220;post&#8221; permission and (b) admin has &#8220;post&#8221; permission, non-admins don&#8217;t.  So let&#8217;s split these things!  First of all, we need a list of the permissions that we&#8217;ll need:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #06c; font-weight: bold;">data</span> Permission <span style="color: #339933; font-weight: bold;">=</span> Post <span style="color: #339933; font-weight: bold;">|</span> Comment</div></div>
+<p>You should read these constructors names with &#8220;permission to&#8221; before their names.  For example, the admin has permission to <code class="codecolorer haskell default"><span class="haskell">Post</span></code> and any logged user has permission to <code class="codecolorer haskell default"><span class="haskell">Comment</span></code>.</p>
+<p>Each request needs to decide which permissions it requires.  This is one of the most important pieces of your application&#8217;s security, since forgetting to ask for permissions could lead to catastrophic problems.  Instead of having this core piece of your app diluted in <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code>, we use a simple, clear, pure function called <code class="codecolorer haskell default"><span class="haskell">permissionsRequiredFor</span></code>.  The idea is to make <code class="codecolorer haskell default"><span class="haskell">permissionsRequiredFor</span></code> as simple as possible, such that with code review alone you could determine if you&#8217;re asking for the right permissions.</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">permissionsRequiredFor <span style="color: #339933; font-weight: bold;">::</span> Route Blog <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: #cccc00; font-weight: bold;">Bool</span> <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: green;">&#91;</span>Permission<span style="color: green;">&#93;</span><br />
+permissionsRequiredFor BlogR &nbsp; &nbsp; &nbsp;True <span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#91;</span>Post<span style="color: green;">&#93;</span><br />
+permissionsRequiredFor <span style="color: green;">&#40;</span>EntryR <span style="color: #339933; font-weight: bold;">_</span><span style="color: green;">&#41;</span> True <span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#91;</span>Comment<span style="color: green;">&#93;</span><br />
+permissionsRequiredFor <span style="color: #339933; font-weight: bold;">_</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">_</span> &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#91;</span><span style="color: green;">&#93;</span></div></div>
+<p>We also need to decide if the currently logged user has the necessary permissions or not.  This is the other important piece of your authorization puzzle, and a piece that we need to make easily testable.  In order to do so, we avoid <code class="codecolorer haskell default"><span class="haskell">maybeAuth</span></code> and take the user as an argument.</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">hasPermissionTo <span style="color: #339933; font-weight: bold;">::</span> <span style="color: green;">&#40;</span>UserId<span style="color: #339933; font-weight: bold;">,</span> User<span style="color: green;">&#41;</span> <br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">-&gt;</span> Permission<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">-&gt;</span> YesodDB sub Blog AuthResult<br />
+<span style="color: green;">&#40;</span><span style="color: #339933; font-weight: bold;">_,</span> user<span style="color: green;">&#41;</span> `hasPermissionTo` Post<br />
+&nbsp; <span style="color: #339933; font-weight: bold;">|</span> isAdmin user <span style="color: #339933; font-weight: bold;">=</span> <span style="font-weight: bold;">return</span> Authorized<br />
+&nbsp; <span style="color: #339933; font-weight: bold;">|</span> <span style="font-weight: bold;">otherwise</span> &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">=</span> lift <span style="color: #339933; font-weight: bold;">$</span> unauthorizedI MsgNotAnAdmin<br />
+<span style="color: #339933; font-weight: bold;">_</span> `hasPermissionTo` Comment <span style="color: #339933; font-weight: bold;">=</span> <span style="font-weight: bold;">return</span> Authorized<br />
+<br />
+<br />
+isAuthorizedTo <span style="color: #339933; font-weight: bold;">::</span> <span style="color: #cccc00; font-weight: bold;">Maybe</span> <span style="color: green;">&#40;</span>UserId<span style="color: #339933; font-weight: bold;">,</span> User<span style="color: green;">&#41;</span> <br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: green;">&#91;</span>Permission<span style="color: green;">&#93;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">-&gt;</span> YesodDB sub Blog AuthResult<br />
+<span style="color: #339933; font-weight: bold;">_</span> &nbsp; &nbsp; &nbsp; `isAuthorizedTo` <span style="color: green;">&#91;</span><span style="color: green;">&#93;</span> &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">=</span> <span style="font-weight: bold;">return</span> Authorized<br />
+Nothing `isAuthorizedTo` <span style="color: green;">&#40;</span><span style="color: #339933; font-weight: bold;">_</span>:<span style="color: #339933; font-weight: bold;">_</span><span style="color: green;">&#41;</span> &nbsp;<span style="color: #339933; font-weight: bold;">=</span> <span style="font-weight: bold;">return</span> AuthenticationRequired<br />
+Just u &nbsp;`isAuthorizedTo` <span style="color: green;">&#40;</span>p:ps<span style="color: green;">&#41;</span> <span style="color: #339933; font-weight: bold;">=</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+&nbsp; r <span style="color: #339933; font-weight: bold;">&lt;-</span> u `hasPermissionTo` p<br />
+&nbsp; <span style="color: #06c; font-weight: bold;">case</span> r <span style="color: #06c; font-weight: bold;">of</span><br />
+&nbsp; &nbsp; Authorized <span style="color: #339933; font-weight: bold;">-&gt;</span> Just u `isAuthorizedTo` ps<br />
+&nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">_</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="font-weight: bold;">return</span> r <span style="color: #5d478b; font-style: italic;">-- unauthorized</span></div></div>
+<p>The <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code> function decides if the user has a given permission or not.  While in this example <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code> could have been a pure function, in general you may need to access the database.  The <code class="codecolorer haskell default"><span class="haskell">isAuthorizedTo</span></code> function then (a) decides if the user needs to be authenticated and (b) checks all permissions required from the list using <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code>.</p>
+<p>Finally, we need to implement <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> gluing everything together:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">isAuthorized route isWrite <span style="color: #339933; font-weight: bold;">=</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+&nbsp; mauth <span style="color: #339933; font-weight: bold;">&lt;-</span> maybeAuth<br />
+&nbsp; runDB <span style="color: #339933; font-weight: bold;">$</span> mauth `isAuthorizedTo` permissionsRequiredFor route isWrite</div></div>
+<p>Ok, so what did we gain by writing three more functions?</p>
+<ul>
+<li>You can easily review <code class="codecolorer haskell default"><span class="haskell">permissionsRequiredFor</span></code> to see if you didn&#8217;t leave a restricted route in the open.</li>
+<li>If you don&#8217;t use the wildcards on the last line of <code class="codecolorer haskell default"><span class="haskell">permissionsRequiredFor</span></code> and instead list all of your routes one by one, then you&#8217;d get a compiler warning and a runtime error every time you forgot to set the permissions of a newly added route.</li>
+<li>If you have many routes that needed the same permissions, you don&#8217;t need to recode the permission code everywhere.  You just need to code it once on <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code> and then ask for that permission on each of your routes. In my experience, the set of permissions (i.e. the <code class="codecolorer haskell default"><span class="haskell">Permission</span></code> data type) is a lot smaller than the set of possible routes.</li>
+<li>You may easily create unit tests for <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code>, increasing your confidence on your code&#8217;s correctness.</li>
+</ul>
+<p>I should also note that this approach is easily extendable.  For example, suppose that you wanted to restrict the visibility of some of your blog posts.  You could change the <code class="codecolorer haskell default"><span class="haskell">Permission</span></code> data type into:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #06c; font-weight: bold;">data</span> Permission <span style="color: #339933; font-weight: bold;">=</span> Post <span style="color: #339933; font-weight: bold;">|</span> CommentOn EntryId <span style="color: #339933; font-weight: bold;">|</span> View EntryId</div></div>
+<p>Now your <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code> function is able to give a different answer depending on which blog post we&#8217;re talking about.</p>
+<p>So far this approach has been successfully used on my day job&#8217;s Yesod application.  It looks like a cousin of Yesod&#8217;s i18n support using data types.  </p>
+<p>Thanks for reading along this far!  Please use the comment section below to say what think of this approach. =)</p>
+]]></content:encoded>
+			<wfw:commentRss>http://blog.felipe.lessa.nom.br/?feed=rss2&#038;p=7</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+	</channel>
+</rss>

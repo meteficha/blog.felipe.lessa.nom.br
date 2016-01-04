@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<title>Sensors detective | Felipe Lessa</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="stylesheet" type="text/css" media="all" href="wp-content/themes/twentyten/style.css" />
+<link rel="pingback" href="xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Feed" href="index.html?feed=rss2" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Comments Feed" href="index.html?feed=comments-rss2" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Sensors detective Comments Feed" href="index.html?feed=rss2&amp;p=93" />
+<link rel='stylesheet' id='openid-css'  href='wp-content/plugins/openid/f/openid.css?ver=519' type='text/css' media='all' />
+<link rel='stylesheet' id='codecolorer-css'  href='wp-content/plugins/codecolorer/codecolorer.css?ver=0.9.9' type='text/css' media='screen' />
+<!-- This site uses the Yoast Google Analytics plugin v5.1.1 - Universal disabled - https://yoast.com/wordpress/plugins/google-analytics/ -->
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-28368350-1']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+
+</script>
+<!-- / Yoast Google Analytics -->
+<script type='text/javascript' src='wp-includes/js/jquery/jquery.js?ver=1.10.2'></script>
+<script type='text/javascript' src='wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script type='text/javascript' src='wp-content/plugins/openid/f/openid.js?ver=519'></script>
+<script type='text/javascript' src='wp-includes/js/comment-reply.min.js?ver=3.8.5'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Esqueleto now supports IN and EXISTS' href='index.html?p=83' />
+<link rel='next' title='Changing NetworkManager route metrics' href='index.html?p=129' />
+<meta name="generator" content="WordPress 3.8.5" />
+<link rel='canonical' href='index.html?p=93' />
+<link rel='shortlink' href='index.html?p=93' />
+<meta name='robots' content='noindex,follow' />
+<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #f1f1f1; }
+</style>
+</head>
+
+<body class="single single-post postid-93 single-format-standard custom-background">
+<div id="wrapper" class="hfeed">
+	<div id="header">
+		<div id="masthead">
+			<div id="branding" role="banner">
+								<div id="site-title">
+					<span>
+						<a href="index.html" title="Felipe Lessa" rel="home">Felipe Lessa</a>
+					</span>
+				</div>
+				<div id="site-description">Some random blog posts</div>
+
+										<img src="wp-content/themes/twentyten/images/headers/cherryblossoms.jpg" width="940" height="198" alt="" />
+								</div><!-- #branding -->
+
+			<div id="access" role="navigation">
+			  				<div class="skip-link screen-reader-text"><a href="index.html?p=93&amp;replytocom=425#content" title="Skip to content">Skip to content</a></div>
+								<div class="menu"><ul><li ><a href="index.html">Home</a></li><li class="page_item page-item-56"><a href="index.html?page_id=56">About</a></li></ul></div>
+			</div><!-- #access -->
+		</div><!-- #masthead -->
+	</div><!-- #header -->
+
+	<div id="main">
+
+		<div id="container">
+			<div id="content" role="main">
+
+			
+
+				<div id="nav-above" class="navigation">
+					<div class="nav-previous"><a href="index.html?p=83" rel="prev"><span class="meta-nav">&larr;</span> Esqueleto now supports IN and EXISTS</a></div>
+					<div class="nav-next"><a href="index.html?p=129" rel="next">Changing NetworkManager route metrics <span class="meta-nav">&rarr;</span></a></div>
+				</div><!-- #nav-above -->
+
+				<div id="post-93" class="post-93 post type-post status-publish format-standard hentry category-hacking tag-asus tag-bios tag-linux tag-m5a97 tag-sensors">
+					<h1 class="entry-title">Sensors detective</h1>
+
+					<div class="entry-meta">
+						<span class="meta-prep meta-prep-author">Posted on</span> <a href="index.html?p=93" title="21:54" rel="bookmark"><span class="entry-date">08/12/2013</span></a> <span class="meta-sep">by</span> <span class="author vcard"><a class="url fn n" href="index.html?author=1" title="View all posts by Felipe Lessa">Felipe Lessa</a></span>					</div><!-- .entry-meta -->
+
+					<div class="entry-content">
+						<p>I have an Asus M5A97 PRO motherboard, which includes the common set of sensors.  The lm-sensors free software correctly detects two chips, <code class="codecolorer text default"><span class="text">k10temp-pci-00c3</span></code> and <code class="codecolorer text default"><span class="text">it8721-isa-0290</span></code>, corresponding to my Phenom II and my motherboard, respectively.  However, by default the output of sensors looks like:</p>
+<p><span id="more-93"></span></p>
+<div class="codecolorer-container python default" style="overflow:auto;white-space:nowrap;"><div class="python codecolorer">k10temp-pci-00c3<br />
+Adapter: PCI adapter<br />
+temp1: &nbsp; &nbsp; &nbsp; &nbsp;+<span class="nu0">27.0</span>°C &nbsp;<span class="br0">&#40;</span>high <span class="sy0">=</span> +<span class="nu0">70.0</span>°C<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="br0">&#40;</span>crit <span class="sy0">=</span> +<span class="nu0">90.0</span>°C<span class="sy0">,</span> hyst <span class="sy0">=</span> +<span class="nu0">85.0</span>°C<span class="br0">&#41;</span><br />
+<br />
+it8721-isa-<span class="nu0">0290</span><br />
+Adapter: ISA adapter<br />
+in0: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span class="nu0">2.82</span> V &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">0.62</span> V<span class="sy0">,</span> <span class="kw2">max</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">0.62</span> V<span class="br0">&#41;</span> &nbsp;ALARM<br />
+in1: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span class="nu0">2.81</span> V &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">0.06</span> V<span class="sy0">,</span> <span class="kw2">max</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">0.34</span> V<span class="br0">&#41;</span> &nbsp;ALARM<br />
+in2: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span class="nu0">1.30</span> V &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">1.66</span> V<span class="sy0">,</span> <span class="kw2">max</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">1.12</span> V<span class="br0">&#41;</span> &nbsp;ALARM<br />
++3.3V: &nbsp; &nbsp; &nbsp; &nbsp;+<span class="nu0">3.29</span> V &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">4.68</span> V<span class="sy0">,</span> <span class="kw2">max</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">0.79</span> V<span class="br0">&#41;</span> &nbsp;ALARM<br />
+in4: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span class="nu0">0.61</span> V &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">0.36</span> V<span class="sy0">,</span> <span class="kw2">max</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">0.94</span> V<span class="br0">&#41;</span><br />
+in5: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span class="nu0">2.52</span> V &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">0.14</span> V<span class="sy0">,</span> <span class="kw2">max</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">1.01</span> V<span class="br0">&#41;</span> &nbsp;ALARM<br />
+in6: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span class="nu0">0.00</span> V &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">1.73</span> V<span class="sy0">,</span> <span class="kw2">max</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">0.11</span> V<span class="br0">&#41;</span> &nbsp;ALARM<br />
+3VSB: &nbsp; &nbsp; &nbsp; &nbsp; +<span class="nu0">0.77</span> V &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">0.24</span> V<span class="sy0">,</span> <span class="kw2">max</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">4.13</span> V<span class="br0">&#41;</span><br />
+Vbat: &nbsp; &nbsp; &nbsp; &nbsp; +<span class="nu0">3.36</span> V &nbsp;<br />
+fan1: &nbsp; &nbsp; &nbsp; &nbsp;<span class="nu0">1288</span> RPM &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp;<span class="nu0">105</span> RPM<span class="br0">&#41;</span><br />
+fan2: &nbsp; &nbsp; &nbsp; &nbsp;<span class="nu0">1192</span> RPM &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp; <span class="nu0">16</span> RPM<span class="br0">&#41;</span><br />
+fan3: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="nu0">0</span> RPM &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp; <span class="nu0">10</span> RPM<span class="br0">&#41;</span> &nbsp;ALARM<br />
+temp1: &nbsp; &nbsp; &nbsp; &nbsp;+<span class="nu0">37.0</span>°C &nbsp;<span class="br0">&#40;</span>low &nbsp;<span class="sy0">=</span> +<span class="nu0">72.0</span>°C<span class="sy0">,</span> high <span class="sy0">=</span> +<span class="nu0">10.0</span>°C<span class="br0">&#41;</span> &nbsp;ALARM &nbsp;sensor <span class="sy0">=</span> thermistor<br />
+temp2: &nbsp; &nbsp; &nbsp; &nbsp;+<span class="nu0">30.0</span>°C &nbsp;<span class="br0">&#40;</span>low &nbsp;<span class="sy0">=</span> +<span class="nu0">15.0</span>°C<span class="sy0">,</span> high <span class="sy0">=</span> -<span class="nu0">128.0</span>°C<span class="br0">&#41;</span> &nbsp;ALARM &nbsp;sensor <span class="sy0">=</span> thermistor<br />
+temp3: &nbsp; &nbsp; &nbsp; -<span class="nu0">128.0</span>°C &nbsp;<span class="br0">&#40;</span>low &nbsp;<span class="sy0">=</span> -<span class="nu0">55.0</span>°C<span class="sy0">,</span> high <span class="sy0">=</span> +<span class="nu0">49.0</span>°C<span class="br0">&#41;</span> &nbsp;sensor <span class="sy0">=</span> disabled<br />
+intrusion0: &nbsp;OK</div></div>
+<p>Well, not exactly useful.  But it turns out that we can do better than that with a little work. The <a href="http://www.lm-sensors.org/wiki/VoltageLabelsAndScaling" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.lm-sensors.org/wiki/VoltageLabelsAndScaling', 'lm-sensors wiki page about voltage labels and scaling']);" >lm-sensors wiki page about voltage labels and scaling</a> describes a simple method by which one may make sense of their motherboard&#8217;s sensors.</p>
+<p>My motherboard&#8217;s sensors chip model is IT8721F, which measures raw values ranging from 0 to 3.06V in steps of 12 mV (8 bits of precision).  In order to fit its range, voltage rails such as +5V get a scaling factor.  Our job is to figure out which is the scaling factor and which input of the sensor is measuring it.</p>
+<p>We start by collecting samples of the correct data.  I didn&#8217;t bother resetting my computer to look at my own BIOS, and instead just searched the web for screenshots of M5A97&#8242;s BIOS screen.  In the end I had collected the following samples:</p>
+<div class="codecolorer-container python default" style="overflow:auto;white-space:nowrap;"><div class="python codecolorer">Temperature: <br />
+&nbsp; CPU: <span class="nu0">33.0</span> <span class="nu0">37.0</span> <span class="nu0">39.0</span> <span class="nu0">40.0</span> <span class="nu0">42.0</span> <span class="nu0">44.0</span><br />
+&nbsp; MB: &nbsp;<span class="nu0">30.0</span> <span class="nu0">31.0</span> <span class="nu0">32.0</span> <span class="nu0">37.0</span><br />
+<br />
+Voltage <span class="br0">&#40;</span>it8721<span class="sy0">,</span> <span class="nu0">0</span> to <span class="nu0">3.06</span> V<span class="sy0">,</span> <span class="nu0">1</span> bit <span class="sy0">=</span> <span class="nu0">12</span> mV<span class="br0">&#41;</span>:<br />
+&nbsp; Vcore: &nbsp;<span class="nu0">1.248</span> &nbsp;<span class="nu0">1.308</span> &nbsp;<span class="nu0">1.320</span> &nbsp;<span class="nu0">1.332</span> &nbsp;<span class="nu0">1.356</span> &nbsp;<span class="nu0">1.380</span> &nbsp;<span class="nu0">1.428</span> &nbsp;<span class="nu0">1.440</span><br />
+&nbsp; +3.3V: &nbsp;<span class="nu0">3.216</span> &nbsp;<span class="nu0">3.264</span> &nbsp;<span class="nu0">3.288</span> &nbsp;<span class="nu0">3.312</span> &nbsp;<span class="nu0">3.336</span> &nbsp;<span class="nu0">3.360</span><br />
+<br />
+&nbsp; +5V: &nbsp; &nbsp;<span class="nu0">4.885</span> &nbsp;<span class="nu0">4.971</span> &nbsp;<span class="nu0">4.992</span> &nbsp;<span class="nu0">5.057</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;--- <span class="nu0">86</span> --- <span class="nu0">21</span> --- <span class="nu0">65</span> ---<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="sy0">=</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="sy0">=</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="nu0">2</span>*<span class="nu0">21</span> + <span class="nu0">2</span>*<span class="nu0">22</span> &nbsp; &nbsp; <span class="nu0">21</span> + <span class="nu0">2</span>*<span class="nu0">22</span><br />
+<br />
+&nbsp; +12V: &nbsp;<span class="nu0">11.685</span> <span class="nu0">11.943</span> <span class="nu0">11.994</span> <span class="nu0">12.046</span> <span class="nu0">12.097</span> <span class="nu0">12.149</span> <span class="nu0">12.200</span> <br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-- <span class="nu0">258</span> -- <span class="nu0">51</span> --- <span class="nu0">52</span> --- <span class="nu0">51</span> --- <span class="nu0">52</span> --- <span class="nu0">51</span> ----<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="sy0">=</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="nu0">2</span>*<span class="nu0">51</span> + <span class="nu0">3</span>*<span class="nu0">52</span></div></div>
+<p>The +3.3V sensor had already been correctly named by lm-sensors (in3).  The Vcore sensor (CPU) is quite easy since it&#8217;s not scaled (in2). +5V and +12V are the tricky ones.</p>
+<p>As you can see on the snippet above, I&#8217;ve sorted the samples I&#8217;ve collected and calculated the differences in mV between them.  Looking at the +12V samples first, we see a pattern of alternately adding 51 or 52 mV, thus we deduce that the measurements have steps of 51.5 mV between them.  This works out to a scaling factor of 51.5/12.  The +5V is analogous and we calculate a scaling factor of 21.5/12 for it.</p>
+<p>(Up to this point, something has been bothering me.  If we take a look at sample 12.200 V, for example, we&#8217;d expect it to be a multiple of 51.5 mV.  However, the closest multiple is 237 * 51.5 mV = 12.2055 V.  No matter how you round that number, you&#8217;ll never get 12.200 V.  I wonder if I calculated something wrong.)</p>
+<p>There remains the problem of correctly labeling the inputs.  Labelling the fan and temperature sensors is quite straightforward. On the other hand, labelling +5V and +12V correctly is quite tricky, since both in0 and in1 have raw values that look okay for both +5V and +12V.  At this point I&#8217;ve rebooted my machine and took note of my own data:</p>
+<p><img src="https://lh3.googleusercontent.com/-iIa3cTfSQ7Y/UqT-XZt5k3I/AAAAAAAALo0/uXrJ3uPwTcI/w1149-h862-no/IMG_20131208_211835.jpg" alt="M5A97 PRO BIOS screenshot showing sensor data." /></p>
+<p>Then I&#8217;ve booted into my Arch Linux and took the raw data from lm-sensors (pasted at the end of this post). Based on it, I guesstimated that in0 corresponds to +12V while in1 corresponds to +5V.  This leaves us with in4 to in6, which I chose to just ignore.</p>
+<p>And, finally, it seems that <a href="https://www.kernel.org/doc/Documentation/hwmon/k10temp" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://www.kernel.org/doc/Documentation/hwmon/k10temp', 'the temperature reported by the k10temp isn&#8217;t real temperature']);" >the temperature reported by the k10temp isn&#8217;t real temperature</a>, instead it&#8217;s a relative temperature.  It&#8217;s mostly meaningless since the motherboard correctly informs the CPU temperature.</p>
+<p>The end result is:</p>
+<div class="codecolorer-container python default" style="overflow:auto;white-space:nowrap;"><div class="python codecolorer">$ sensors<br />
+k10temp-pci-00c3<br />
+Adapter: PCI adapter<br />
+CPU Temp <span class="br0">&#40;</span>rel<span class="br0">&#41;</span>: &nbsp;+<span class="nu0">26.5</span>°C &nbsp;<span class="br0">&#40;</span>high <span class="sy0">=</span> +<span class="nu0">70.0</span>°C<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="br0">&#40;</span>crit <span class="sy0">=</span> +<span class="nu0">90.0</span>°C<span class="sy0">,</span> hyst <span class="sy0">=</span> +<span class="nu0">85.0</span>°C<span class="br0">&#41;</span><br />
+<br />
+it8721-isa-<span class="nu0">0290</span><br />
+Adapter: ISA adapter<br />
++12V: &nbsp; &nbsp; &nbsp; &nbsp;+<span class="nu0">12.10</span> V &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">2.68</span> V<span class="sy0">,</span> <span class="kw2">max</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">2.68</span> V<span class="br0">&#41;</span> &nbsp;ALARM<br />
++5V: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span class="nu0">5.03</span> V &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">0.11</span> V<span class="sy0">,</span> <span class="kw2">max</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">0.60</span> V<span class="br0">&#41;</span> &nbsp;ALARM<br />
+Vcore: &nbsp; &nbsp; &nbsp; &nbsp;+<span class="nu0">1.45</span> V &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">1.66</span> V<span class="sy0">,</span> <span class="kw2">max</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">1.12</span> V<span class="br0">&#41;</span> &nbsp;ALARM<br />
++3.3V: &nbsp; &nbsp; &nbsp; &nbsp;+<span class="nu0">3.29</span> V &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">4.68</span> V<span class="sy0">,</span> <span class="kw2">max</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">0.79</span> V<span class="br0">&#41;</span> &nbsp;ALARM<br />
+3VSB: &nbsp; &nbsp; &nbsp; &nbsp; +<span class="nu0">0.77</span> V &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">0.24</span> V<span class="sy0">,</span> <span class="kw2">max</span> <span class="sy0">=</span> &nbsp;+<span class="nu0">4.13</span> V<span class="br0">&#41;</span><br />
+Vbat: &nbsp; &nbsp; &nbsp; &nbsp; +<span class="nu0">3.36</span> V &nbsp;<br />
+CPU Fan: &nbsp; &nbsp; <span class="nu0">1290</span> RPM &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp;<span class="nu0">105</span> RPM<span class="br0">&#41;</span><br />
+Chassis Fan: <span class="nu0">1192</span> RPM &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp; <span class="nu0">16</span> RPM<span class="br0">&#41;</span><br />
+Power Fan: &nbsp; &nbsp; &nbsp;<span class="nu0">0</span> RPM &nbsp;<span class="br0">&#40;</span><span class="kw2">min</span> <span class="sy0">=</span> &nbsp; <span class="nu0">10</span> RPM<span class="br0">&#41;</span> &nbsp;ALARM<br />
+CPU Temp: &nbsp; &nbsp; +<span class="nu0">37.0</span>°C &nbsp;<span class="br0">&#40;</span>low &nbsp;<span class="sy0">=</span> +<span class="nu0">72.0</span>°C<span class="sy0">,</span> high <span class="sy0">=</span> +<span class="nu0">10.0</span>°C<span class="br0">&#41;</span> &nbsp;ALARM &nbsp;sensor <span class="sy0">=</span> thermistor<br />
+M/B Temp: &nbsp; &nbsp; +<span class="nu0">30.0</span>°C &nbsp;<span class="br0">&#40;</span>low &nbsp;<span class="sy0">=</span> +<span class="nu0">15.0</span>°C<span class="sy0">,</span> high <span class="sy0">=</span> -<span class="nu0">128.0</span>°C<span class="br0">&#41;</span> &nbsp;ALARM &nbsp;sensor <span class="sy0">=</span> thermistor</div></div>
+<p>Much better!  If you have the same motherboard as mine and want to have this beauty, just drop this snippet in your <code class="codecolorer text default"><span class="text">/etc/sensors.conf</span></code>:</p>
+<div class="codecolorer-container bash default" style="overflow:auto;white-space:nowrap;"><div class="bash codecolorer"><span class="co0"># Asus M5A97 PRO &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><br />
+chip <span class="st0">&quot;k10temp-pci-00c3&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label temp1 <span class="st0">&quot;CPU Temp (rel)&quot;</span><br />
+<br />
+chip <span class="st0">&quot;it8721-*&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label &nbsp;in0 <span class="st0">&quot;+12V&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label &nbsp;in1 <span class="st0">&quot;+5V&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label &nbsp;in2 <span class="st0">&quot;Vcore&quot;</span><br />
+&nbsp; &nbsp; &nbsp;ignore in4<br />
+&nbsp; &nbsp; &nbsp;ignore in5<br />
+&nbsp; &nbsp; &nbsp;ignore in6<br />
+<br />
+&nbsp; &nbsp; &nbsp;compute in0 &nbsp;<span class="sy0">@</span> <span class="sy0">*</span> <span class="br0">&#40;</span><span class="nu0">515</span><span class="sy0">/</span><span class="nu0">120</span><span class="br0">&#41;</span>, <span class="sy0">@</span> <span class="sy0">/</span> <span class="br0">&#40;</span><span class="nu0">515</span><span class="sy0">/</span><span class="nu0">120</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp;compute in1 &nbsp;<span class="sy0">@</span> <span class="sy0">*</span> <span class="br0">&#40;</span><span class="nu0">215</span><span class="sy0">/</span><span class="nu0">120</span><span class="br0">&#41;</span>, <span class="sy0">@</span> <span class="sy0">/</span> <span class="br0">&#40;</span><span class="nu0">215</span><span class="sy0">/</span><span class="nu0">120</span><span class="br0">&#41;</span><br />
+<br />
+&nbsp; &nbsp; &nbsp;ignore temp3<br />
+&nbsp; &nbsp; &nbsp;label temp1 <span class="st0">&quot;CPU Temp&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label temp2 <span class="st0">&quot;M/B Temp&quot;</span><br />
+<br />
+&nbsp; &nbsp; &nbsp;label fan1 <span class="st0">&quot;CPU Fan&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label fan2 <span class="st0">&quot;Chassis Fan&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label fan3 <span class="st0">&quot;Power Fan&quot;</span><br />
+<br />
+&nbsp; &nbsp; &nbsp;ignore intrusion0</div></div>
+<p>I&#8217;ve posted the configuration snippet above to the lm-sensors mailing list as well, so hopefully it will make it to the <a href="http://www.lm-sensors.org/wiki/Configurations" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.lm-sensors.org/wiki/Configurations', 'lm-sensors configurations wiki page']);" >lm-sensors configurations wiki page</a> :).</p>
+<hr />
+<p>The raw data after the BIOS screenshot:</p>
+<div class="codecolorer-container python default" style="overflow:auto;white-space:nowrap;"><div class="python codecolorer">k10temp-pci-00c3<br />
+Adapter: PCI adapter<br />
+temp1:<br />
+&nbsp; temp1_input: <span class="nu0">30.125</span><br />
+&nbsp; temp1_max: <span class="nu0">70.000</span><br />
+&nbsp; temp1_crit: <span class="nu0">90.000</span><br />
+&nbsp; temp1_crit_hyst: <span class="nu0">85.000</span><br />
+<br />
+it8721-isa-<span class="nu0">0290</span><br />
+Adapter: ISA adapter<br />
+in0:<br />
+&nbsp; in0_input: <span class="nu0">2.820</span><br />
+&nbsp; in0_min: <span class="nu0">0.624</span><br />
+&nbsp; in0_max: <span class="nu0">0.624</span><br />
+&nbsp; in0_alarm: <span class="nu0">1.000</span><br />
+in1:<br />
+&nbsp; in1_input: <span class="nu0">2.808</span><br />
+&nbsp; in1_min: <span class="nu0">0.060</span><br />
+&nbsp; in1_max: <span class="nu0">0.336</span><br />
+&nbsp; in1_alarm: <span class="nu0">1.000</span><br />
+in2:<br />
+&nbsp; in2_input: <span class="nu0">1.452</span><br />
+&nbsp; in2_min: <span class="nu0">1.656</span><br />
+&nbsp; in2_max: <span class="nu0">1.116</span><br />
+&nbsp; in2_alarm: <span class="nu0">1.000</span><br />
++3.3V:<br />
+&nbsp; in3_input: <span class="nu0">3.288</span><br />
+&nbsp; in3_min: <span class="nu0">4.680</span><br />
+&nbsp; in3_max: <span class="nu0">0.792</span><br />
+&nbsp; in3_alarm: <span class="nu0">1.000</span><br />
+in4:<br />
+&nbsp; in4_input: <span class="nu0">0.612</span><br />
+&nbsp; in4_min: <span class="nu0">0.360</span><br />
+&nbsp; in4_max: <span class="nu0">0.936</span><br />
+&nbsp; in4_alarm: <span class="nu0">0.000</span><br />
+in5:<br />
+&nbsp; in5_input: <span class="nu0">2.520</span><br />
+&nbsp; in5_min: <span class="nu0">0.144</span><br />
+&nbsp; in5_max: <span class="nu0">1.008</span><br />
+&nbsp; in5_alarm: <span class="nu0">1.000</span><br />
+in6:<br />
+&nbsp; in6_input: <span class="nu0">0.000</span><br />
+&nbsp; in6_min: <span class="nu0">1.728</span><br />
+&nbsp; in6_max: <span class="nu0">0.108</span><br />
+&nbsp; in6_alarm: <span class="nu0">1.000</span><br />
+3VSB:<br />
+&nbsp; in7_input: <span class="nu0">0.768</span><br />
+&nbsp; in7_min: <span class="nu0">0.240</span><br />
+&nbsp; in7_max: <span class="nu0">4.128</span><br />
+&nbsp; in7_alarm: <span class="nu0">0.000</span><br />
+Vbat:<br />
+&nbsp; in8_input: <span class="nu0">3.360</span><br />
+fan1:<br />
+&nbsp; fan1_input: <span class="nu0">1454.000</span><br />
+&nbsp; fan1_min: <span class="nu0">105.000</span><br />
+&nbsp; fan1_alarm: <span class="nu0">0.000</span><br />
+fan2:<br />
+&nbsp; fan2_input: <span class="nu0">1194.000</span><br />
+&nbsp; fan2_min: <span class="nu0">16.000</span><br />
+&nbsp; fan2_alarm: <span class="nu0">0.000</span><br />
+fan3:<br />
+&nbsp; fan3_input: <span class="nu0">0.000</span><br />
+&nbsp; fan3_min: <span class="nu0">10.000</span><br />
+&nbsp; fan3_alarm: <span class="nu0">1.000</span><br />
+temp1:<br />
+&nbsp; temp1_input: <span class="nu0">40.000</span><br />
+&nbsp; temp1_max: <span class="nu0">10.000</span><br />
+&nbsp; temp1_min: <span class="nu0">72.000</span><br />
+&nbsp; temp1_alarm: <span class="nu0">1.000</span><br />
+&nbsp; temp1_type: <span class="nu0">4.000</span><br />
+&nbsp; temp1_offset: <span class="nu0">0.000</span><br />
+temp2:<br />
+&nbsp; temp2_input: <span class="nu0">30.000</span><br />
+&nbsp; temp2_max: -<span class="nu0">128.000</span><br />
+&nbsp; temp2_min: <span class="nu0">15.000</span><br />
+&nbsp; temp2_alarm: <span class="nu0">1.000</span><br />
+&nbsp; temp2_type: <span class="nu0">4.000</span><br />
+&nbsp; temp2_offset: <span class="nu0">0.000</span><br />
+temp3:<br />
+&nbsp; temp3_input: -<span class="nu0">128.000</span><br />
+&nbsp; temp3_max: <span class="nu0">49.000</span><br />
+&nbsp; temp3_min: -<span class="nu0">55.000</span><br />
+&nbsp; temp3_alarm: <span class="nu0">0.000</span><br />
+&nbsp; temp3_type: <span class="nu0">0.000</span><br />
+&nbsp; temp3_offset: <span class="nu0">0.000</span><br />
+intrusion0:<br />
+&nbsp; intrusion0_alarm: <span class="nu0">0.000</span></div></div>
+											</div><!-- .entry-content -->
+
+
+					<div class="entry-utility">
+						This entry was posted in <a href="index.html?cat=11" title="View all posts in Hacking" rel="category">Hacking</a> and tagged <a href="index.html?tag=asus" rel="tag">asus</a>, <a href="index.html?tag=bios" rel="tag">bios</a>, <a href="index.html?tag=linux" rel="tag">linux</a>, <a href="index.html?tag=m5a97" rel="tag">m5a97</a>, <a href="index.html?tag=sensors" rel="tag">sensors</a>. Bookmark the <a href="index.html?p=93" title="Permalink to Sensors detective" rel="bookmark">permalink</a>.											</div><!-- .entry-utility -->
+				</div><!-- #post-## -->
+
+				<div id="nav-below" class="navigation">
+					<div class="nav-previous"><a href="index.html?p=83" rel="prev"><span class="meta-nav">&larr;</span> Esqueleto now supports IN and EXISTS</a></div>
+					<div class="nav-next"><a href="index.html?p=129" rel="next">Changing NetworkManager route metrics <span class="meta-nav">&rarr;</span></a></div>
+				</div><!-- #nav-below -->
+
+				
+			<div id="comments">
+
+
+			<h3 id="comments-title">3 Responses to <em>Sensors detective</em></h3>
+
+
+			<ol class="commentlist">
+					<li class="comment even thread-even depth-1" id="li-comment-425">
+		<div id="comment-425">
+			<div class="comment-author vcard">
+				<img alt='' src='http://1.gravatar.com/avatar/3daf39228e0b4ba3aa7cd2cc3f29dd5d?s=40&amp;d=identicon&amp;r=PG' class='avatar avatar-40 photo' height='40' width='40' />				<cite class="fn">Boris Lessa</cite> <span class="says">says:</span>			</div><!-- .comment-author .vcard -->
+			
+			<div class="comment-meta commentmetadata"><a href="index.html?p=93#comment-425">
+				08/12/2013 at 22:55</a>			</div><!-- .comment-meta .commentmetadata -->
+
+			<div class="comment-body"><p>Muito interessante, Filho, sua descoberta e solução para o problema. O post ficou muito bem feito também. Abração!</p>
+</div>
+
+			<div class="reply">
+				<a class='comment-reply-link' href='index.html?p=93&amp;replytocom=425#respond' onclick='return addComment.moveForm("comment-425", "425", "respond", "93")'>Reply</a>			</div><!-- .reply -->
+		</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-2105">
+		<div id="comment-2105">
+			<div class="comment-author vcard">
+				<img alt='' src='http://1.gravatar.com/avatar/7336a54ec098d68e5660e78065de248f?s=40&amp;d=identicon&amp;r=PG' class='avatar avatar-40 photo' height='40' width='40' />				<cite class="fn">Graeme</cite> <span class="says">says:</span>			</div><!-- .comment-author .vcard -->
+			
+			<div class="comment-meta commentmetadata"><a href="index.html?p=93#comment-2105">
+				17/08/2014 at 14:35</a>			</div><!-- .comment-meta .commentmetadata -->
+
+			<div class="comment-body"><p>Many thanks Felipe. I have an Asus M5A97 R 2.0 mobo, and have used your file as a basis, setting useful alarm limits.</p>
+</div>
+
+			<div class="reply">
+				<a class='comment-reply-link' href='index.html?p=93&amp;replytocom=2105#respond' onclick='return addComment.moveForm("comment-2105", "2105", "respond", "93")'>Reply</a>			</div><!-- .reply -->
+		</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-4067">
+		<div id="comment-4067">
+			<div class="comment-author vcard">
+				<img alt='' src='http://1.gravatar.com/avatar/39448e35a1a360f1a20f55bffa7c48f0?s=40&amp;d=identicon&amp;r=PG' class='avatar avatar-40 photo' height='40' width='40' />				<cite class="fn">ThecaTTony</cite> <span class="says">says:</span>			</div><!-- .comment-author .vcard -->
+			
+			<div class="comment-meta commentmetadata"><a href="index.html?p=93#comment-4067">
+				28/11/2014 at 08:24</a>			</div><!-- .comment-meta .commentmetadata -->
+
+			<div class="comment-body"><p>Thanks from Argentina!</p>
+</div>
+
+			<div class="reply">
+				<a class='comment-reply-link' href='index.html?p=93&amp;replytocom=4067#respond' onclick='return addComment.moveForm("comment-4067", "4067", "respond", "93")'>Reply</a>			</div><!-- .reply -->
+		</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+			</ol>
+
+
+	
+
+								<div id="respond" class="comment-respond">
+				<h3 id="reply-title" class="comment-reply-title">Leave a Reply to <a href="index.html?p=93&amp;replytocom=425#comment-425">Boris Lessa</a> <small><a rel="nofollow" id="cancel-comment-reply-link" href="index.html?p=93#respond">Cancel reply</a></small></h3>
+									<form action="http://blog.felipe.lessa.nom.br/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+																			<p class="comment-notes">Your email address will not be published. Required fields are marked <span class="required">*</span></p>							<p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="text" value="" size="30" /></p>
+												<p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p>						<p class="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href=&quot;&quot; title=&quot;&quot;&gt; &lt;abbr title=&quot;&quot;&gt; &lt;acronym title=&quot;&quot;&gt; &lt;b&gt; &lt;blockquote cite=&quot;&quot;&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=&quot;&quot;&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=&quot;&quot;&gt; &lt;strike&gt; &lt;strong&gt; </code></p>						<p class="form-submit">
+							<input name="submit" type="submit" id="submit" value="Post Comment" />
+							<input type='hidden' name='comment_post_ID' value='93' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='425' />
+						</p>
+						<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="e5a3b3d1a9" /></p>		<span id="openid_comment">
+			<label>
+				<input type="checkbox" id="login_with_openid" name="login_with_openid" checked="checked" />
+				Authenticate this comment using <span class="openid_link">OpenID</span>.			</label>
+		</span>
+		<script type="text/javascript">jQuery(function(){ add_openid_to_comment_form('http://blog.felipe.lessa.nom.br/index.php', '68f5010493') })</script>
+					</form>
+							</div><!-- #respond -->
+			
+</div><!-- #comments -->
+
+
+			</div><!-- #content -->
+		</div><!-- #container -->
+
+
+		<div id="primary" class="widget-area" role="complementary">
+			<ul class="xoxo">
+
+
+			<li id="search" class="widget-container widget_search">
+				<form role="search" method="get" id="searchform" class="searchform" action="index.html">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form>			</li>
+
+			<li id="archives" class="widget-container">
+				<h3 class="widget-title">Archives</h3>
+				<ul>
+						<li><a href='index.html?m=201601'>January 2016</a></li>
+	<li><a href='index.html?m=201509'>September 2015</a></li>
+	<li><a href='index.html?m=201505'>May 2015</a></li>
+	<li><a href='index.html?m=201312'>December 2013</a></li>
+	<li><a href='index.html?m=201211'>November 2012</a></li>
+	<li><a href='index.html?m=201209'>September 2012</a></li>
+	<li><a href='index.html?m=201201'>January 2012</a></li>
+				</ul>
+			</li>
+
+			<li id="meta" class="widget-container">
+				<h3 class="widget-title">Meta</h3>
+				<ul>
+										<li><a href="wp-login.php">Log in</a></li>
+									</ul>
+			</li>
+
+					</ul>
+		</div><!-- #primary .widget-area -->
+
+	</div><!-- #main -->
+
+	<div id="footer" role="contentinfo">
+		<div id="colophon">
+
+
+
+			<div id="site-info">
+				<a href="index.html" title="Felipe Lessa" rel="home">
+					Felipe Lessa				</a>
+			</div><!-- #site-info -->
+
+			<div id="site-generator">
+								<a href="http://wordpress.org/" title="Semantic Personal Publishing Platform">Proudly powered by WordPress.</a>
+			</div><!-- #site-generator -->
+
+		</div><!-- #colophon -->
+	</div><!-- #footer -->
+
+</div><!-- #wrapper -->
+
+</body>
+</html>

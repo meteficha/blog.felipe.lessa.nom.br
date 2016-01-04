@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<title>Announcing esqueleto, a type-safe EDSL for SQL queries | Felipe Lessa</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="stylesheet" type="text/css" media="all" href="http://blog.felipe.lessa.nom.br/wp-content/themes/twentyten/style.css" />
+<link rel="pingback" href="http://blog.felipe.lessa.nom.br/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Feed" href="http://blog.felipe.lessa.nom.br/?feed=rss2" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Comments Feed" href="http://blog.felipe.lessa.nom.br/?feed=comments-rss2" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Announcing esqueleto, a type-safe EDSL for SQL queries Comments Feed" href="http://blog.felipe.lessa.nom.br/?feed=rss2&#038;p=68" />
+<link rel='stylesheet' id='openid-css'  href='http://blog.felipe.lessa.nom.br/wp-content/plugins/openid/f/openid.css?ver=519' type='text/css' media='all' />
+<link rel='stylesheet' id='codecolorer-css'  href='http://blog.felipe.lessa.nom.br/wp-content/plugins/codecolorer/codecolorer.css?ver=0.9.9' type='text/css' media='screen' />
+<!-- This site uses the Yoast Google Analytics plugin v5.1.1 - Universal disabled - https://yoast.com/wordpress/plugins/google-analytics/ -->
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-28368350-1']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+
+</script>
+<!-- / Yoast Google Analytics -->
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-includes/js/jquery/jquery.js?ver=1.10.2'></script>
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-content/plugins/openid/f/openid.js?ver=519'></script>
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-includes/js/comment-reply.min.js?ver=3.8.5'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.felipe.lessa.nom.br/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.felipe.lessa.nom.br/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Abstracting permissions with Yesod' href='http://blog.felipe.lessa.nom.br/?p=7' />
+<link rel='next' title='Esqueleto now supports IN and EXISTS' href='http://blog.felipe.lessa.nom.br/?p=83' />
+<meta name="generator" content="WordPress 3.8.5" />
+<link rel='canonical' href='http://blog.felipe.lessa.nom.br/?p=68' />
+<link rel='shortlink' href='http://blog.felipe.lessa.nom.br/?p=68' />
+<meta name='robots' content='noindex,follow' />
+<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #f1f1f1; }
+</style>
+</head>
+
+<body class="single single-post postid-68 single-format-standard custom-background">
+<div id="wrapper" class="hfeed">
+	<div id="header">
+		<div id="masthead">
+			<div id="branding" role="banner">
+								<div id="site-title">
+					<span>
+						<a href="http://blog.felipe.lessa.nom.br/" title="Felipe Lessa" rel="home">Felipe Lessa</a>
+					</span>
+				</div>
+				<div id="site-description">Some random blog posts</div>
+
+										<img src="http://blog.felipe.lessa.nom.br/wp-content/themes/twentyten/images/headers/cherryblossoms.jpg" width="940" height="198" alt="" />
+								</div><!-- #branding -->
+
+			<div id="access" role="navigation">
+			  				<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+								<div class="menu"><ul><li ><a href="http://blog.felipe.lessa.nom.br/">Home</a></li><li class="page_item page-item-56"><a href="http://blog.felipe.lessa.nom.br/?page_id=56">About</a></li></ul></div>
+			</div><!-- #access -->
+		</div><!-- #masthead -->
+	</div><!-- #header -->
+
+	<div id="main">
+
+		<div id="container">
+			<div id="content" role="main">
+
+			
+
+				<div id="nav-above" class="navigation">
+					<div class="nav-previous"><a href="http://blog.felipe.lessa.nom.br/?p=7" rel="prev"><span class="meta-nav">&larr;</span> Abstracting permissions with Yesod</a></div>
+					<div class="nav-next"><a href="http://blog.felipe.lessa.nom.br/?p=83" rel="next">Esqueleto now supports IN and EXISTS <span class="meta-nav">&rarr;</span></a></div>
+				</div><!-- #nav-above -->
+
+				<div id="post-68" class="post-68 post type-post status-publish format-standard hentry category-haskell tag-edsl tag-esqueleto tag-haskell tag-persistent tag-sql tag-type-safe tag-yesod">
+					<h1 class="entry-title">Announcing esqueleto, a type-safe EDSL for SQL queries</h1>
+
+					<div class="entry-meta">
+						<span class="meta-prep meta-prep-author">Posted on</span> <a href="http://blog.felipe.lessa.nom.br/?p=68" title="19:51" rel="bookmark"><span class="entry-date">06/09/2012</span></a> <span class="meta-sep">by</span> <span class="author vcard"><a class="url fn n" href="http://blog.felipe.lessa.nom.br/?author=1" title="View all posts by Felipe Lessa">Felipe Lessa</a></span>					</div><!-- .entry-meta -->
+
+					<div class="entry-content">
+						<p>I&#8217;m very pleased to announce a preview release of <a href="http://hackage.haskell.org/package/esqueleto" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://hackage.haskell.org/package/esqueleto', 'esqueleto']);" >esqueleto</a>, a bare bones, type-safe EDSL for SQL queries.</p>
+<p><span id="more-68"></span></p>
+<p>On the first part of this blog post I&#8217;ll talk about persistent and HaskellDB.  You may jump <a href="#esqueleto">right into where I talk about esqueleto</a> if you want, though.</p>
+<h2>Background</h2>
+<p><a href="http://www.yesodweb.com/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.yesodweb.com/', 'Yesod']);" >Yesod</a> is very modular, and each of its components may be used separately.  You may also take libraries from other web frameworks.  However, it&#8217;s more convenient to use Yesod with its standard set of libraries.</p>
+<p>One of those libraries is <a href="http://hackage.haskell.org/package/persistent" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://hackage.haskell.org/package/persistent', 'persistent']);" >persistent</a>. It fills the role of communicating with the database: serialization and deserialization of data types, insertions, updates, queries, schema migration, and so on.  It currently has both SQL and NoSQL backends, such as <a href="http://hackage.haskell.org/package/persistent-mysql" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://hackage.haskell.org/package/persistent-mysql', 'persistent-mysql']);" >persistent-mysql</a>, <a href="http://hackage.haskell.org/package/persistent-postgresql" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://hackage.haskell.org/package/persistent-postgresql', 'persistent-postgresql']);" >persistent-postgresql</a>, <a href="http://hackage.haskell.org/package/persistent-sqlite" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://hackage.haskell.org/package/persistent-sqlite', 'persistent-sqlite']);" >persistent-sqlite</a> and <a href="http://hackage.haskell.org/package/persistent-mongoDB" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://hackage.haskell.org/package/persistent-mongoDB', 'persistent-mongoDB']);" >persistent-mongoDB</a>.</p>
+<h2>Persistent&#8217;s weakness</h2>
+<p>Even though persistent&#8217;s use of Template Haskell has been criticized by some, it&#8217;s almost consensual that its largest drawback lies on its query API.  For example, if you want to see all of John&#8217;s posts, and you know that John&#8217;s key on the database is <code class="codecolorer haskell default"><span class="haskell">johnId</span></code>, then you may write:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer">posts <span class="sy0">&lt;-</span> selectList <span class="br0">&#91;</span>BlogPostAuthorId <span class="sy0">==.</span> johnId<span class="br0">&#93;</span> <span class="br0">&#91;</span><span class="br0">&#93;</span></div></div>
+<p>Even though the meaning of those lists is somewhat cryptic, it&#8217;s not a bad line of code.  However, what if you didn&#8217;t know John&#8217;s key, just its e-mail (assuming that there is an uniqueness constraint on e-mails)?  Unfortunately, with persistent you&#8217;ll need either two queries:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer">Entity johnId john <span class="sy0">&lt;-</span> getBy <span class="br0">&#40;</span>UniqueEmail john'sEmail<span class="br0">&#41;</span><br />
+posts <span class="sy0">&lt;-</span> selectList <span class="br0">&#91;</span>BlogPostAuthorId <span class="sy0">==.</span> johnId<span class="br0">&#93;</span> <span class="br0">&#91;</span><span class="br0">&#93;</span></div></div>
+<p>Or you could do it in one query using the ad hoc <a href="http://hackage.haskell.org/packages/archive/persistent/1.0.1/doc/html/Database-Persist-Query-Join-Sql.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://hackage.haskell.org/packages/archive/persistent/1.0.1/doc/html/Database-Persist-Query-Join-Sql.html', 'Database.Persist.Query.Join.Sql']);" >Database.Persist.Query.Join.Sql</a> module:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer">runJoin <span class="sy0">$</span> SelectOneMany<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="br0">&#123;</span> somFilterOne &nbsp; &nbsp; &nbsp;<span class="sy0">=</span> <span class="br0">&#91;</span> PersonEmail <span class="sy0">==.</span> john'sEmail <span class="br0">&#93;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="sy0">,</span> somOrderOne &nbsp; &nbsp; &nbsp; <span class="sy0">=</span> <span class="br0">&#91;</span><span class="br0">&#93;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="sy0">,</span> somFilterMany &nbsp; &nbsp; <span class="sy0">=</span> <span class="br0">&#91;</span><span class="br0">&#93;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="sy0">,</span> somOrderMany &nbsp; &nbsp; &nbsp;<span class="sy0">=</span> <span class="br0">&#91;</span><span class="br0">&#93;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="sy0">,</span> somFilterKeys &nbsp; &nbsp; <span class="sy0">=</span> <span class="br0">&#40;</span>BlogPostAuthorId <span class="sy0">&lt;-.</span><span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="sy0">,</span> somGetKey &nbsp; &nbsp; &nbsp; &nbsp; <span class="sy0">=</span> blogPostAuthorId<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="sy0">,</span> somIncludeNoMatch <span class="sy0">=</span> False<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="br0">&#125;</span></div></div>
+<p>Compare to the equivalent SQL query:</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;"><div class="sql codecolorer"><span class="kw1">SELECT</span> BlogPost<span class="sy0">.*</span><br />
+<span class="kw1">FROM</span> Person <span class="kw1">INNER</span> <span class="kw1">JOIN</span> BlogPost<br />
+<span class="kw1">ON</span> Person<span class="sy0">.</span>id <span class="sy0">=</span> BlogPost<span class="sy0">.</span>authorId<br />
+<span class="kw1">WHERE</span> Person<span class="sy0">.</span>email <span class="sy0">=</span> ?</div></div>
+<p>But it gets even worse: you have support only for simple queries (using <code class="codecolorer haskell default"><span class="haskell">selectList</span></code>) and for simple one-to-many joins (using the ad hoc <code class="codecolorer haskell default"><span class="haskell">SelectOneMany</span></code>).  If you need anything else then you&#8217;re on your own.  For instance, there&#8217;s no support for doing many-to-many joins.</p>
+<p>For these reasons I&#8217;ve created the <a href="http://hackage.haskell.org/packages/archive/persistent/1.0.1/doc/html/Database-Persist-GenericSql.html#v:rawSql" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://hackage.haskell.org/packages/archive/persistent/1.0.1/doc/html/Database-Persist-GenericSql.html#v:rawSql', '::CODECOLORER_BLOCK_8::']);" ><code class="codecolorer haskell default"><span class="haskell">rawSql</span></code></a> function <a href="https://github.com/yesodweb/persistent/pull/34" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/yesodweb/persistent/pull/34', '8 month ago']);" >8 month ago</a>.  It was nice to be able to write raw SQL queries and still be able to use persistent to deserialize the results, but we still get all the drawbacks of using raw SQL queries:</p>
+<ul>
+<li>No compile-time checks whatsoever.  You could alleviate this problem using <a href="http://hackage.haskell.org/package/hssqlppp" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://hackage.haskell.org/package/hssqlppp', 'hssqlppp']);" >hssqlppp</a>, for example, but you&#8217;d still not get compile-time checks for the types of your entities&#8212;there would still be plenty of ways of shooting yourself in the foot.</li>
+<li>No composability.  Suppose you have a query for people and their latest blog post.  You can&#8217;t reuse this query to reorder the results or filter them.</li>
+<li>Zero coolness factor.  C&#8217;mon, we&#8217;re not using Haskell for nothing! =)</li>
+</ul>
+<h2>HaskellDB: a solution?</h2>
+<p><a href="http://hackage.haskell.org/package/haskelldb" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://hackage.haskell.org/package/haskelldb', 'HaskellDB']);" >HaskellDB</a> is a type-safe EDSL that allows you to write SQL queries using relational algebra.  It&#8217;s as old as Parsec, having been introduced in 1999!</p>
+<p>Recently some people have been showing interest in using it with Yesod.  Last month <a href="https://groups.google.com/d/msg/yesodweb/nQjQuwydfI8/vB9mM47uZ0AJ" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://groups.google.com/d/msg/yesodweb/nQjQuwydfI8/vB9mM47uZ0AJ', 'Mats Rauhala']);" >Mats Rauhala</a> wrote the following summary about his opinion at the time on Yesod&#8217;s mailing list:</p>
+<blockquote><p>
+1. Direct sql<br />
+  &#8211; No, or very little type safety<br />
+  &#8211; No, or very little compile time checks<br />
+  &#8211; Raw queries are ugly<br />
+  + Full power of SQL</p>
+<p>2. ORM<br />
+  + Type safety (ala persistent)<br />
+  &#8211; No control over queries<br />
+  &#8211; No proper join support(?, persistent)<br />
+  + Abstract<br />
+  +- High-level</p>
+<p>3. Relational algebra<br />
+  + Type safety (ala HaskellDB)<br />
+  + Great control over queries<br />
+  + Good control over abstractions<br />
+  + It&#8217;s algebra, therefore fits Haskell (tongue in cheek)<br />
+  &#8211; Forgotten (HaskellDB)
+</p></blockquote>
+<p>Although it&#8217;s rather painful to setup HaskellDB&#8217;s tables, I&#8217;ll won&#8217;t count that as a big drawback since some Template Haskell could certainly solve this shortcoming.  Its lack of migration capabilities is not a huge problem, too, since you may use persistent just for the migrations (although I&#8217;m not sure if anyone has ever put something like this into production).</p>
+<p>HaskellDB&#8217;s biggest drawback is being a relational algebra library.  &#8220;What?&#8221;, I hear you say.  I like relational algebra as much as the next functional programmer, but it comes with two drawbacks, one of them being a major one:</p>
+<ol>
+<li>Being something different than what we&#8217;re used to means that it takes some time to learn how to use it and get productive.  This is a minor drawback, but nevertheless it is a drawback.</li>
+<li>However, the biggest drawback is that <strong>it&#8217;s very hard to map into efficient SQL</strong>.  Back in 2008, Geoff Wilson <a href="http://pseudofish.com/blog/2008/05/18/haskelldb-performance/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pseudofish.com/blog/2008/05/18/haskelldb-performance/', 'wrote a blog post about HaskellDB&#8217;s performance']);" >wrote a blog post about HaskellDB&#8217;s performance</a>.  A simple <code class="codecolorer sql default"><span class="sql"><span class="kw1">INNER</span> <span class="kw1">JOIN</span></span></code> was taking between 40x and <strong>160x</strong> more time to execute when using HaskellDB and comparing against a handwritten SQL query.</li>
+</ol>
+<p>While I&#8217;m sure that some work has been done on HaskellDB&#8217;s optimizer since that blog post, Chris Done <a href="http://chrisdone.com/posts/2011-11-06-haskelldb-tutorial.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://chrisdone.com/posts/2011-11-06-haskelldb-tutorial.html', 'found out last November']);" >found out last November</a> that it still isn&#8217;t very good:</p>
+<blockquote><p>
+Don’t expect good performance from HaskellDB if you’re using MySQL.
+</p></blockquote>
+<p>Even if I started using PostgreSQL, I wouldn&#8217;t want to rely on its optimizer when doing, say, a join between five tables on HaskellDB.  (If you didn&#8217;t already know, I&#8217;m <a href="http://hackage.haskell.org/package/persistent-mysql" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://hackage.haskell.org/package/persistent-mysql', 'persistent-mysql']);" >persistent-mysql</a>&#8216;s author.)</p>
+<p>Please don&#8217;t get me wrong, HaskellDB is amazing!  But it won&#8217;t work for my production systems.</p>
+<p><a name="esqueleto"></a></p>
+<h2>Esqueleto rises</h2>
+<p>Last Sunday my co-worker was bitten by a nasty bug due to a raw SQL query.  He changed an entity&#8217;s field so that it would be optional.  After fixing all type errors, he found out that some parts of the application were not working, but no error messages were to be found anywhere.  Turns out an implicit join in a raw SQL query started dropping rows from the result since the value was <code class="codecolorer sql default"><span class="sql"><span class="kw1">NULL</span></span></code>.  After we found the bug, he proceeded to show me <a href="http://squeryl.org/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://squeryl.org/', 'Squeryl']);" >Squeryl</a>. My initial thought after seeing the examples was: how could I write this in Haskell?</p>
+<p>Thus <a href="http://hackage.haskell.org/package/esqueleto" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://hackage.haskell.org/package/esqueleto', 'esqueleto']);" >esqueleto</a> was born.  It&#8217;s a bare bones, type-safe EDSL for SQL-queries. Like HaskellDB, it has composable, type-checked queries.  Unlike HaskellDB, it&#8217;s not relational algebra, it&#8217;s SQL.  I was inspired by Squeryl but created esqueleto from scratch.</p>
+<p>It sits on top of persistent and requires no further setup: if you&#8217;re already using persistent then you already have everything it takes to use esqueleto.  Although I haven&#8217;t tested, yet, it should work on any SQL backend.</p>
+<p>Let&#8217;s remember the first query we did on the beginning of this post:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer">selectList <span class="br0">&#91;</span>BlogPostAuthorId <span class="sy0">==.</span> johnId<span class="br0">&#93;</span> <span class="br0">&#91;</span><span class="br0">&#93;</span></div></div>
+<p>You could write the same query in plain SQL as:</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;"><div class="sql codecolorer"><span class="kw1">SELECT</span> BlogPost<span class="sy0">.*</span><br />
+<span class="kw1">FROM</span> BlogPost<br />
+<span class="kw1">WHERE</span> BlogPost<span class="sy0">.</span>authorId <span class="sy0">=</span> ?</div></div>
+<p>With esqueleto, you may say:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer">select <span class="sy0">$</span><br />
+from <span class="sy0">$</span> \b <span class="sy0">-&gt;</span> <span class="kw1">do</span><br />
+where<span class="sy0">_</span> <span class="br0">&#40;</span>b <span class="sy0">^.</span> BlogPostAuthorId <span class="sy0">==.</span> val johnId<span class="br0">&#41;</span><br />
+<span class="kw3">return</span> b</div></div>
+<p>Arguably more verbose than persistent&#8217;s <code class="codecolorer haskell default"><span class="haskell">selectList</span></code>, but extremely close to the handwriten SQL: just take the <code class="codecolorer haskell default"><span class="haskell"><span class="kw3">return</span></span></code> and move it to the top!</p>
+<p>Better still, the SQL that esqueleto generates is:</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;"><div class="sql codecolorer"><span class="kw1">SELECT</span> BlogPost<span class="sy0">.</span>id<span class="sy0">,</span> BlogPost<span class="sy0">.</span>title<br />
+<span class="kw1">FROM</span> BlogPost<br />
+<span class="kw1">WHERE</span> BlogPost<span class="sy0">.</span>authorId <span class="sy0">=</span> ?</div></div>
+<p>I&#8217;m not kidding!  The only difference from the handwritten query is the explicit list of columns, which is needed for correctness (the order your database returns the columns may not be what persistent expects).</p>
+<p>Remember the one-to-many join?  Here&#8217;s the esqueleto version:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer">select <span class="sy0">$</span><br />
+from <span class="sy0">$</span> \<span class="br0">&#40;</span>p `InnerJoin` b<span class="br0">&#41;</span> <span class="sy0">-&gt;</span> <span class="kw1">do</span><br />
+on <span class="br0">&#40;</span>p <span class="sy0">^.</span> PersonId <span class="sy0">==.</span> b <span class="sy0">^.</span> BlogPostAuthorId<span class="br0">&#41;</span><br />
+where<span class="sy0">_</span> <span class="br0">&#40;</span>p <span class="sy0">^.</span> PersonEmail <span class="sy0">==.</span> val john'sEmail<span class="br0">&#41;</span><br />
+<span class="kw3">return</span> b</div></div>
+<p>The SQL esqueleto generates for this query is:</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;"><div class="sql codecolorer"><span class="kw1">SELECT</span> BlogPost<span class="sy0">.</span>id<span class="sy0">,</span> BlogPost<span class="sy0">.</span>title<br />
+<span class="kw1">FROM</span> Person <span class="kw1">INNER</span> <span class="kw1">JOIN</span> BlogPost<br />
+<span class="kw1">ON</span> Person<span class="sy0">.</span>id <span class="sy0">=</span> BlogPost<span class="sy0">.</span>authorId<br />
+<span class="kw1">WHERE</span> Person<span class="sy0">.</span>email <span class="sy0">=</span> ?</div></div>
+<p>Let&#8217;s take <a href="http://pseudofish.com/blog/2008/05/18/haskelldb-performance/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pseudofish.com/blog/2008/05/18/haskelldb-performance/', 'Geoff Wilson&#8217;s post']);" >Geoff Wilson&#8217;s post</a> as an example again.  Since this is a preview release of esqueleto, it does not have support for <code class="codecolorer sql default"><span class="sql"><span class="kw1">IN</span></span></code> yet, so I&#8217;ll rewrite his code slightly. The HaskellDB code he wrote was:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer">query db <span class="sy0">$</span> <span class="kw1">do</span><br />
+&nbsp; s <span class="sy0">&lt;-</span> table S<span class="sy0">.</span>stock<br />
+&nbsp; e <span class="sy0">&lt;-</span> table E<span class="sy0">.</span>end<span class="sy0">_</span>of<span class="sy0">_</span>day<br />
+&nbsp; restrict <span class="br0">&#40;</span>s<span class="sy0">!</span>S<span class="sy0">.</span>stock<span class="sy0">_</span>id <span class="sy0">.==.</span> e<span class="sy0">!</span>E<span class="sy0">.</span>stock<span class="sy0">_</span>id <span class="sy0">.&amp;&amp;.</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; s<span class="sy0">!</span>S<span class="sy0">.</span>ticker <span class="sy0">.==.</span> constant ticker <span class="sy0">.&amp;&amp;.</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; e<span class="sy0">!</span>E<span class="sy0">.</span>trade<span class="sy0">_</span>date <span class="sy0">.==.</span> constant stockDate<span class="br0">&#41;</span><br />
+&nbsp; r <span class="sy0">&lt;-</span> project <span class="br0">&#40;</span>closing<span class="sy0">_</span>price <span class="sy0">&lt;&lt;</span> e<span class="sy0">!</span>E<span class="sy0">.</span>closing<span class="sy0">_</span>price #<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; trade<span class="sy0">_</span>date &nbsp; &nbsp;<span class="sy0">&lt;&lt;</span> e<span class="sy0">!</span>E<span class="sy0">.</span>trade<span class="sy0">_</span>date<span class="br0">&#41;</span><br />
+&nbsp; <span class="kw3">return</span> r</div></div>
+<p>The SQL that HaskellDB generated on 2008 was (adapted):</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;"><div class="sql codecolorer"><span class="kw1">SELECT</span> closing_price2 <span class="kw1">AS</span> closing_price<span class="sy0">,</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp;trade_date2 <span class="kw1">AS</span> trade_date<br />
+<span class="kw1">FROM</span> <span class="br0">&#40;</span><span class="kw1">SELECT</span> stock_id <span class="kw1">AS</span> stock_id2<span class="sy0">,</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;trade_date <span class="kw1">AS</span> trade_date2<span class="sy0">,</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;closing_price <span class="kw1">AS</span> closing_price2<br />
+&nbsp; &nbsp; &nbsp; <span class="kw1">FROM</span> end_of_day <span class="kw1">AS</span> T1<span class="br0">&#41;</span> <span class="kw1">AS</span> T1<span class="sy0">,</span><br />
+&nbsp; &nbsp; &nbsp;<span class="br0">&#40;</span><span class="kw1">SELECT</span> stock_id <span class="kw1">AS</span> stock_id1<span class="sy0">,</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;ticker <span class="kw1">AS</span> ticker1<br />
+&nbsp; &nbsp; &nbsp; <span class="kw1">FROM</span> stock <span class="kw1">AS</span> T1<span class="br0">&#41;</span> <span class="kw1">AS</span> T2<br />
+<span class="kw1">WHERE</span> stock_id1 <span class="sy0">=</span> stock_id2<br />
+&nbsp; <span class="kw1">AND</span> ticker1 <span class="sy0">=</span> <span class="st0">'FXJ'</span><br />
+&nbsp; <span class="kw1">AND</span> trade_date2 <span class="sy0">=</span> <span class="st0">'2008-02-14 00:00:00'</span>;</div></div>
+<p>His handwritten SQL was (adapted as well):</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;"><div class="sql codecolorer"><span class="kw1">SELECT</span> e<span class="sy0">.</span>closing_price <span class="kw1">AS</span> closing_price<span class="sy0">,</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp;e<span class="sy0">.</span>trade_date <span class="kw1">AS</span> trade_date<br />
+<span class="kw1">FROM</span><br />
+&nbsp; &nbsp; stock s<span class="sy0">,</span> end_of_day e<br />
+<span class="kw1">WHERE</span><br />
+&nbsp; &nbsp; s<span class="sy0">.</span>stock_id <span class="sy0">=</span> e<span class="sy0">.</span>stock_id<br />
+&nbsp; &nbsp; <span class="kw1">AND</span> s<span class="sy0">.</span>ticker <span class="sy0">=</span> <span class="st0">'FXJ'</span><br />
+&nbsp; &nbsp; <span class="kw1">AND</span> e<span class="sy0">.</span>trade_date <span class="sy0">=</span> <span class="st0">'2008-02-14 00:00:00'</span>;</div></div>
+<p>The same query could be written using persistent and esqueleto as:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer">select <span class="sy0">$</span><br />
+from <span class="sy0">$</span> \<span class="br0">&#40;</span>s<span class="sy0">,</span> e<span class="br0">&#41;</span> <span class="sy0">-&gt;</span> <span class="kw1">do</span><br />
+where<span class="sy0">_</span> <span class="br0">&#40;</span>s <span class="sy0">^.</span> StockId <span class="sy0">==.</span> e <span class="sy0">^.</span> EndOfDayStockId <span class="sy0">&amp;&amp;.</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; s <span class="sy0">^.</span> StockTicker <span class="sy0">==.</span> val ticker <span class="sy0">&amp;&amp;.</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; s <span class="sy0">^.</span> EndOfDayTradeDate <span class="sy0">==.</span> val stockDate<span class="br0">&#41;</span><br />
+<span class="kw3">return</span> <span class="br0">&#40;</span>e <span class="sy0">^.</span> EndOfDayClosingPrice<span class="sy0">,</span> e <span class="sy0">^.</span> EndOfDayTradeDate<span class="br0">&#41;</span></div></div>
+<p>The generated SQL would be:</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;"><div class="sql codecolorer"><span class="kw1">SELECT</span> end_of_day<span class="sy0">.</span>closing_price<span class="sy0">,</span> end_of_day<span class="sy0">.</span>trade_date<br />
+<span class="kw1">FROM</span> stock<span class="sy0">,</span> end_of_day<br />
+<span class="kw1">WHERE</span> stock<span class="sy0">.</span>stock_id <span class="sy0">=</span> end_of_day<span class="sy0">.</span>stock_id <span class="kw1">AND</span> <span class="br0">&#40;</span>stock<span class="sy0">.</span>ticker <span class="sy0">=</span> ? <span class="kw1">AND</span> end_of_day<span class="sy0">.</span>trade_date <span class="sy0">=</span> ?<span class="br0">&#41;</span></div></div>
+<h2>Conclusion</h2>
+<p>The full power of raw SQL.  Type-checked queries, no type signatures required.  Complete control over the resulting SQL.  The robustness and performance of persistent.  And with only 800 source lines of code (+ 400 SLOC for the test suite).  What&#8217;s not to like about esqueleto? =D</p>
+<p>This is just a preview release.  I&#8217;m eager to hear what you have to say about it.  Send pull requests, open issues, comment about it <a href="http://www.reddit.com/r/haskell/comments/zh3h6/announcing_esqueleto_a_typesafe_edsl_for_sql/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.reddit.com/r/haskell/comments/zh3h6/announcing_esqueleto_a_typesafe_edsl_for_sql/', 'on reddit']);" >on reddit</a> or send e-mails to Yesod&#8217;s mailing list.  Or, even better, give it a spin a let me know how it went!  Its <a href="http://hackage.haskell.org/packages/archive/esqueleto/latest/doc/html/Database-Esqueleto.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://hackage.haskell.org/packages/archive/esqueleto/latest/doc/html/Database-Esqueleto.html', 'Haddock documentation']);" >Haddock documentation</a> should get you started.</p>
+<p>Thanks for reading this rather long blog post! =)</p>
+											</div><!-- .entry-content -->
+
+
+					<div class="entry-utility">
+						This entry was posted in <a href="http://blog.felipe.lessa.nom.br/?cat=3" title="View all posts in Haskell" rel="category">Haskell</a> and tagged <a href="http://blog.felipe.lessa.nom.br/?tag=edsl" rel="tag">EDSL</a>, <a href="http://blog.felipe.lessa.nom.br/?tag=esqueleto" rel="tag">esqueleto</a>, <a href="http://blog.felipe.lessa.nom.br/?tag=haskell" rel="tag">Haskell</a>, <a href="http://blog.felipe.lessa.nom.br/?tag=persistent" rel="tag">persistent</a>, <a href="http://blog.felipe.lessa.nom.br/?tag=sql" rel="tag">SQL</a>, <a href="http://blog.felipe.lessa.nom.br/?tag=type-safe" rel="tag">type-safe</a>, <a href="http://blog.felipe.lessa.nom.br/?tag=yesod" rel="tag">Yesod</a>. Bookmark the <a href="http://blog.felipe.lessa.nom.br/?p=68" title="Permalink to Announcing esqueleto, a type-safe EDSL for SQL queries" rel="bookmark">permalink</a>.											</div><!-- .entry-utility -->
+				</div><!-- #post-## -->
+
+				<div id="nav-below" class="navigation">
+					<div class="nav-previous"><a href="http://blog.felipe.lessa.nom.br/?p=7" rel="prev"><span class="meta-nav">&larr;</span> Abstracting permissions with Yesod</a></div>
+					<div class="nav-next"><a href="http://blog.felipe.lessa.nom.br/?p=83" rel="next">Esqueleto now supports IN and EXISTS <span class="meta-nav">&rarr;</span></a></div>
+				</div><!-- #nav-below -->
+
+				
+			<div id="comments">
+
+
+			<h3 id="comments-title">7 Responses to <em>Announcing esqueleto, a type-safe EDSL for SQL queries</em></h3>
+
+
+			<ol class="commentlist">
+					<li class="comment even thread-even depth-1" id="li-comment-123">
+		<div id="comment-123">
+			<div class="comment-author vcard">
+				<img alt='' src='http://0.gravatar.com/avatar/a7c454dd362fd3d043f9dd0587be1079?s=40&amp;d=identicon&amp;r=PG' class='avatar avatar-40 photo' height='40' width='40' />				<cite class="fn">Anton</cite> <span class="says">says:</span>			</div><!-- .comment-author .vcard -->
+			
+			<div class="comment-meta commentmetadata"><a href="http://blog.felipe.lessa.nom.br/?p=68#comment-123">
+				07/09/2012 at 01:05</a>			</div><!-- .comment-meta .commentmetadata -->
+
+			<div class="comment-body"><p>Great!</p>
+</div>
+
+			<div class="reply">
+				<a class='comment-reply-link' href='?p=68&#038;replytocom=123#respond' onclick='return addComment.moveForm("comment-123", "123", "respond", "68")'>Reply</a>			</div><!-- .reply -->
+		</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-125">
+		<div id="comment-125">
+			<div class="comment-author vcard">
+				<img alt='' src='http://1.gravatar.com/avatar/dae199419510327869d1e088b2f1aaf5?s=40&amp;d=identicon&amp;r=PG' class='avatar avatar-40 photo' height='40' width='40' />				<cite class="fn">Marek Sieradzki</cite> <span class="says">says:</span>			</div><!-- .comment-author .vcard -->
+			
+			<div class="comment-meta commentmetadata"><a href="http://blog.felipe.lessa.nom.br/?p=68#comment-125">
+				07/09/2012 at 06:58</a>			</div><!-- .comment-meta .commentmetadata -->
+
+			<div class="comment-body"><p>It&#8217;s very important that these operators are short and readable or whole thing is a quasiquote, if language is a very restricted EDSL then quasiquote is often a LOT more readable than EDSL that invents new &#8216;==&#8217;. I know it might sound like nitpicking but that&#8217;s one of the reasons I didn&#8217;t use HaskellDB.</p>
+<p>Operators matter a lot. I don&#8217;t know if we can just use some TH $macro that would process our normally written AST that has normal == and such. I think $tosql(&#8230; AST) would be more readable than code sprinkled with ^.</p>
+<p>Other ones were that it didn&#8217;t support pgsql stored procedures and that there was lots of code to write. Little was maintained, nothing was documented and I found -th package a lot later.</p>
+</div>
+
+			<div class="reply">
+				<a class='comment-reply-link' href='?p=68&#038;replytocom=125#respond' onclick='return addComment.moveForm("comment-125", "125", "respond", "68")'>Reply</a>			</div><!-- .reply -->
+		</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-meteficha bypostauthor even thread-even depth-1" id="li-comment-126">
+		<div id="comment-126">
+			<div class="comment-author vcard">
+				<img alt='' src='http://1.gravatar.com/avatar/7ed4c86260f44586c938ccdd56ff6590?s=40&amp;d=identicon&amp;r=PG' class='avatar avatar-40 photo' height='40' width='40' />				<cite class="fn">Felipe Lessa</cite> <span class="says">says:</span>			</div><!-- .comment-author .vcard -->
+			
+			<div class="comment-meta commentmetadata"><a href="http://blog.felipe.lessa.nom.br/?p=68#comment-126">
+				07/09/2012 at 08:16</a>			</div><!-- .comment-meta .commentmetadata -->
+
+			<div class="comment-body"><p>Marek Sieradzki: Thanks for the feedback!  I&#8217;m not a big fan of these operators as well, I&#8217;ve opened an issue to track progress in this respect <a href="https://github.com/meteficha/esqueleto/issues/2" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'https://github.com/meteficha/esqueleto/issues/2', 'https://github.com/meteficha/esqueleto/issues/2']);"  rel="nofollow">https://github.com/meteficha/esqueleto/issues/2</a>.</p>
+<p>It is possible to write TH code that translates an even more SQL-like language into esqueleto&#8217;s operators.  However, I&#8217;m not sure if that would be a good idea in practice, we&#8217;d have to try it out.  Perhaps we could provide both interfaces as well.  I&#8217;ve opened an issue on GitHub but don&#8217;t hold your breath <a href="https://github.com/meteficha/esqueleto/issues/3" onclick="_gaq.push(['_trackEvent', 'outbound-comment', 'https://github.com/meteficha/esqueleto/issues/3', 'https://github.com/meteficha/esqueleto/issues/3']);"  rel="nofollow">https://github.com/meteficha/esqueleto/issues/3</a> =).</p>
+</div>
+
+			<div class="reply">
+				<a class='comment-reply-link' href='?p=68&#038;replytocom=126#respond' onclick='return addComment.moveForm("comment-126", "126", "respond", "68")'>Reply</a>			</div><!-- .reply -->
+		</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-128">
+		<div id="comment-128">
+			<div class="comment-author vcard">
+				<img alt='' src='http://1.gravatar.com/avatar/9c51a8b8afa2366a2ef4650c411f187a?s=40&amp;d=identicon&amp;r=PG' class='avatar avatar-40 photo' height='40' width='40' />				<cite class="fn"><a href='http://comonad.com/reader/' rel='external nofollow' class='openid_link url'>Edward Kmett</a></cite> <span class="says">says:</span>			</div><!-- .comment-author .vcard -->
+			
+			<div class="comment-meta commentmetadata"><a href="http://blog.felipe.lessa.nom.br/?p=68#comment-128">
+				07/09/2012 at 17:40</a>			</div><!-- .comment-meta .commentmetadata -->
+
+			<div class="comment-body"><p>Great work, Felipe! I just figured I&#8217;d raise my voice as I for one rather like the current EDSL approach over the massive compile times and inflexibility of TH quasiquoters. <img src="http://blog.felipe.lessa.nom.br/wp-includes/images/smilies/icon_wink.gif" alt=";)" class="wp-smiley" /> </p>
+</div>
+
+			<div class="reply">
+				<a class='comment-reply-link' href='?p=68&#038;replytocom=128#respond' onclick='return addComment.moveForm("comment-128", "128", "respond", "68")'>Reply</a>			</div><!-- .reply -->
+		</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-309">
+		<div id="comment-309">
+			<div class="comment-author vcard">
+				<img alt='' src='http://1.gravatar.com/avatar/f3c3a902a3e8c2ee16bb961339f1c184?s=40&amp;d=identicon&amp;r=PG' class='avatar avatar-40 photo' height='40' width='40' />				<cite class="fn">Levi</cite> <span class="says">says:</span>			</div><!-- .comment-author .vcard -->
+			
+			<div class="comment-meta commentmetadata"><a href="http://blog.felipe.lessa.nom.br/?p=68#comment-309">
+				31/05/2013 at 20:48</a>			</div><!-- .comment-meta .commentmetadata -->
+
+			<div class="comment-body"><p>Wow.. that&#8217;s really cool.<br />
+Almost reminds me of what it can look like in C# for LINQ, though of course with the restriction in haskell with the keyword &#8216;where&#8217;</p>
+</div>
+
+			<div class="reply">
+				<a class='comment-reply-link' href='?p=68&#038;replytocom=309#respond' onclick='return addComment.moveForm("comment-309", "309", "respond", "68")'>Reply</a>			</div><!-- .reply -->
+		</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-4366">
+		<div id="comment-4366">
+			<div class="comment-author vcard">
+				<img alt='' src='http://0.gravatar.com/avatar/2b9331f638e35e9cf430befc4aaeaad1?s=40&amp;d=identicon&amp;r=PG' class='avatar avatar-40 photo' height='40' width='40' />				<cite class="fn">Juan</cite> <span class="says">says:</span>			</div><!-- .comment-author .vcard -->
+			
+			<div class="comment-meta commentmetadata"><a href="http://blog.felipe.lessa.nom.br/?p=68#comment-4366">
+				19/11/2015 at 09:48</a>			</div><!-- .comment-meta .commentmetadata -->
+
+			<div class="comment-body"><p>I am wondering if you have applied Esqueleto or HaskellDB to some sort of Big Graph or Graph processing on Big Data project.</p>
+</div>
+
+			<div class="reply">
+				<a class='comment-reply-link' href='?p=68&#038;replytocom=4366#respond' onclick='return addComment.moveForm("comment-4366", "4366", "respond", "68")'>Reply</a>			</div><!-- .reply -->
+		</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-meteficha bypostauthor even depth-2" id="li-comment-4367">
+		<div id="comment-4367">
+			<div class="comment-author vcard">
+				<img alt='' src='http://1.gravatar.com/avatar/7ed4c86260f44586c938ccdd56ff6590?s=40&amp;d=identicon&amp;r=PG' class='avatar avatar-40 photo' height='40' width='40' />				<cite class="fn">Felipe Lessa</cite> <span class="says">says:</span>			</div><!-- .comment-author .vcard -->
+			
+			<div class="comment-meta commentmetadata"><a href="http://blog.felipe.lessa.nom.br/?p=68#comment-4367">
+				19/11/2015 at 09:51</a>			</div><!-- .comment-meta .commentmetadata -->
+
+			<div class="comment-body"><p>I haven&#8217;t myself, but many people use it in production.  Maybe someone else has!</p>
+</div>
+
+			<div class="reply">
+				<a class='comment-reply-link' href='?p=68&#038;replytocom=4367#respond' onclick='return addComment.moveForm("comment-4367", "4367", "respond", "68")'>Reply</a>			</div><!-- .reply -->
+		</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+			</ol>
+
+
+	
+
+								<div id="respond" class="comment-respond">
+				<h3 id="reply-title" class="comment-reply-title">Leave a Reply to <a href="#comment-125">Marek Sieradzki</a> <small><a rel="nofollow" id="cancel-comment-reply-link" href="?p=68#respond">Cancel reply</a></small></h3>
+									<form action="http://blog.felipe.lessa.nom.br/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+																			<p class="comment-notes">Your email address will not be published. Required fields are marked <span class="required">*</span></p>							<p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="text" value="" size="30" /></p>
+												<p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p>						<p class="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href=&quot;&quot; title=&quot;&quot;&gt; &lt;abbr title=&quot;&quot;&gt; &lt;acronym title=&quot;&quot;&gt; &lt;b&gt; &lt;blockquote cite=&quot;&quot;&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=&quot;&quot;&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=&quot;&quot;&gt; &lt;strike&gt; &lt;strong&gt; </code></p>						<p class="form-submit">
+							<input name="submit" type="submit" id="submit" value="Post Comment" />
+							<input type='hidden' name='comment_post_ID' value='68' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='125' />
+						</p>
+						<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="b9e7e9a6dc" /></p>		<span id="openid_comment">
+			<label>
+				<input type="checkbox" id="login_with_openid" name="login_with_openid" checked="checked" />
+				Authenticate this comment using <span class="openid_link">OpenID</span>.			</label>
+		</span>
+		<script type="text/javascript">jQuery(function(){ add_openid_to_comment_form('http://blog.felipe.lessa.nom.br/index.php', '68f5010493') })</script>
+					</form>
+							</div><!-- #respond -->
+			
+</div><!-- #comments -->
+
+
+			</div><!-- #content -->
+		</div><!-- #container -->
+
+
+		<div id="primary" class="widget-area" role="complementary">
+			<ul class="xoxo">
+
+
+			<li id="search" class="widget-container widget_search">
+				<form role="search" method="get" id="searchform" class="searchform" action="http://blog.felipe.lessa.nom.br/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form>			</li>
+
+			<li id="archives" class="widget-container">
+				<h3 class="widget-title">Archives</h3>
+				<ul>
+						<li><a href='http://blog.felipe.lessa.nom.br/?m=201601'>January 2016</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201509'>September 2015</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201505'>May 2015</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201312'>December 2013</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201211'>November 2012</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201209'>September 2012</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201201'>January 2012</a></li>
+				</ul>
+			</li>
+
+			<li id="meta" class="widget-container">
+				<h3 class="widget-title">Meta</h3>
+				<ul>
+										<li><a href="http://blog.felipe.lessa.nom.br/wp-login.php">Log in</a></li>
+									</ul>
+			</li>
+
+					</ul>
+		</div><!-- #primary .widget-area -->
+
+	</div><!-- #main -->
+
+	<div id="footer" role="contentinfo">
+		<div id="colophon">
+
+
+
+			<div id="site-info">
+				<a href="http://blog.felipe.lessa.nom.br/" title="Felipe Lessa" rel="home">
+					Felipe Lessa				</a>
+			</div><!-- #site-info -->
+
+			<div id="site-generator">
+								<a href="http://wordpress.org/" title="Semantic Personal Publishing Platform">Proudly powered by WordPress.</a>
+			</div><!-- #site-generator -->
+
+		</div><!-- #colophon -->
+	</div><!-- #footer -->
+
+</div><!-- #wrapper -->
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Using stack on NixOS</title>
+	<atom:link href="http://blog.felipe.lessa.nom.br?feed=rss2&#038;p=146" rel="self" type="application/rss+xml" />
+	<link>http://blog.felipe.lessa.nom.br/?p=146</link>
+	<description>Some random blog posts</description>
+	<lastBuildDate>Thu, 19 Nov 2015 11:51:35 +0000</lastBuildDate>
+		<sy:updatePeriod>hourly</sy:updatePeriod>
+		<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=3.8.5</generator>
+	<item>
+		<title>By: Felipe Lessa</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=146#comment-4256</link>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+		<pubDate>Wed, 23 Sep 2015 12:28:26 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=146#comment-4256</guid>
+		<description><![CDATA[Hmmm... Well, I guess I prefer just having to be careful about Nix garbage collections (which don&#039;t have to be frequent anyway, thanks to nix-store --optimize) and not having to worry about when nix-build was safe to be used again.  But thanks a lot for your suggestion! :)]]></description>
+		<content:encoded><![CDATA[<p>Hmmm&#8230; Well, I guess I prefer just having to be careful about Nix garbage collections (which don&#8217;t have to be frequent anyway, thanks to nix-store &#8211;optimize) and not having to worry about when nix-build was safe to be used again.  But thanks a lot for your suggestion! <img src="http://blog.felipe.lessa.nom.br/wp-includes/images/smilies/icon_smile.gif" alt=":)" class="wp-smiley" /> </p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Luca Bruno</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=146#comment-4255</link>
+		<dc:creator><![CDATA[Luca Bruno]]></dc:creator>
+		<pubDate>Wed, 23 Sep 2015 08:34:54 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=146#comment-4255</guid>
+		<description><![CDATA[Yes, unless you don&#039;t run nix-build when the symlink is already existing.]]></description>
+		<content:encoded><![CDATA[<p>Yes, unless you don&#8217;t run nix-build when the symlink is already existing.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Felipe Lessa</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=146#comment-4251</link>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+		<pubDate>Tue, 22 Sep 2015 19:06:41 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=146#comment-4251</guid>
+		<description><![CDATA[Luca, what would happen if the system’s zlib was upgraded and the nix-build command was executed again? Wouldn’t it return the new zlib’s path and overwrite the zlib symlink created by the previous –out-link?]]></description>
+		<content:encoded><![CDATA[<p>Luca, what would happen if the system’s zlib was upgraded and the nix-build command was executed again? Wouldn’t it return the new zlib’s path and overwrite the zlib symlink created by the previous –out-link?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Luca Bruno</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=146#comment-4249</link>
+		<dc:creator><![CDATA[Luca Bruno]]></dc:creator>
+		<pubDate>Tue, 22 Sep 2015 18:12:56 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=146#comment-4249</guid>
+		<description><![CDATA[Instead of --no-out-link you can --out-link zlib and --out-link postgresql, and they will not be garbage collected until you delete the symlinks.]]></description>
+		<content:encoded><![CDATA[<p>Instead of &#8211;no-out-link you can &#8211;out-link zlib and &#8211;out-link postgresql, and they will not be garbage collected until you delete the symlinks.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>

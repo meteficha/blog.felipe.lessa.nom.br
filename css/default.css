@@ -196,11 +196,11 @@ div.info {
     color: #222;
 }
 
-.archive-button {
+div.archive-button {
     text-align: center;
 }
 
-.archive-button a {
+a.button {
     text-decoration: none;
     background-color: #FED;
     border: 1px solid #C96;
@@ -210,7 +210,16 @@ div.info {
     font-size: 18pt;
 }
 
-.archive-button a:hover {
+a.museum-live-button {
+    float: right;
+    padding: 9px;
+    font-size: 14pt;
+    border-radius: 6px;
+    text-transform: uppercase;
+}
+
+
+a.button:hover {
     background-color: #FFF2E0;
 }
 

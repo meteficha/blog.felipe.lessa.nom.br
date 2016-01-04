@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Announcing esqueleto, a type-safe EDSL for SQL queries</title>
+	<atom:link href="http://blog.felipe.lessa.nom.br?feed=rss2&#038;p=68" rel="self" type="application/rss+xml" />
+	<link>http://blog.felipe.lessa.nom.br/?p=68</link>
+	<description>Some random blog posts</description>
+	<lastBuildDate>Thu, 19 Nov 2015 11:51:35 +0000</lastBuildDate>
+		<sy:updatePeriod>hourly</sy:updatePeriod>
+		<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=3.8.5</generator>
+	<item>
+		<title>By: Felipe Lessa</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=68#comment-4367</link>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+		<pubDate>Thu, 19 Nov 2015 11:51:35 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=68#comment-4367</guid>
+		<description><![CDATA[I haven&#039;t myself, but many people use it in production.  Maybe someone else has!]]></description>
+		<content:encoded><![CDATA[<p>I haven&#8217;t myself, but many people use it in production.  Maybe someone else has!</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Juan</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=68#comment-4366</link>
+		<dc:creator><![CDATA[Juan]]></dc:creator>
+		<pubDate>Thu, 19 Nov 2015 11:48:00 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=68#comment-4366</guid>
+		<description><![CDATA[I am wondering if you have applied Esqueleto or HaskellDB to some sort of Big Graph or Graph processing on Big Data project.]]></description>
+		<content:encoded><![CDATA[<p>I am wondering if you have applied Esqueleto or HaskellDB to some sort of Big Graph or Graph processing on Big Data project.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Levi</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=68#comment-309</link>
+		<dc:creator><![CDATA[Levi]]></dc:creator>
+		<pubDate>Fri, 31 May 2013 23:48:59 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=68#comment-309</guid>
+		<description><![CDATA[Wow.. that&#039;s really cool.
+Almost reminds me of what it can look like in C# for LINQ, though of course with the restriction in haskell with the keyword &#039;where&#039;]]></description>
+		<content:encoded><![CDATA[<p>Wow.. that&#8217;s really cool.<br />
+Almost reminds me of what it can look like in C# for LINQ, though of course with the restriction in haskell with the keyword &#8216;where&#8217;</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Edward Kmett</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=68#comment-128</link>
+		<dc:creator><![CDATA[Edward Kmett]]></dc:creator>
+		<pubDate>Fri, 07 Sep 2012 20:40:35 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=68#comment-128</guid>
+		<description><![CDATA[Great work, Felipe! I just figured I&#039;d raise my voice as I for one rather like the current EDSL approach over the massive compile times and inflexibility of TH quasiquoters. ;)]]></description>
+		<content:encoded><![CDATA[<p>Great work, Felipe! I just figured I&#8217;d raise my voice as I for one rather like the current EDSL approach over the massive compile times and inflexibility of TH quasiquoters. <img src="http://blog.felipe.lessa.nom.br/wp-includes/images/smilies/icon_wink.gif" alt=";)" class="wp-smiley" /> </p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Felipe Lessa</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=68#comment-126</link>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+		<pubDate>Fri, 07 Sep 2012 11:16:18 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=68#comment-126</guid>
+		<description><![CDATA[Marek Sieradzki: Thanks for the feedback!  I&#039;m not a big fan of these operators as well, I&#039;ve opened an issue to track progress in this respect https://github.com/meteficha/esqueleto/issues/2.
+
+It is possible to write TH code that translates an even more SQL-like language into esqueleto&#039;s operators.  However, I&#039;m not sure if that would be a good idea in practice, we&#039;d have to try it out.  Perhaps we could provide both interfaces as well.  I&#039;ve opened an issue on GitHub but don&#039;t hold your breath https://github.com/meteficha/esqueleto/issues/3 =).]]></description>
+		<content:encoded><![CDATA[<p>Marek Sieradzki: Thanks for the feedback!  I&#8217;m not a big fan of these operators as well, I&#8217;ve opened an issue to track progress in this respect <a href="https://github.com/meteficha/esqueleto/issues/2" rel="nofollow">https://github.com/meteficha/esqueleto/issues/2</a>.</p>
+<p>It is possible to write TH code that translates an even more SQL-like language into esqueleto&#8217;s operators.  However, I&#8217;m not sure if that would be a good idea in practice, we&#8217;d have to try it out.  Perhaps we could provide both interfaces as well.  I&#8217;ve opened an issue on GitHub but don&#8217;t hold your breath <a href="https://github.com/meteficha/esqueleto/issues/3" rel="nofollow">https://github.com/meteficha/esqueleto/issues/3</a> =).</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Marek Sieradzki</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=68#comment-125</link>
+		<dc:creator><![CDATA[Marek Sieradzki]]></dc:creator>
+		<pubDate>Fri, 07 Sep 2012 09:58:43 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=68#comment-125</guid>
+		<description><![CDATA[It&#039;s very important that these operators are short and readable or whole thing is a quasiquote, if language is a very restricted EDSL then quasiquote is often a LOT more readable than EDSL that invents new &#039;==&#039;. I know it might sound like nitpicking but that&#039;s one of the reasons I didn&#039;t use HaskellDB.
+
+Operators matter a lot. I don&#039;t know if we can just use some TH $macro that would process our normally written AST that has normal == and such. I think $tosql(... AST) would be more readable than code sprinkled with ^.
+
+Other ones were that it didn&#039;t support pgsql stored procedures and that there was lots of code to write. Little was maintained, nothing was documented and I found -th package a lot later.]]></description>
+		<content:encoded><![CDATA[<p>It&#8217;s very important that these operators are short and readable or whole thing is a quasiquote, if language is a very restricted EDSL then quasiquote is often a LOT more readable than EDSL that invents new &#8216;==&#8217;. I know it might sound like nitpicking but that&#8217;s one of the reasons I didn&#8217;t use HaskellDB.</p>
+<p>Operators matter a lot. I don&#8217;t know if we can just use some TH $macro that would process our normally written AST that has normal == and such. I think $tosql(&#8230; AST) would be more readable than code sprinkled with ^.</p>
+<p>Other ones were that it didn&#8217;t support pgsql stored procedures and that there was lots of code to write. Little was maintained, nothing was documented and I found -th package a lot later.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Anton</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=68#comment-123</link>
+		<dc:creator><![CDATA[Anton]]></dc:creator>
+		<pubDate>Fri, 07 Sep 2012 04:05:49 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=68#comment-123</guid>
+		<description><![CDATA[Great!]]></description>
+		<content:encoded><![CDATA[<p>Great!</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>

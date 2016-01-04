@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Sensors detective</title>
+	<atom:link href="http://blog.felipe.lessa.nom.br?feed=rss2&#038;p=93" rel="self" type="application/rss+xml" />
+	<link>http://blog.felipe.lessa.nom.br/?p=93</link>
+	<description>Some random blog posts</description>
+	<lastBuildDate>Thu, 19 Nov 2015 11:51:35 +0000</lastBuildDate>
+		<sy:updatePeriod>hourly</sy:updatePeriod>
+		<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=3.8.5</generator>
+	<item>
+		<title>By: ThecaTTony</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=93#comment-4067</link>
+		<dc:creator><![CDATA[ThecaTTony]]></dc:creator>
+		<pubDate>Fri, 28 Nov 2014 10:24:31 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=93#comment-4067</guid>
+		<description><![CDATA[Thanks from Argentina!]]></description>
+		<content:encoded><![CDATA[<p>Thanks from Argentina!</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Graeme</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=93#comment-2105</link>
+		<dc:creator><![CDATA[Graeme]]></dc:creator>
+		<pubDate>Sun, 17 Aug 2014 17:35:28 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=93#comment-2105</guid>
+		<description><![CDATA[Many thanks Felipe. I have an Asus M5A97 R 2.0 mobo, and have used your file as a basis, setting useful alarm limits.]]></description>
+		<content:encoded><![CDATA[<p>Many thanks Felipe. I have an Asus M5A97 R 2.0 mobo, and have used your file as a basis, setting useful alarm limits.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Boris Lessa</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=93#comment-425</link>
+		<dc:creator><![CDATA[Boris Lessa]]></dc:creator>
+		<pubDate>Mon, 09 Dec 2013 00:55:04 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=93#comment-425</guid>
+		<description><![CDATA[Muito interessante, Filho, sua descoberta e solução para o problema. O post ficou muito bem feito também. Abração!]]></description>
+		<content:encoded><![CDATA[<p>Muito interessante, Filho, sua descoberta e solução para o problema. O post ficou muito bem feito também. Abração!</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>

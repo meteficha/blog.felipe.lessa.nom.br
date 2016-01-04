@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<title>Abstracting permissions with Yesod | Felipe Lessa</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="stylesheet" type="text/css" media="all" href="wp-content/themes/twentyten/style.css" />
+<link rel="pingback" href="xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Feed" href="index.html?feed=rss2" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Comments Feed" href="index.html?feed=comments-rss2" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Abstracting permissions with Yesod Comments Feed" href="index.html?feed=rss2&amp;p=7" />
+<link rel='stylesheet' id='openid-css'  href='wp-content/plugins/openid/f/openid.css?ver=519' type='text/css' media='all' />
+<link rel='stylesheet' id='codecolorer-css'  href='wp-content/plugins/codecolorer/codecolorer.css?ver=0.9.9' type='text/css' media='screen' />
+<!-- This site uses the Yoast Google Analytics plugin v5.1.1 - Universal disabled - https://yoast.com/wordpress/plugins/google-analytics/ -->
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-28368350-1']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+
+</script>
+<!-- / Yoast Google Analytics -->
+<script type='text/javascript' src='wp-includes/js/jquery/jquery.js?ver=1.10.2'></script>
+<script type='text/javascript' src='wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script type='text/javascript' src='wp-content/plugins/openid/f/openid.js?ver=519'></script>
+<script type='text/javascript' src='wp-includes/js/comment-reply.min.js?ver=3.8.5'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="wp-includes/wlwmanifest.xml" /> 
+<link rel='next' title='Announcing esqueleto, a type-safe EDSL for SQL queries' href='index.html?p=68' />
+<meta name="generator" content="WordPress 3.8.5" />
+<link rel='canonical' href='index.html?p=7' />
+<link rel='shortlink' href='index.html?p=7' />
+<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #f1f1f1; }
+</style>
+</head>
+
+<body class="single single-post postid-7 single-format-standard custom-background">
+<div id="wrapper" class="hfeed">
+	<div id="header">
+		<div id="masthead">
+			<div id="branding" role="banner">
+								<div id="site-title">
+					<span>
+						<a href="index.html" title="Felipe Lessa" rel="home">Felipe Lessa</a>
+					</span>
+				</div>
+				<div id="site-description">Some random blog posts</div>
+
+										<img src="wp-content/themes/twentyten/images/headers/cherryblossoms.jpg" width="940" height="198" alt="" />
+								</div><!-- #branding -->
+
+			<div id="access" role="navigation">
+			  				<div class="skip-link screen-reader-text"><a href="index.html?p=7#content" title="Skip to content">Skip to content</a></div>
+								<div class="menu"><ul><li ><a href="index.html">Home</a></li><li class="page_item page-item-56"><a href="index.html?page_id=56">About</a></li></ul></div>
+			</div><!-- #access -->
+		</div><!-- #masthead -->
+	</div><!-- #header -->
+
+	<div id="main">
+
+		<div id="container">
+			<div id="content" role="main">
+
+			
+
+				<div id="nav-above" class="navigation">
+					<div class="nav-previous"></div>
+					<div class="nav-next"><a href="index.html?p=68" rel="next">Announcing esqueleto, a type-safe EDSL for SQL queries <span class="meta-nav">&rarr;</span></a></div>
+				</div><!-- #nav-above -->
+
+				<div id="post-7" class="post-7 post type-post status-publish format-standard hentry category-uncategorized tag-haskell tag-yesod">
+					<h1 class="entry-title">Abstracting permissions with Yesod</h1>
+
+					<div class="entry-meta">
+						<span class="meta-prep meta-prep-author">Posted on</span> <a href="index.html?p=7" title="09:55" rel="bookmark"><span class="entry-date">16/01/2012</span></a> <span class="meta-sep">by</span> <span class="author vcard"><a class="url fn n" href="index.html?author=1" title="View all posts by Felipe Lessa">Felipe Lessa</a></span>					</div><!-- .entry-meta -->
+
+					<div class="entry-content">
+						<p><a href="http://www.yesodweb.com/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.yesodweb.com/', 'Yesod']);" >Yesod</a> is a terrific framework for web applications in <a href="http://www.haskell.org/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.haskell.org/', 'Haskell']);" >Haskell</a>.  It has many, many built-in features.  One of them is that there&#8217;s nice support for authentication and authorization.  In this post I&#8217;m interested in talking about how you could write your authorization code such that it&#8217;s harder to make mistakes.</p>
+<p><span id="more-7"></span></p>
+<p>As shown on the <a href="http://www.yesodweb.com/blog/2012/01/blog-example" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.yesodweb.com/blog/2012/01/blog-example', 'recent example']);" >recent example</a> of creating a blog web app, Yesod&#8217;s approach to authorization lies within the <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> function:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer"><span class="kw1">class</span> <span class="sy0">...</span> <span class="sy0">=&gt;</span> Yesod a <span class="kw1">where</span><br />
+&nbsp; <span class="sy0">...</span><br />
+&nbsp; isAuthorized <span class="sy0">::</span> Route a <span class="sy0">-&gt;</span> <span class="kw4">Bool</span> <span class="sy0">-&gt;</span> GHandler s a AuthResult<br />
+&nbsp; <span class="sy0">...</span></div></div>
+<p>So <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> takes a <code class="codecolorer haskell default"><span class="haskell">Route a</span></code>, such as <code class="codecolorer haskell default"><span class="haskell">EntryR <span class="nu0">10</span></span></code>, and a <code class="codecolorer haskell default"><span class="haskell"><span class="kw4">Bool</span></span></code> telling if the request may do writes (e.g. POST or PUT) or not (e.g. GET or HEAD).  It must return an <code class="codecolorer haskell default"><span class="haskell">AuthResult</span></code> that decides if the user is <code class="codecolorer haskell default"><span class="haskell">Authorized</span></code>, <code class="codecolorer haskell default"><span class="haskell">Unauthorized</span></code> or if he needs to be authenticated first (<code class="codecolorer haskell default"><span class="haskell">AuthenticationRequired</span></code>).</p>
+<p>While keeping authorization code in a single place is nice, using <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> alone makes it very difficult to test your authorization code.  Using the <a href="http://www.yesodweb.com/blog/2012/01/blog-example" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.yesodweb.com/blog/2012/01/blog-example', 'blog example']);" >blog example</a> again, only the admin should be able to create blog posts.  So let&#8217;s take a look at the example code that decides if the user should be authorized to post to the blog:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer">isAuthorized BlogR True <span class="sy0">=</span> <span class="kw1">do</span><br />
+&nbsp; mauth <span class="sy0">&lt;-</span> maybeAuth<br />
+&nbsp; <span class="kw1">case</span> mauth <span class="kw1">of</span><br />
+&nbsp; &nbsp; Nothing <span class="sy0">-&gt;</span> <span class="kw3">return</span> AuthenticationRequired<br />
+&nbsp; &nbsp; Just <span class="br0">&#40;</span><span class="sy0">_,</span> user<span class="br0">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; <span class="sy0">|</span> isAdmin user <span class="sy0">-&gt;</span> <span class="kw3">return</span> Authorized<br />
+&nbsp; &nbsp; &nbsp; <span class="sy0">|</span> <span class="kw3">otherwise</span> &nbsp; &nbsp;<span class="sy0">-&gt;</span> unauthorizedI MsgNotAnAdmin</div></div>
+<p>There are many things going on here:</p>
+<ol>
+<li>There&#8217;s authentication code that checks if the current user is logged in via <code class="codecolorer haskell default"><span class="haskell">maybeAuth</span></code>.</li>
+<li>If the user is not logged in, it returns <code class="codecolorer haskell default"><span class="haskell">AuthenticationRequired</span></code>.</li>
+<li>Otherwise the user&#8217;s credentials are checked to see if he should be authorized or not.</li>
+</ol>
+<p>Step 1 is pretty standard housekeeping-style code.  Steps 2 and 3, however, are part of your business logic that decides who should be able to do what.  This means that you should be able to create (a) an unit test that asserts that the admin can create blog posts and (b) an unit test that asserts that a non-admin can&#8217;t create blog posts.  Unfortunately, with the code above writing unit tests is really difficult.  You not only need to artificially run the <code class="codecolorer haskell default"><span class="haskell">GHandler</span></code> monad (boring), but you need to fake the current session so that Step 1&#8242;s <code class="codecolorer haskell default"><span class="haskell">maybeAuth</span></code> gets the right information (difficult).  Even then, your <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> function is allowed to do anything, since it&#8217;s inside <code class="codecolorer haskell default"><span class="haskell">GHandler</span></code>.</p>
+<p>Enter permissions.  What we&#8217;re really trying to say in the code above is that (a) to create a blog post you need the &#8220;post&#8221; permission and (b) admin has &#8220;post&#8221; permission, non-admins don&#8217;t.  So let&#8217;s split these things!  First of all, we need a list of the permissions that we&#8217;ll need:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer"><span class="kw1">data</span> Permission <span class="sy0">=</span> Post <span class="sy0">|</span> Comment</div></div>
+<p>You should read these constructors names with &#8220;permission to&#8221; before their names.  For example, the admin has permission to <code class="codecolorer haskell default"><span class="haskell">Post</span></code> and any logged user has permission to <code class="codecolorer haskell default"><span class="haskell">Comment</span></code>.</p>
+<p>Each request needs to decide which permissions it requires.  This is one of the most important pieces of your application&#8217;s security, since forgetting to ask for permissions could lead to catastrophic problems.  Instead of having this core piece of your app diluted in <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code>, we use a simple, clear, pure function called <code class="codecolorer haskell default"><span class="haskell">permissionsRequiredFor</span></code>.  The idea is to make <code class="codecolorer haskell default"><span class="haskell">permissionsRequiredFor</span></code> as simple as possible, such that with code review alone you could determine if you&#8217;re asking for the right permissions.</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer">permissionsRequiredFor <span class="sy0">::</span> Route Blog <span class="sy0">-&gt;</span> <span class="kw4">Bool</span> <span class="sy0">-&gt;</span> <span class="br0">&#91;</span>Permission<span class="br0">&#93;</span><br />
+permissionsRequiredFor BlogR &nbsp; &nbsp; &nbsp;True <span class="sy0">=</span> <span class="br0">&#91;</span>Post<span class="br0">&#93;</span><br />
+permissionsRequiredFor <span class="br0">&#40;</span>EntryR <span class="sy0">_</span><span class="br0">&#41;</span> True <span class="sy0">=</span> <span class="br0">&#91;</span>Comment<span class="br0">&#93;</span><br />
+permissionsRequiredFor <span class="sy0">_</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="sy0">_</span> &nbsp; &nbsp;<span class="sy0">=</span> <span class="br0">&#91;</span><span class="br0">&#93;</span></div></div>
+<p>We also need to decide if the currently logged user has the necessary permissions or not.  This is the other important piece of your authorization puzzle, and a piece that we need to make easily testable.  In order to do so, we avoid <code class="codecolorer haskell default"><span class="haskell">maybeAuth</span></code> and take the user as an argument.</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer">hasPermissionTo <span class="sy0">::</span> <span class="br0">&#40;</span>UserId<span class="sy0">,</span> User<span class="br0">&#41;</span> <br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="sy0">-&gt;</span> Permission<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="sy0">-&gt;</span> YesodDB sub Blog AuthResult<br />
+<span class="br0">&#40;</span><span class="sy0">_,</span> user<span class="br0">&#41;</span> `hasPermissionTo` Post<br />
+&nbsp; <span class="sy0">|</span> isAdmin user <span class="sy0">=</span> <span class="kw3">return</span> Authorized<br />
+&nbsp; <span class="sy0">|</span> <span class="kw3">otherwise</span> &nbsp; &nbsp;<span class="sy0">=</span> lift <span class="sy0">$</span> unauthorizedI MsgNotAnAdmin<br />
+<span class="sy0">_</span> `hasPermissionTo` Comment <span class="sy0">=</span> <span class="kw3">return</span> Authorized<br />
+<br />
+<br />
+isAuthorizedTo <span class="sy0">::</span> <span class="kw4">Maybe</span> <span class="br0">&#40;</span>UserId<span class="sy0">,</span> User<span class="br0">&#41;</span> <br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="sy0">-&gt;</span> <span class="br0">&#91;</span>Permission<span class="br0">&#93;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="sy0">-&gt;</span> YesodDB sub Blog AuthResult<br />
+<span class="sy0">_</span> &nbsp; &nbsp; &nbsp; `isAuthorizedTo` <span class="br0">&#91;</span><span class="br0">&#93;</span> &nbsp; &nbsp; <span class="sy0">=</span> <span class="kw3">return</span> Authorized<br />
+Nothing `isAuthorizedTo` <span class="br0">&#40;</span><span class="sy0">_</span>:<span class="sy0">_</span><span class="br0">&#41;</span> &nbsp;<span class="sy0">=</span> <span class="kw3">return</span> AuthenticationRequired<br />
+Just u &nbsp;`isAuthorizedTo` <span class="br0">&#40;</span>p:ps<span class="br0">&#41;</span> <span class="sy0">=</span> <span class="kw1">do</span><br />
+&nbsp; r <span class="sy0">&lt;-</span> u `hasPermissionTo` p<br />
+&nbsp; <span class="kw1">case</span> r <span class="kw1">of</span><br />
+&nbsp; &nbsp; Authorized <span class="sy0">-&gt;</span> Just u `isAuthorizedTo` ps<br />
+&nbsp; &nbsp; <span class="sy0">_</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="sy0">-&gt;</span> <span class="kw3">return</span> r <span class="co1">-- unauthorized</span></div></div>
+<p>The <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code> function decides if the user has a given permission or not.  While in this example <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code> could have been a pure function, in general you may need to access the database.  The <code class="codecolorer haskell default"><span class="haskell">isAuthorizedTo</span></code> function then (a) decides if the user needs to be authenticated and (b) checks all permissions required from the list using <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code>.</p>
+<p>Finally, we need to implement <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> gluing everything together:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer">isAuthorized route isWrite <span class="sy0">=</span> <span class="kw1">do</span><br />
+&nbsp; mauth <span class="sy0">&lt;-</span> maybeAuth<br />
+&nbsp; runDB <span class="sy0">$</span> mauth `isAuthorizedTo` permissionsRequiredFor route isWrite</div></div>
+<p>Ok, so what did we gain by writing three more functions?</p>
+<ul>
+<li>You can easily review <code class="codecolorer haskell default"><span class="haskell">permissionsRequiredFor</span></code> to see if you didn&#8217;t leave a restricted route in the open.</li>
+<li>If you don&#8217;t use the wildcards on the last line of <code class="codecolorer haskell default"><span class="haskell">permissionsRequiredFor</span></code> and instead list all of your routes one by one, then you&#8217;d get a compiler warning and a runtime error every time you forgot to set the permissions of a newly added route.</li>
+<li>If you have many routes that needed the same permissions, you don&#8217;t need to recode the permission code everywhere.  You just need to code it once on <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code> and then ask for that permission on each of your routes. In my experience, the set of permissions (i.e. the <code class="codecolorer haskell default"><span class="haskell">Permission</span></code> data type) is a lot smaller than the set of possible routes.</li>
+<li>You may easily create unit tests for <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code>, increasing your confidence on your code&#8217;s correctness.</li>
+</ul>
+<p>I should also note that this approach is easily extendable.  For example, suppose that you wanted to restrict the visibility of some of your blog posts.  You could change the <code class="codecolorer haskell default"><span class="haskell">Permission</span></code> data type into:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer"><span class="kw1">data</span> Permission <span class="sy0">=</span> Post <span class="sy0">|</span> CommentOn EntryId <span class="sy0">|</span> View EntryId</div></div>
+<p>Now your <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code> function is able to give a different answer depending on which blog post we&#8217;re talking about.</p>
+<p>So far this approach has been successfully used on my day job&#8217;s Yesod application.  It looks like a cousin of Yesod&#8217;s i18n support using data types.  </p>
+<p>Thanks for reading along this far!  Please use the comment section below to say what think of this approach. =)</p>
+											</div><!-- .entry-content -->
+
+
+					<div class="entry-utility">
+						This entry was posted in <a href="index.html?cat=1" title="View all posts in Uncategorized" rel="category">Uncategorized</a> and tagged <a href="index.html?tag=haskell" rel="tag">Haskell</a>, <a href="index.html?tag=yesod" rel="tag">Yesod</a>. Bookmark the <a href="index.html?p=7" title="Permalink to Abstracting permissions with Yesod" rel="bookmark">permalink</a>.											</div><!-- .entry-utility -->
+				</div><!-- #post-## -->
+
+				<div id="nav-below" class="navigation">
+					<div class="nav-previous"></div>
+					<div class="nav-next"><a href="index.html?p=68" rel="next">Announcing esqueleto, a type-safe EDSL for SQL queries <span class="meta-nav">&rarr;</span></a></div>
+				</div><!-- #nav-below -->
+
+				
+			<div id="comments">
+
+
+
+								<div id="respond" class="comment-respond">
+				<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="index.html?p=7#respond" style="display:none;">Cancel reply</a></small></h3>
+									<form action="http://blog.felipe.lessa.nom.br/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+																			<p class="comment-notes">Your email address will not be published. Required fields are marked <span class="required">*</span></p>							<p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="text" value="" size="30" /></p>
+												<p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p>						<p class="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href=&quot;&quot; title=&quot;&quot;&gt; &lt;abbr title=&quot;&quot;&gt; &lt;acronym title=&quot;&quot;&gt; &lt;b&gt; &lt;blockquote cite=&quot;&quot;&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=&quot;&quot;&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=&quot;&quot;&gt; &lt;strike&gt; &lt;strong&gt; </code></p>						<p class="form-submit">
+							<input name="submit" type="submit" id="submit" value="Post Comment" />
+							<input type='hidden' name='comment_post_ID' value='7' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+						</p>
+						<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="11294c0aeb" /></p>		<span id="openid_comment">
+			<label>
+				<input type="checkbox" id="login_with_openid" name="login_with_openid" checked="checked" />
+				Authenticate this comment using <span class="openid_link">OpenID</span>.			</label>
+		</span>
+		<script type="text/javascript">jQuery(function(){ add_openid_to_comment_form('http://blog.felipe.lessa.nom.br/index.php', '68f5010493') })</script>
+					</form>
+							</div><!-- #respond -->
+			
+</div><!-- #comments -->
+
+
+			</div><!-- #content -->
+		</div><!-- #container -->
+
+
+		<div id="primary" class="widget-area" role="complementary">
+			<ul class="xoxo">
+
+
+			<li id="search" class="widget-container widget_search">
+				<form role="search" method="get" id="searchform" class="searchform" action="index.html">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form>			</li>
+
+			<li id="archives" class="widget-container">
+				<h3 class="widget-title">Archives</h3>
+				<ul>
+						<li><a href='index.html?m=201601'>January 2016</a></li>
+	<li><a href='index.html?m=201509'>September 2015</a></li>
+	<li><a href='index.html?m=201505'>May 2015</a></li>
+	<li><a href='index.html?m=201312'>December 2013</a></li>
+	<li><a href='index.html?m=201211'>November 2012</a></li>
+	<li><a href='index.html?m=201209'>September 2012</a></li>
+	<li><a href='index.html?m=201201'>January 2012</a></li>
+				</ul>
+			</li>
+
+			<li id="meta" class="widget-container">
+				<h3 class="widget-title">Meta</h3>
+				<ul>
+										<li><a href="wp-login.php">Log in</a></li>
+									</ul>
+			</li>
+
+					</ul>
+		</div><!-- #primary .widget-area -->
+
+	</div><!-- #main -->
+
+	<div id="footer" role="contentinfo">
+		<div id="colophon">
+
+
+
+			<div id="site-info">
+				<a href="index.html" title="Felipe Lessa" rel="home">
+					Felipe Lessa				</a>
+			</div><!-- #site-info -->
+
+			<div id="site-generator">
+								<a href="http://wordpress.org/" title="Semantic Personal Publishing Platform">Proudly powered by WordPress.</a>
+			</div><!-- #site-generator -->
+
+		</div><!-- #colophon -->
+	</div><!-- #footer -->
+
+</div><!-- #wrapper -->
+
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<title>About | Felipe Lessa</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="stylesheet" type="text/css" media="all" href="http://blog.felipe.lessa.nom.br/wp-content/themes/twentyten/style.css" />
+<link rel="pingback" href="http://blog.felipe.lessa.nom.br/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Feed" href="http://blog.felipe.lessa.nom.br/?feed=rss2" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Comments Feed" href="http://blog.felipe.lessa.nom.br/?feed=comments-rss2" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; About Comments Feed" href="http://blog.felipe.lessa.nom.br/?feed=rss2&#038;page_id=56" />
+<link rel='stylesheet' id='openid-css'  href='http://blog.felipe.lessa.nom.br/wp-content/plugins/openid/f/openid.css?ver=519' type='text/css' media='all' />
+<link rel='stylesheet' id='codecolorer-css'  href='http://blog.felipe.lessa.nom.br/wp-content/plugins/codecolorer/codecolorer.css?ver=0.9.9' type='text/css' media='screen' />
+<!-- This site uses the Yoast Google Analytics plugin v5.1.1 - Universal disabled - https://yoast.com/wordpress/plugins/google-analytics/ -->
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-28368350-1']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+
+</script>
+<!-- / Yoast Google Analytics -->
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-includes/js/jquery/jquery.js?ver=1.10.2'></script>
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-content/plugins/openid/f/openid.js?ver=519'></script>
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-includes/js/comment-reply.min.js?ver=3.8.5'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.felipe.lessa.nom.br/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.felipe.lessa.nom.br/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 3.8.5" />
+<link rel='canonical' href='http://blog.felipe.lessa.nom.br/?page_id=56' />
+<link rel='shortlink' href='http://blog.felipe.lessa.nom.br/?p=56' />
+<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #f1f1f1; }
+</style>
+</head>
+
+<body class="page page-id-56 page-template-default custom-background">
+<div id="wrapper" class="hfeed">
+	<div id="header">
+		<div id="masthead">
+			<div id="branding" role="banner">
+								<div id="site-title">
+					<span>
+						<a href="http://blog.felipe.lessa.nom.br/" title="Felipe Lessa" rel="home">Felipe Lessa</a>
+					</span>
+				</div>
+				<div id="site-description">Some random blog posts</div>
+
+										<img src="http://blog.felipe.lessa.nom.br/wp-content/themes/twentyten/images/headers/cherryblossoms.jpg" width="940" height="198" alt="" />
+								</div><!-- #branding -->
+
+			<div id="access" role="navigation">
+			  				<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+								<div class="menu"><ul><li ><a href="http://blog.felipe.lessa.nom.br/">Home</a></li><li class="page_item page-item-56 current_page_item"><a href="http://blog.felipe.lessa.nom.br/?page_id=56">About</a></li></ul></div>
+			</div><!-- #access -->
+		</div><!-- #masthead -->
+	</div><!-- #header -->
+
+	<div id="main">
+
+		<div id="container">
+			<div id="content" role="main">
+
+			
+
+				<div id="post-56" class="post-56 page type-page status-publish hentry">
+											<h1 class="entry-title">About</h1>
+					
+					<div class="entry-content">
+						<p>This is my personal blog where I&#8217;m going to post about random stuff I stumble upon. I&#8217;m a Brazilian <a href="http://www.haskellers.com/user/meteficha" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.haskellers.com/user/meteficha', 'Haskeller']);" >Haskeller</a> currently using Yesod in my day job. I&#8217;m also a Bioinformatics Master&#8217;s student on University of Brasília. Check out my <a href="https://plus.google.com/118323070335349339293" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://plus.google.com/118323070335349339293', 'Google+']);" >Google+</a> if you&#8217;d like to stay tuned to what I&#8217;ve been up to lately =).</p>
+<p>(Last updated on Jan 16, 2012.)</p>
+																	</div><!-- .entry-content -->
+				</div><!-- #post-## -->
+
+				
+			<div id="comments">
+
+
+
+								<div id="respond" class="comment-respond">
+				<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="?page_id=56#respond" style="display:none;">Cancel reply</a></small></h3>
+									<form action="http://blog.felipe.lessa.nom.br/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+																			<p class="comment-notes">Your email address will not be published. Required fields are marked <span class="required">*</span></p>							<p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="text" value="" size="30" /></p>
+												<p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p>						<p class="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href=&quot;&quot; title=&quot;&quot;&gt; &lt;abbr title=&quot;&quot;&gt; &lt;acronym title=&quot;&quot;&gt; &lt;b&gt; &lt;blockquote cite=&quot;&quot;&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=&quot;&quot;&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=&quot;&quot;&gt; &lt;strike&gt; &lt;strong&gt; </code></p>						<p class="form-submit">
+							<input name="submit" type="submit" id="submit" value="Post Comment" />
+							<input type='hidden' name='comment_post_ID' value='56' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+						</p>
+						<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="97327020bd" /></p>		<span id="openid_comment">
+			<label>
+				<input type="checkbox" id="login_with_openid" name="login_with_openid" checked="checked" />
+				Authenticate this comment using <span class="openid_link">OpenID</span>.			</label>
+		</span>
+		<script type="text/javascript">jQuery(function(){ add_openid_to_comment_form('http://blog.felipe.lessa.nom.br/index.php', '68f5010493') })</script>
+					</form>
+							</div><!-- #respond -->
+			
+</div><!-- #comments -->
+
+
+			</div><!-- #content -->
+		</div><!-- #container -->
+
+
+		<div id="primary" class="widget-area" role="complementary">
+			<ul class="xoxo">
+
+
+			<li id="search" class="widget-container widget_search">
+				<form role="search" method="get" id="searchform" class="searchform" action="http://blog.felipe.lessa.nom.br/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form>			</li>
+
+			<li id="archives" class="widget-container">
+				<h3 class="widget-title">Archives</h3>
+				<ul>
+						<li><a href='http://blog.felipe.lessa.nom.br/?m=201601'>January 2016</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201509'>September 2015</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201505'>May 2015</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201312'>December 2013</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201211'>November 2012</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201209'>September 2012</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201201'>January 2012</a></li>
+				</ul>
+			</li>
+
+			<li id="meta" class="widget-container">
+				<h3 class="widget-title">Meta</h3>
+				<ul>
+										<li><a href="http://blog.felipe.lessa.nom.br/wp-login.php">Log in</a></li>
+									</ul>
+			</li>
+
+					</ul>
+		</div><!-- #primary .widget-area -->
+
+	</div><!-- #main -->
+
+	<div id="footer" role="contentinfo">
+		<div id="colophon">
+
+
+
+			<div id="site-info">
+				<a href="http://blog.felipe.lessa.nom.br/" title="Felipe Lessa" rel="home">
+					Felipe Lessa				</a>
+			</div><!-- #site-info -->
+
+			<div id="site-generator">
+								<a href="http://wordpress.org/" title="Semantic Personal Publishing Platform">Proudly powered by WordPress.</a>
+			</div><!-- #site-generator -->
+
+		</div><!-- #colophon -->
+	</div><!-- #footer -->
+
+</div><!-- #wrapper -->
+
+</body>
+</html>

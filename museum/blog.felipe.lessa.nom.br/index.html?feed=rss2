@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Felipe Lessa</title>
+	<atom:link href="http://blog.felipe.lessa.nom.br?feed=rss2" rel="self" type="application/rss+xml" />
+	<link>http://blog.felipe.lessa.nom.br</link>
+	<description>Some random blog posts</description>
+	<lastBuildDate>Sat, 02 Jan 2016 18:10:42 +0000</lastBuildDate>
+	<language>en-US</language>
+		<sy:updatePeriod>hourly</sy:updatePeriod>
+		<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=3.8.5</generator>
+	<item>
+		<title>Announcing serversession</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=153</link>
+		<comments>http://blog.felipe.lessa.nom.br/?p=153#comments</comments>
+		<pubDate>Sat, 02 Jan 2016 03:06:47 +0000</pubDate>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+				<category><![CDATA[Haskell]]></category>
+
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=153</guid>
+		<description><![CDATA[I&#8217;m pleased to announce the serversession family of packages. Background HTTP is a stateless protocol. Cookies are used to create sessions out of otherwise independent requests made by the browser to the server. There are many ways of managing sessions &#8230; <a href="http://blog.felipe.lessa.nom.br/?p=153">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>I&#8217;m pleased to announce the <a href="https://github.com/yesodweb/serversession" title="serversession's GitHub page"><strong>serversession family of packages</strong></a>.</p>
+<h2> Background</h2>
+<p>HTTP is a stateless protocol.  Cookies are used to create <strong>sessions</strong> out of otherwise independent requests made by the browser to the server.  There are many ways of managing sessions via cookies, but they can be mostly separated into two big camps:</p>
+<dl>
+<dt>Client-side sessions</dt>
+<dd>The cookie data contains the session data.  For example, it could contain a shopper&#8217;s login and cart contents.</dd>
+<dt>Server-side sessions</dt>
+<dd>The cookie data contains a session identifier, and the session data is kept on a database indexed by the session identifiers.</dd>
+</dl>
+<p><span id="more-153"></span></p>
+<p>The <a href="http://hackage.haskell.org/package/clientsession" title="clientsession package on Hackage">clientsession</a> package has existed for many years already.  It&#8217;s both <a href="http://hackage.haskell.org/package/yesod-core-1.4.18.1/docs/Yesod-Core.html#v:makeSessionBackend" title="Yesod.Core">Yesod</a>&#8216;s and <a href="http://hackage.haskell.org/package/snap-0.14.0.6/docs/Snap-Snaplet-Session-Backends-CookieSession.html" title="Snap.Snaplet.Session.Backends.CookieSession">Snap</a>&#8216;s de facto session backend.  It performs well and is battle tested by many different people and companies.</p>
+<p>However, there are many reasons why one may want to favor server-side sessions over client-side ones:</p>
+<ul>
+<li>Saving <strong>arbitrary amounts of session data</strong> without being constrained by cookie size limits.  Even if your data fits on a cookie, you may want to spare having to bounce all that data around on every request and response.</li>
+<li><strong>Securely invalidating a session</strong>.  User logout with client-side sessions erases the cookie from the user&#8217;s browser but doesn&#8217;t invalidate its data.  The old cookie is still valid until its expiration.  Server-side sessions, however, can be securely invalidate by simply erasing them from your session database.  This can be a critical feature depending on your needs.</li>
+</ul>
+<p>The biggest disadvantage of server-side sessions is that they need more server-side resources.  Not only it needs space for sessions storage, but it also incurs the overhead of zero to two DB transactions per HTTP request.</p>
+<p>One solution isn&#8217;t inherently better than the other.  It all depends on your use case.  And if your use case needs server-side sessions, this is your lucky day.</p>
+<h2> The serversession packages </h2>
+<p>I&#8217;d like to fill the gap that currently exists on the Haskell ecosystem with respect to server-side session support.  Preferably once and for all.  That&#8217;s why there are many serversession packages.</p>
+<p>The main one, aptly called <a href="https://hackage.haskell.org/package/serversession" title="serversession's page on Hackage"><strong>serversession</strong></a>, contains the core logic about server-side sessions.  It&#8217;s abstracted over a <strong>backend</strong> which will store the session&#8217;s data (usually a database).  And it&#8217;s meant to be used by a <strong>frontend</strong>, such as Yesod or Snap.  Besides having a nice <a href="https://travis-ci.org/yesodweb/serversession" title="serversession's page on Travis-CI">test suite</a>, it&#8217;s also unencumbered by the minutia of dealing with databases and thus is easier to review.  It also defines a standard test suite that every backend needs to pass.</p>
+<p>Out-of-the-box you&#8217;ll find support for many different backends:</p>
+<ul>
+<li>The <a href="https://hackage.haskell.org/package/serversession-backend-persistent" title="serversession-backend-persistent's page on Hackage"><strong>serversession-backend-persistent</strong></a> package allows one to use any SQL database that persistent supports, including PostgreSQL, MySQL, and SQLite.</li>
+<li>Through the <a href="https://hackage.haskell.org/package/serversession-backend-acid-state" title="serversession-backend-acid-state's page on Hackage"><strong>serversession-backend-acid-state</strong></a> package you may use <a href="https://hackage.haskell.org/package/acid-state" title="acid-state's page on Hackage">acid-state</a>. This backend keeps sessions in memory but provides ACID guarantees using a transaction log.</li>
+<li>We also support Redis via the <a href="https://hackage.haskell.org/package/serversession-backend-redis" title="serversession-backend-redis's page on Hackage"><strong>serversession-backend-redis</strong></a> package.</li>
+</ul>
+<p>We also already officially support the most popular frontends:</p>
+<ul>
+<li>Yesod, through the <a href="https://hackage.haskell.org/package/serversession-frontend-yesod" title="serversession-frontend-yesod's page on Hackage"><strong>serversession-frontend-yesod</strong></a> package.  Provides a drop-in replacement for clientsession. </li>
+<li>Snap, through the <a href="https://hackage.haskell.org/package/serversession-frontend-snap" title="serversession-frontend-snap's page on Hackage"><strong>serversession-frontend-snap</strong></a> package.  Also provides a drop-in replacement for clientsession. </li>
+<li>Even plain WAI apps, through the <a href="https://hackage.haskell.org/package/serversession-frontend-wai" title="serversession-frontend-wai's page on Hackage"><strong>serversession-frontend-wai</strong></a> package.
+</ul>
+<p>Adding a new backend is very straightforward, specially because there&#8217;s already a test suite for free.  Adding a new frontend is a bit more complicated depending on how well your frontend&#8217;s concept of sessions maps to serversession&#8217;s.  If you&#8217;d like to support your favorite backend/frontend, please send your contributions back upstream so they become official packages as well!</p>
+<h2> Usage example </h2>
+<p>If you have an Yesod app, you&#8217;re probably using persistent.  Changing your app to support serversession is just a matter of setting up the session storage entities and changing Yesod&#8217;s default session backend (not to be confused with a serversession backend).</p>
+<p>To setup the entities, you&#8217;ll have to teach persistent how to set them up on your database.  Please check <a href="http://www.stackage.org/package/serversession-backend-persistent" title="serversession-backend-persistent's page on Stackage">serversession-backend-persistent&#8217;s docs</a> for details, but it all boils down to changing your migration Template Haskell code from:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #5d478b; font-style: italic;">-- On Model.hs</span><br />
+share <span style="color: green;">&#91;</span>mkPersist sqlSettings<span style="color: #339933; font-weight: bold;">,</span> mkMigrate <span style="background-color: #3cb371;">&quot;migrateAll&quot;</span><span style="color: green;">&#93;</span></div></div>
+<p>to:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #5d478b; font-style: italic;">-- On Model.hs</span><br />
+share <span style="color: green;">&#91;</span>mkPersist sqlSettings<span style="color: #339933; font-weight: bold;">,</span> mkSave <span style="background-color: #3cb371;">&quot;entityDefs&quot;</span><span style="color: green;">&#93;</span><br />
+<br />
+<span style="color: #5d478b; font-style: italic;">-- On Application.hs</span><br />
+mkMigrate <span style="background-color: #3cb371;">&quot;migrateAll&quot;</span> <span style="color: green;">&#40;</span>serverSessionDefs <span style="color: green;">&#40;</span>Proxy <span style="color: #339933; font-weight: bold;">::</span> Proxy SessionMap<span style="color: green;">&#41;</span> <span style="color: #339933; font-weight: bold;">++</span> entityDefs<span style="color: green;">&#41;</span></div></div>
+<p>Changing the default session backend is even easier.  Again, please read <a href="http://www.stackage.org/package/serversession-frontend-yesod" title="serversession-frontend-yesod's page on Stackage">the docs</a>, but you&#8217;ll just add the following to your <code class="codecolorer haskell default"><span class="haskell"><span style="color: #06c; font-weight: bold;">instance</span> Yesod App</span></code>:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">&nbsp; &nbsp; makeSessionBackend <span style="color: #339933; font-weight: bold;">=</span> simpleBackend <span style="font-weight: bold;">id</span> <span style="color: #339933; font-weight: bold;">.</span> SqlStorage <span style="color: #339933; font-weight: bold;">.</span> appConnPool</div></div>
+<p>And you&#8217;re set!  Please take a look at the <a href="https://github.com/yesodweb/serversession/tree/master/examples/serversession-example-yesod-persistent" title="Example project using serversession with Yesod and persistent on GitHub">included example project</a> to see how everything fits together.</p>
+<h2>Final words</h2>
+<p>One of clientsession&#8217;s biggest success was in being used by many different projects.  This is desirable both for reducing duplicate community efforts and for increasing the number of eyeballs over a security-related piece of code.  I&#8217;d like to make serversession equally successful in the same way, which is why it supports from the get-go both the major Haskell web frameworks that today use clientsession by default.</p>
+<p>I&#8217;d like to invite your criticism and feedback.  And your success stories as well! </p>
+<p>Happy New Year!</p>
+]]></content:encoded>
+			<wfw:commentRss>http://blog.felipe.lessa.nom.br/?feed=rss2&#038;p=153</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>Using stack on NixOS</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=146</link>
+		<comments>http://blog.felipe.lessa.nom.br/?p=146#comments</comments>
+		<pubDate>Tue, 22 Sep 2015 15:37:23 +0000</pubDate>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=146</guid>
+		<description><![CDATA[I&#8217;ve got myself a new laptop recently and decided to try NixOS. It&#8217;s been a great experience so far, but there are some rough edges. One of them is stack not completely working out of the box for my projects. &#8230; <a href="http://blog.felipe.lessa.nom.br/?p=146">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>I&#8217;ve got myself a new laptop recently and decided to try NixOS.  It&#8217;s<br />
+been a great experience so far, but there are some rough edges.  One<br />
+of them is stack not completely working out of the box for my<br />
+projects.</p>
+<p><span id="more-146"></span></p>
+<p>The reason is that some Haskell packages depend on system C libraries,<br />
+but neither stack nor Cabal-the-library are able to find them on<br />
+NixOS.  As an example, you won&#8217;t find /usr/lib/libz.so on my system.<br />
+Instead, right now it&#8217;s at<br />
+/nix/store/2zmlykvqx69q5bh1l3jqyhrj2493vqdx-zlib-1.2.8/lib/libz.so.</p>
+<p>Being a NixOS newbie, I&#8217;ve tried some solutions but none of them<br />
+worked.  I&#8217;ve then asked for Peter Simon&#8217;s help, which he gladly and<br />
+swiftly provided (thanks, Peter!).  For my use case, I&#8217;ve adapted his<br />
+suggestions into the following script:</p>
+<div class="codecolorer-container bash default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="bash codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #666666; font-style: italic;">#!/usr/bin/env bash</span><br />
+<span style="color: #007800;">ZLIB</span>=<span style="color: #ff0000;">&quot;<span style="color: #007800;">$(nix-build --no-out-link &quot;&lt;nixpkgs&gt;&quot; -A zlib)</span>&quot;</span><br />
+<span style="color: #007800;">PSQL</span>=<span style="color: #ff0000;">&quot;<span style="color: #007800;">$(nix-build --no-out-link &quot;&lt;nixpkgs&gt;&quot; -A postgresql)</span>&quot;</span><br />
+<span style="color: #7a0874; font-weight: bold;">exec</span> stack &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; \<br />
+&nbsp; &nbsp; &nbsp;<span style="color: #660033;">--extra-lib-dirs</span>=<span style="color: #800000;">${ZLIB}</span><span style="color: #000000; font-weight: bold;">/</span>lib <span style="color: #660033;">--extra-include-dirs</span>=<span style="color: #800000;">${ZLIB}</span><span style="color: #000000; font-weight: bold;">/</span>include \<br />
+&nbsp; &nbsp; &nbsp;<span style="color: #660033;">--extra-lib-dirs</span>=<span style="color: #800000;">${PSQL}</span><span style="color: #000000; font-weight: bold;">/</span>lib <span style="color: #660033;">--extra-include-dirs</span>=<span style="color: #800000;">${PSQL}</span><span style="color: #000000; font-weight: bold;">/</span>include \<br />
+&nbsp; &nbsp; &nbsp;<span style="color: #007800;">$*</span></div></div>
+<p>My transitive dependencies need zlib and postgresql libraries, so I<br />
+use nix-build to find out where these packages are and pass their<br />
+directories to stack explicitly.</p>
+<p>This solution is not without drawbacks.  The biggest one is that your<br />
+built Haskell libraries will be hardcoded to these C libraries, but<br />
+NixOS doesn&#8217;t know anything about this dependency.  If you upgrade<br />
+your system and garbage collect the old C libraries, you&#8217;ll have to<br />
+recompile the Haskell libraries (probably with rm -R<br />
+~/.stack/snapshots).  However, I quite like its conciseness, and one<br />
+doesn&#8217;t need to understand much about NixOS&#8217;s internals to use it.</p>
+<p>At the moment this hack is serving me well.  If you&#8217;re reading this<br />
+blog post more than a couple of months after I wrote it, take a look<br />
+around to see if a better solution has been developed in the mean time :).</p>
+]]></content:encoded>
+			<wfw:commentRss>http://blog.felipe.lessa.nom.br/?feed=rss2&#038;p=146</wfw:commentRss>
+		<slash:comments>4</slash:comments>
+		</item>
+		<item>
+		<title>Using Caps Lock as Menu/Apps keys on Emacs</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=137</link>
+		<comments>http://blog.felipe.lessa.nom.br/?p=137#comments</comments>
+		<pubDate>Thu, 03 Sep 2015 15:28:02 +0000</pubDate>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=137</guid>
+		<description><![CDATA[I&#8217;m an ergoemacs-mode user, a mode that changes most key bindings so that they put less strain on your hands.  For example, it uses Alt instead of Ctrl most of the time, which is easier to press: use your curled &#8230; <a href="http://blog.felipe.lessa.nom.br/?p=137">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>I&#8217;m an <a href="http://ergoemacs.github.io/" target="_blank">ergoemacs-mode</a> user, a mode that changes most key bindings so that they put less strain on your hands.  For example, it uses Alt instead of Ctrl most of the time, which is easier to press: use your curled thumb instead of a <a href="http://ergoemacs.org/emacs/swap_CapsLock_Ctrl.html" target="_blank">karate chop</a>.  Also, many commands are activated by first pressing the Menu/Apps key (that key near the Right Ctrl which usually opens the context menu).  For example, pressing Menu then T allows you to switch buffers.</p>
+<p>However, the keyboard on my new notebook doesn&#8217;t have a dedicated Menu key.  Instead, one needs to press Fn+Right Ctrl, which is of course extremely painful.</p>
+<div style="width: 475px" class="wp-caption aligncenter"><a href="https://goo.gl/photos/cHPvwWs6D5LPnfxB8" target="_blank"><img alt="" src="http://i.imgur.com/IDQDiau.jpg" width="465" height="320" /></a><p class="wp-caption-text">Menu key hidden on the Right Ctrl.</p></div>
+<p>&nbsp;</p>
+<p>I&#8217;ve found a workaround, though.  A very hackish workaround.</p>
+<p><span id="more-137"></span>The <a href="http://ergoemacs.github.io/faq.html" target="_blank">ergoemacs-mode FAQ</a> suggests using Caps Lock as a Menu/Apps key for Mac users.  Using xmodmap it&#8217;s trivial to make Caps Lock a Menu key:</p>
+<pre>$ xmodmap -e "keycode 66 = Menu"</pre>
+<p>However, using xmodmap properly with Gnome is nigh impossible.  It&#8217;s recommend to use xkb instead, but xkb doesn&#8217;t support mapping Caps Lock to the Menu key out-of-the-box (<a href="https://bugs.freedesktop.org/show_bug.cgi?id=91867" target="_blank">at least not yet</a>).  At this point, having wandered through many documentation pages, I&#8217;ve decided to try using some of the xkb options that already exist.</p>
+<p>At first I tried setting Caps Lock as the Hyper key.  However, by default the Hyper key gets the same modifier code as the Super key (which is usually the key with the Windows logo).  There&#8217;s a straightforward way of separating them, but I couldn&#8217;t find a way to make it play nice with Gnome.  And even if I could, it&#8217;s not clear to me if I could use the Hyper key as a substitute for the Menu key on emacs.</p>
+<p>When ready to admit defeat, I&#8217;ve set the Caps Lock behavior to &#8220;Caps Lock is disabled&#8221; in preparation of trying a hack using xmodmap.  Much to my surprise, I accidentally discovered that emacs then began treating the disabled Caps Lock key as &lt;VoidSymbol&gt;! The gears started turning in my head, then I added the following line to my ~/.emacs file:</p>
+<pre>(define-key key-translation-map (kbd "&lt;VoidSymbol&gt;") (kbd "&lt;menu&gt;"))</pre>
+<p>Surprisingly, it worked!  Now pressing Caps Lock then T will switch buffers, for example.  As a bonus, pressing Caps Lock accidentally while on another application won&#8217;t do anything.</p>
+<p>It&#8217;s not clear to me how fragile this hack really is.  I&#8217;ll update this blog post if I ever find some drawback to it.  But right now it seems to work quite nicely.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://blog.felipe.lessa.nom.br/?feed=rss2&#038;p=137</wfw:commentRss>
+		<slash:comments>2</slash:comments>
+		</item>
+		<item>
+		<title>Changing NetworkManager route metrics</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=129</link>
+		<comments>http://blog.felipe.lessa.nom.br/?p=129#comments</comments>
+		<pubDate>Sat, 30 May 2015 02:35:14 +0000</pubDate>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=129</guid>
+		<description><![CDATA[If you use NetworkManager with more than one interface, you probably want to control the metric of their routes. Here&#8217;s one way you can do it. Background I got a PCI Express WiFi card (wlan0) and a USB WiFi dongle &#8230; <a href="http://blog.felipe.lessa.nom.br/?p=129">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>If you use NetworkManager with more than one interface, you probably want to control the metric of their routes. Here&#8217;s one way you can do it.</p>
+<p><span id="more-129"></span></p>
+<h2>Background</h2>
+<p>I got a PCI Express WiFi card (wlan0) and a USB WiFi dongle (wlan1). On my system, NetworkManager will activate both at the same time. Then it gives metric 600 to the first one to be activated, and 601 to the second one.</p>
+<p>What I wanted was to say: hey, NetworkManager, use metric 500 for wlan1 and 600 for wlan0. It doesn&#8217;t look like this is supported, though. Also, DuckDuckGo and Google didn&#8217;t help me much.</p>
+<p>Digging through the <a href="https://www.mankier.com/5/nm-settings" target="_blank">nm-settings(5) man page</a>, though, I found the route-metric option.  It&#8217;s not ideal because it&#8217;s applied to a connection, not to a device.  But it works fine for my use case as each WiFi interface is connected to a different WiFi network.</p>
+<h2>Step 1: Find out which are your connections</h2>
+<p>Use the nmcli helper to list your connections:</p>
+<pre>$ nmcli connection
+NAME       UUID                                  TYPE             DEVICE
+Network 1  f0ed603c-f3c3-4acb-b54b-bb857bd9c5b5  802-11-wireless  wlan0       
+Network 2  2b4b7240-36bd-407a-a3aa-169abb0ce6c4  802-11-wireless  wlan1</pre>
+<p>As you can see here, each interface is using a different connection.</p>
+<h2>Step 2: Set the connection&#8217;s default route metric</h2>
+<p>For example, to set the wlan1 interface&#8217;s default route metric to 500, just change its connection:</p>
+<pre>$ nmcli connection modify uuid 2b4b7240-36bd-407a-a3aa-169abb0ce6c4 ipv4.route-metric 500
+$ nmcli connection modify uuid 2b4b7240-36bd-407a-a3aa-169abb0ce6c4 ipv6.route-metric 500
+$ nmcli connection show   uuid 2b4b7240-36bd-407a-a3aa-169abb0ce6c4 | grep route-metric
+ipv4.route-metric:                      500
+ipv6.route-metric:                      500</pre>
+<h2>Step 3: Check that your routing table is correct</h2>
+<p>NetworkManager should automatically change the route&#8217;s metric:</p>
+<pre>$ ip route
+default via 192.168.25.1 dev wlan1  proto static  metric 500 
+default via 192.168.0.1 dev wlan0  proto static  metric 600 
+192.168.0.0/24 dev wlan0  proto kernel  scope link  src 192.168.0.111  metric 600 
+192.168.25.0/24 dev wlan1  proto kernel  scope link  src 192.168.25.69  metric 500</pre>
+<p>If it didn&#8217;t, try restarting NetworkManager.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://blog.felipe.lessa.nom.br/?feed=rss2&#038;p=129</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>Sensors detective</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=93</link>
+		<comments>http://blog.felipe.lessa.nom.br/?p=93#comments</comments>
+		<pubDate>Sun, 08 Dec 2013 23:54:47 +0000</pubDate>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+				<category><![CDATA[Hacking]]></category>
+		<category><![CDATA[asus]]></category>
+		<category><![CDATA[bios]]></category>
+		<category><![CDATA[linux]]></category>
+		<category><![CDATA[m5a97]]></category>
+		<category><![CDATA[sensors]]></category>
+
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=93</guid>
+		<description><![CDATA[I have an Asus M5A97 PRO motherboard, which includes the common set of sensors. The lm-sensors free software correctly detects two chips, k10temp-pci-00c3 and it8721-isa-0290, corresponding to my Phenom II and my motherboard, respectively. However, by default the output of &#8230; <a href="http://blog.felipe.lessa.nom.br/?p=93">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>I have an Asus M5A97 PRO motherboard, which includes the common set of sensors.  The lm-sensors free software correctly detects two chips, <code class="codecolorer text default"><span class="text">k10temp-pci-00c3</span></code> and <code class="codecolorer text default"><span class="text">it8721-isa-0290</span></code>, corresponding to my Phenom II and my motherboard, respectively.  However, by default the output of sensors looks like:</p>
+<p><span id="more-93"></span></p>
+<div class="codecolorer-container python default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="python codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">k10temp-pci-00c3<br />
+Adapter: PCI adapter<br />
+temp1: &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">27.0</span>°C &nbsp;<span style="color: black;">&#40;</span>high <span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">70.0</span>°C<span style="color: black;">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: black;">&#40;</span>crit <span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">90.0</span>°C<span style="color: #66cc66;">,</span> hyst <span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">85.0</span>°C<span style="color: black;">&#41;</span><br />
+<br />
+it8721-isa-<span style="color: #ff4500;">0290</span><br />
+Adapter: ISA adapter<br />
+in0: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">2.82</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.62</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.62</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
+in1: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">2.81</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.06</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.34</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
+in2: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">1.30</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">1.66</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">1.12</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
++3.3V: &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">3.29</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">4.68</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.79</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
+in4: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">0.61</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.36</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.94</span> V<span style="color: black;">&#41;</span><br />
+in5: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">2.52</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.14</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">1.01</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
+in6: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">0.00</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">1.73</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.11</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
+3VSB: &nbsp; &nbsp; &nbsp; &nbsp; +<span style="color: #ff4500;">0.77</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.24</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">4.13</span> V<span style="color: black;">&#41;</span><br />
+Vbat: &nbsp; &nbsp; &nbsp; &nbsp; +<span style="color: #ff4500;">3.36</span> V &nbsp;<br />
+fan1: &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff4500;">1288</span> RPM &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;<span style="color: #ff4500;">105</span> RPM<span style="color: black;">&#41;</span><br />
+fan2: &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff4500;">1192</span> RPM &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp; <span style="color: #ff4500;">16</span> RPM<span style="color: black;">&#41;</span><br />
+fan3: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff4500;">0</span> RPM &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp; <span style="color: #ff4500;">10</span> RPM<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
+temp1: &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">37.0</span>°C &nbsp;<span style="color: black;">&#40;</span>low &nbsp;<span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">72.0</span>°C<span style="color: #66cc66;">,</span> high <span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">10.0</span>°C<span style="color: black;">&#41;</span> &nbsp;ALARM &nbsp;sensor <span style="color: #66cc66;">=</span> thermistor<br />
+temp2: &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">30.0</span>°C &nbsp;<span style="color: black;">&#40;</span>low &nbsp;<span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">15.0</span>°C<span style="color: #66cc66;">,</span> high <span style="color: #66cc66;">=</span> -<span style="color: #ff4500;">128.0</span>°C<span style="color: black;">&#41;</span> &nbsp;ALARM &nbsp;sensor <span style="color: #66cc66;">=</span> thermistor<br />
+temp3: &nbsp; &nbsp; &nbsp; -<span style="color: #ff4500;">128.0</span>°C &nbsp;<span style="color: black;">&#40;</span>low &nbsp;<span style="color: #66cc66;">=</span> -<span style="color: #ff4500;">55.0</span>°C<span style="color: #66cc66;">,</span> high <span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">49.0</span>°C<span style="color: black;">&#41;</span> &nbsp;sensor <span style="color: #66cc66;">=</span> disabled<br />
+intrusion0: &nbsp;OK</div></div>
+<p>Well, not exactly useful.  But it turns out that we can do better than that with a little work. The <a href="http://www.lm-sensors.org/wiki/VoltageLabelsAndScaling">lm-sensors wiki page about voltage labels and scaling</a> describes a simple method by which one may make sense of their motherboard&#8217;s sensors.</p>
+<p>My motherboard&#8217;s sensors chip model is IT8721F, which measures raw values ranging from 0 to 3.06V in steps of 12 mV (8 bits of precision).  In order to fit its range, voltage rails such as +5V get a scaling factor.  Our job is to figure out which is the scaling factor and which input of the sensor is measuring it.</p>
+<p>We start by collecting samples of the correct data.  I didn&#8217;t bother resetting my computer to look at my own BIOS, and instead just searched the web for screenshots of M5A97&#8242;s BIOS screen.  In the end I had collected the following samples:</p>
+<div class="codecolorer-container python default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="python codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">Temperature: <br />
+&nbsp; CPU: <span style="color: #ff4500;">33.0</span> <span style="color: #ff4500;">37.0</span> <span style="color: #ff4500;">39.0</span> <span style="color: #ff4500;">40.0</span> <span style="color: #ff4500;">42.0</span> <span style="color: #ff4500;">44.0</span><br />
+&nbsp; MB: &nbsp;<span style="color: #ff4500;">30.0</span> <span style="color: #ff4500;">31.0</span> <span style="color: #ff4500;">32.0</span> <span style="color: #ff4500;">37.0</span><br />
+<br />
+Voltage <span style="color: black;">&#40;</span>it8721<span style="color: #66cc66;">,</span> <span style="color: #ff4500;">0</span> to <span style="color: #ff4500;">3.06</span> V<span style="color: #66cc66;">,</span> <span style="color: #ff4500;">1</span> bit <span style="color: #66cc66;">=</span> <span style="color: #ff4500;">12</span> mV<span style="color: black;">&#41;</span>:<br />
+&nbsp; Vcore: &nbsp;<span style="color: #ff4500;">1.248</span> &nbsp;<span style="color: #ff4500;">1.308</span> &nbsp;<span style="color: #ff4500;">1.320</span> &nbsp;<span style="color: #ff4500;">1.332</span> &nbsp;<span style="color: #ff4500;">1.356</span> &nbsp;<span style="color: #ff4500;">1.380</span> &nbsp;<span style="color: #ff4500;">1.428</span> &nbsp;<span style="color: #ff4500;">1.440</span><br />
+&nbsp; +3.3V: &nbsp;<span style="color: #ff4500;">3.216</span> &nbsp;<span style="color: #ff4500;">3.264</span> &nbsp;<span style="color: #ff4500;">3.288</span> &nbsp;<span style="color: #ff4500;">3.312</span> &nbsp;<span style="color: #ff4500;">3.336</span> &nbsp;<span style="color: #ff4500;">3.360</span><br />
+<br />
+&nbsp; +5V: &nbsp; &nbsp;<span style="color: #ff4500;">4.885</span> &nbsp;<span style="color: #ff4500;">4.971</span> &nbsp;<span style="color: #ff4500;">4.992</span> &nbsp;<span style="color: #ff4500;">5.057</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;--- <span style="color: #ff4500;">86</span> --- <span style="color: #ff4500;">21</span> --- <span style="color: #ff4500;">65</span> ---<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">=</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">=</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff4500;">2</span>*<span style="color: #ff4500;">21</span> + <span style="color: #ff4500;">2</span>*<span style="color: #ff4500;">22</span> &nbsp; &nbsp; <span style="color: #ff4500;">21</span> + <span style="color: #ff4500;">2</span>*<span style="color: #ff4500;">22</span><br />
+<br />
+&nbsp; +12V: &nbsp;<span style="color: #ff4500;">11.685</span> <span style="color: #ff4500;">11.943</span> <span style="color: #ff4500;">11.994</span> <span style="color: #ff4500;">12.046</span> <span style="color: #ff4500;">12.097</span> <span style="color: #ff4500;">12.149</span> <span style="color: #ff4500;">12.200</span> <br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-- <span style="color: #ff4500;">258</span> -- <span style="color: #ff4500;">51</span> --- <span style="color: #ff4500;">52</span> --- <span style="color: #ff4500;">51</span> --- <span style="color: #ff4500;">52</span> --- <span style="color: #ff4500;">51</span> ----<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">=</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff4500;">2</span>*<span style="color: #ff4500;">51</span> + <span style="color: #ff4500;">3</span>*<span style="color: #ff4500;">52</span></div></div>
+<p>The +3.3V sensor had already been correctly named by lm-sensors (in3).  The Vcore sensor (CPU) is quite easy since it&#8217;s not scaled (in2). +5V and +12V are the tricky ones.</p>
+<p>As you can see on the snippet above, I&#8217;ve sorted the samples I&#8217;ve collected and calculated the differences in mV between them.  Looking at the +12V samples first, we see a pattern of alternately adding 51 or 52 mV, thus we deduce that the measurements have steps of 51.5 mV between them.  This works out to a scaling factor of 51.5/12.  The +5V is analogous and we calculate a scaling factor of 21.5/12 for it.</p>
+<p>(Up to this point, something has been bothering me.  If we take a look at sample 12.200 V, for example, we&#8217;d expect it to be a multiple of 51.5 mV.  However, the closest multiple is 237 * 51.5 mV = 12.2055 V.  No matter how you round that number, you&#8217;ll never get 12.200 V.  I wonder if I calculated something wrong.)</p>
+<p>There remains the problem of correctly labeling the inputs.  Labelling the fan and temperature sensors is quite straightforward. On the other hand, labelling +5V and +12V correctly is quite tricky, since both in0 and in1 have raw values that look okay for both +5V and +12V.  At this point I&#8217;ve rebooted my machine and took note of my own data:</p>
+<p><img src="https://lh3.googleusercontent.com/-iIa3cTfSQ7Y/UqT-XZt5k3I/AAAAAAAALo0/uXrJ3uPwTcI/w1149-h862-no/IMG_20131208_211835.jpg" alt="M5A97 PRO BIOS screenshot showing sensor data." /></p>
+<p>Then I&#8217;ve booted into my Arch Linux and took the raw data from lm-sensors (pasted at the end of this post). Based on it, I guesstimated that in0 corresponds to +12V while in1 corresponds to +5V.  This leaves us with in4 to in6, which I chose to just ignore.</p>
+<p>And, finally, it seems that <a href="https://www.kernel.org/doc/Documentation/hwmon/k10temp">the temperature reported by the k10temp isn&#8217;t real temperature</a>, instead it&#8217;s a relative temperature.  It&#8217;s mostly meaningless since the motherboard correctly informs the CPU temperature.</p>
+<p>The end result is:</p>
+<div class="codecolorer-container python default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="python codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">$ sensors<br />
+k10temp-pci-00c3<br />
+Adapter: PCI adapter<br />
+CPU Temp <span style="color: black;">&#40;</span>rel<span style="color: black;">&#41;</span>: &nbsp;+<span style="color: #ff4500;">26.5</span>°C &nbsp;<span style="color: black;">&#40;</span>high <span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">70.0</span>°C<span style="color: black;">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: black;">&#40;</span>crit <span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">90.0</span>°C<span style="color: #66cc66;">,</span> hyst <span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">85.0</span>°C<span style="color: black;">&#41;</span><br />
+<br />
+it8721-isa-<span style="color: #ff4500;">0290</span><br />
+Adapter: ISA adapter<br />
++12V: &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">12.10</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">2.68</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">2.68</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
++5V: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">5.03</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.11</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.60</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
+Vcore: &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">1.45</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">1.66</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">1.12</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
++3.3V: &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">3.29</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">4.68</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.79</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
+3VSB: &nbsp; &nbsp; &nbsp; &nbsp; +<span style="color: #ff4500;">0.77</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.24</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">4.13</span> V<span style="color: black;">&#41;</span><br />
+Vbat: &nbsp; &nbsp; &nbsp; &nbsp; +<span style="color: #ff4500;">3.36</span> V &nbsp;<br />
+CPU Fan: &nbsp; &nbsp; <span style="color: #ff4500;">1290</span> RPM &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;<span style="color: #ff4500;">105</span> RPM<span style="color: black;">&#41;</span><br />
+Chassis Fan: <span style="color: #ff4500;">1192</span> RPM &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp; <span style="color: #ff4500;">16</span> RPM<span style="color: black;">&#41;</span><br />
+Power Fan: &nbsp; &nbsp; &nbsp;<span style="color: #ff4500;">0</span> RPM &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp; <span style="color: #ff4500;">10</span> RPM<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
+CPU Temp: &nbsp; &nbsp; +<span style="color: #ff4500;">37.0</span>°C &nbsp;<span style="color: black;">&#40;</span>low &nbsp;<span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">72.0</span>°C<span style="color: #66cc66;">,</span> high <span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">10.0</span>°C<span style="color: black;">&#41;</span> &nbsp;ALARM &nbsp;sensor <span style="color: #66cc66;">=</span> thermistor<br />
+M/B Temp: &nbsp; &nbsp; +<span style="color: #ff4500;">30.0</span>°C &nbsp;<span style="color: black;">&#40;</span>low &nbsp;<span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">15.0</span>°C<span style="color: #66cc66;">,</span> high <span style="color: #66cc66;">=</span> -<span style="color: #ff4500;">128.0</span>°C<span style="color: black;">&#41;</span> &nbsp;ALARM &nbsp;sensor <span style="color: #66cc66;">=</span> thermistor</div></div>
+<p>Much better!  If you have the same motherboard as mine and want to have this beauty, just drop this snippet in your <code class="codecolorer text default"><span class="text">/etc/sensors.conf</span></code>:</p>
+<div class="codecolorer-container bash default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="bash codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #666666; font-style: italic;"># Asus M5A97 PRO &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><br />
+chip <span style="color: #ff0000;">&quot;k10temp-pci-00c3&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label temp1 <span style="color: #ff0000;">&quot;CPU Temp (rel)&quot;</span><br />
+<br />
+chip <span style="color: #ff0000;">&quot;it8721-*&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label &nbsp;in0 <span style="color: #ff0000;">&quot;+12V&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label &nbsp;in1 <span style="color: #ff0000;">&quot;+5V&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label &nbsp;in2 <span style="color: #ff0000;">&quot;Vcore&quot;</span><br />
+&nbsp; &nbsp; &nbsp;ignore in4<br />
+&nbsp; &nbsp; &nbsp;ignore in5<br />
+&nbsp; &nbsp; &nbsp;ignore in6<br />
+<br />
+&nbsp; &nbsp; &nbsp;compute in0 &nbsp;<span style="color: #000000; font-weight: bold;">@</span> <span style="color: #000000; font-weight: bold;">*</span> <span style="color: #7a0874; font-weight: bold;">&#40;</span><span style="color: #000000;">515</span><span style="color: #000000; font-weight: bold;">/</span><span style="color: #000000;">120</span><span style="color: #7a0874; font-weight: bold;">&#41;</span>, <span style="color: #000000; font-weight: bold;">@</span> <span style="color: #000000; font-weight: bold;">/</span> <span style="color: #7a0874; font-weight: bold;">&#40;</span><span style="color: #000000;">515</span><span style="color: #000000; font-weight: bold;">/</span><span style="color: #000000;">120</span><span style="color: #7a0874; font-weight: bold;">&#41;</span><br />
+&nbsp; &nbsp; &nbsp;compute in1 &nbsp;<span style="color: #000000; font-weight: bold;">@</span> <span style="color: #000000; font-weight: bold;">*</span> <span style="color: #7a0874; font-weight: bold;">&#40;</span><span style="color: #000000;">215</span><span style="color: #000000; font-weight: bold;">/</span><span style="color: #000000;">120</span><span style="color: #7a0874; font-weight: bold;">&#41;</span>, <span style="color: #000000; font-weight: bold;">@</span> <span style="color: #000000; font-weight: bold;">/</span> <span style="color: #7a0874; font-weight: bold;">&#40;</span><span style="color: #000000;">215</span><span style="color: #000000; font-weight: bold;">/</span><span style="color: #000000;">120</span><span style="color: #7a0874; font-weight: bold;">&#41;</span><br />
+<br />
+&nbsp; &nbsp; &nbsp;ignore temp3<br />
+&nbsp; &nbsp; &nbsp;label temp1 <span style="color: #ff0000;">&quot;CPU Temp&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label temp2 <span style="color: #ff0000;">&quot;M/B Temp&quot;</span><br />
+<br />
+&nbsp; &nbsp; &nbsp;label fan1 <span style="color: #ff0000;">&quot;CPU Fan&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label fan2 <span style="color: #ff0000;">&quot;Chassis Fan&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label fan3 <span style="color: #ff0000;">&quot;Power Fan&quot;</span><br />
+<br />
+&nbsp; &nbsp; &nbsp;ignore intrusion0</div></div>
+<p>I&#8217;ve posted the configuration snippet above to the lm-sensors mailing list as well, so hopefully it will make it to the <a href="http://www.lm-sensors.org/wiki/Configurations">lm-sensors configurations wiki page</a> :).</p>
+<hr />
+<p>The raw data after the BIOS screenshot:</p>
+<div class="codecolorer-container python default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="python codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">k10temp-pci-00c3<br />
+Adapter: PCI adapter<br />
+temp1:<br />
+&nbsp; temp1_input: <span style="color: #ff4500;">30.125</span><br />
+&nbsp; temp1_max: <span style="color: #ff4500;">70.000</span><br />
+&nbsp; temp1_crit: <span style="color: #ff4500;">90.000</span><br />
+&nbsp; temp1_crit_hyst: <span style="color: #ff4500;">85.000</span><br />
+<br />
+it8721-isa-<span style="color: #ff4500;">0290</span><br />
+Adapter: ISA adapter<br />
+in0:<br />
+&nbsp; in0_input: <span style="color: #ff4500;">2.820</span><br />
+&nbsp; in0_min: <span style="color: #ff4500;">0.624</span><br />
+&nbsp; in0_max: <span style="color: #ff4500;">0.624</span><br />
+&nbsp; in0_alarm: <span style="color: #ff4500;">1.000</span><br />
+in1:<br />
+&nbsp; in1_input: <span style="color: #ff4500;">2.808</span><br />
+&nbsp; in1_min: <span style="color: #ff4500;">0.060</span><br />
+&nbsp; in1_max: <span style="color: #ff4500;">0.336</span><br />
+&nbsp; in1_alarm: <span style="color: #ff4500;">1.000</span><br />
+in2:<br />
+&nbsp; in2_input: <span style="color: #ff4500;">1.452</span><br />
+&nbsp; in2_min: <span style="color: #ff4500;">1.656</span><br />
+&nbsp; in2_max: <span style="color: #ff4500;">1.116</span><br />
+&nbsp; in2_alarm: <span style="color: #ff4500;">1.000</span><br />
++3.3V:<br />
+&nbsp; in3_input: <span style="color: #ff4500;">3.288</span><br />
+&nbsp; in3_min: <span style="color: #ff4500;">4.680</span><br />
+&nbsp; in3_max: <span style="color: #ff4500;">0.792</span><br />
+&nbsp; in3_alarm: <span style="color: #ff4500;">1.000</span><br />
+in4:<br />
+&nbsp; in4_input: <span style="color: #ff4500;">0.612</span><br />
+&nbsp; in4_min: <span style="color: #ff4500;">0.360</span><br />
+&nbsp; in4_max: <span style="color: #ff4500;">0.936</span><br />
+&nbsp; in4_alarm: <span style="color: #ff4500;">0.000</span><br />
+in5:<br />
+&nbsp; in5_input: <span style="color: #ff4500;">2.520</span><br />
+&nbsp; in5_min: <span style="color: #ff4500;">0.144</span><br />
+&nbsp; in5_max: <span style="color: #ff4500;">1.008</span><br />
+&nbsp; in5_alarm: <span style="color: #ff4500;">1.000</span><br />
+in6:<br />
+&nbsp; in6_input: <span style="color: #ff4500;">0.000</span><br />
+&nbsp; in6_min: <span style="color: #ff4500;">1.728</span><br />
+&nbsp; in6_max: <span style="color: #ff4500;">0.108</span><br />
+&nbsp; in6_alarm: <span style="color: #ff4500;">1.000</span><br />
+3VSB:<br />
+&nbsp; in7_input: <span style="color: #ff4500;">0.768</span><br />
+&nbsp; in7_min: <span style="color: #ff4500;">0.240</span><br />
+&nbsp; in7_max: <span style="color: #ff4500;">4.128</span><br />
+&nbsp; in7_alarm: <span style="color: #ff4500;">0.000</span><br />
+Vbat:<br />
+&nbsp; in8_input: <span style="color: #ff4500;">3.360</span><br />
+fan1:<br />
+&nbsp; fan1_input: <span style="color: #ff4500;">1454.000</span><br />
+&nbsp; fan1_min: <span style="color: #ff4500;">105.000</span><br />
+&nbsp; fan1_alarm: <span style="color: #ff4500;">0.000</span><br />
+fan2:<br />
+&nbsp; fan2_input: <span style="color: #ff4500;">1194.000</span><br />
+&nbsp; fan2_min: <span style="color: #ff4500;">16.000</span><br />
+&nbsp; fan2_alarm: <span style="color: #ff4500;">0.000</span><br />
+fan3:<br />
+&nbsp; fan3_input: <span style="color: #ff4500;">0.000</span><br />
+&nbsp; fan3_min: <span style="color: #ff4500;">10.000</span><br />
+&nbsp; fan3_alarm: <span style="color: #ff4500;">1.000</span><br />
+temp1:<br />
+&nbsp; temp1_input: <span style="color: #ff4500;">40.000</span><br />
+&nbsp; temp1_max: <span style="color: #ff4500;">10.000</span><br />
+&nbsp; temp1_min: <span style="color: #ff4500;">72.000</span><br />
+&nbsp; temp1_alarm: <span style="color: #ff4500;">1.000</span><br />
+&nbsp; temp1_type: <span style="color: #ff4500;">4.000</span><br />
+&nbsp; temp1_offset: <span style="color: #ff4500;">0.000</span><br />
+temp2:<br />
+&nbsp; temp2_input: <span style="color: #ff4500;">30.000</span><br />
+&nbsp; temp2_max: -<span style="color: #ff4500;">128.000</span><br />
+&nbsp; temp2_min: <span style="color: #ff4500;">15.000</span><br />
+&nbsp; temp2_alarm: <span style="color: #ff4500;">1.000</span><br />
+&nbsp; temp2_type: <span style="color: #ff4500;">4.000</span><br />
+&nbsp; temp2_offset: <span style="color: #ff4500;">0.000</span><br />
+temp3:<br />
+&nbsp; temp3_input: -<span style="color: #ff4500;">128.000</span><br />
+&nbsp; temp3_max: <span style="color: #ff4500;">49.000</span><br />
+&nbsp; temp3_min: -<span style="color: #ff4500;">55.000</span><br />
+&nbsp; temp3_alarm: <span style="color: #ff4500;">0.000</span><br />
+&nbsp; temp3_type: <span style="color: #ff4500;">0.000</span><br />
+&nbsp; temp3_offset: <span style="color: #ff4500;">0.000</span><br />
+intrusion0:<br />
+&nbsp; intrusion0_alarm: <span style="color: #ff4500;">0.000</span></div></div>
+]]></content:encoded>
+			<wfw:commentRss>http://blog.felipe.lessa.nom.br/?feed=rss2&#038;p=93</wfw:commentRss>
+		<slash:comments>3</slash:comments>
+		</item>
+		<item>
+		<title>Esqueleto now supports IN and EXISTS</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=83</link>
+		<comments>http://blog.felipe.lessa.nom.br/?p=83#comments</comments>
+		<pubDate>Thu, 29 Nov 2012 15:57:04 +0000</pubDate>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+				<category><![CDATA[Haskell]]></category>
+
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=83</guid>
+		<description><![CDATA[Since version 0.2.9 that I&#8217;ve just released, esqueleto supports IN and EXISTS operators (and their negated counterparts). For example: select $ from $ \person -&#62; do where_ $ exists $ &#160; &#160; &#160; &#160; &#160;from $ \post -&#62; do &#160; &#8230; <a href="http://blog.felipe.lessa.nom.br/?p=83">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>Since version 0.2.9 that I&#8217;ve just released, <a href="http://hackage.haskell.org/package/esqueleto">esqueleto</a> supports <code class="codecolorer sql default"><span class="sql"><span style="color: #993333; font-weight: bold;">IN</span></span></code> and <code class="codecolorer sql default"><span class="sql"><span style="color: #993333; font-weight: bold;">EXISTS</span></span></code> operators (and their negated counterparts).  For example:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">select <span style="color: #339933; font-weight: bold;">$</span><br />
+from <span style="color: #339933; font-weight: bold;">$</span> \person <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+where<span style="color: #339933; font-weight: bold;">_</span> <span style="color: #339933; font-weight: bold;">$</span> exists <span style="color: #339933; font-weight: bold;">$</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;from <span style="color: #339933; font-weight: bold;">$</span> \post <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;where<span style="color: #339933; font-weight: bold;">_</span> <span style="color: green;">&#40;</span>post <span style="color: #339933; font-weight: bold;">^.</span> BlogPostAuthorId <span style="color: #339933; font-weight: bold;">==.</span> person <span style="color: #339933; font-weight: bold;">^.</span> PersonId<span style="color: green;">&#41;</span><br />
+<span style="font-weight: bold;">return</span> person</div></div>
+<p>Enjoy! =)</p>
+<p>PS: I&#8217;ll try to post more in the future, so keep tuned =).</p>
+]]></content:encoded>
+			<wfw:commentRss>http://blog.felipe.lessa.nom.br/?feed=rss2&#038;p=83</wfw:commentRss>
+		<slash:comments>3</slash:comments>
+		</item>
+		<item>
+		<title>Announcing esqueleto, a type-safe EDSL for SQL queries</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=68</link>
+		<comments>http://blog.felipe.lessa.nom.br/?p=68#comments</comments>
+		<pubDate>Thu, 06 Sep 2012 22:51:09 +0000</pubDate>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+				<category><![CDATA[Haskell]]></category>
+		<category><![CDATA[EDSL]]></category>
+		<category><![CDATA[esqueleto]]></category>
+		<category><![CDATA[persistent]]></category>
+		<category><![CDATA[SQL]]></category>
+		<category><![CDATA[type-safe]]></category>
+		<category><![CDATA[Yesod]]></category>
+
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=68</guid>
+		<description><![CDATA[I&#8217;m very pleased to announce a preview release of esqueleto, a bare bones, type-safe EDSL for SQL queries. On the first part of this blog post I&#8217;ll talk about persistent and HaskellDB. You may jump right into where I talk &#8230; <a href="http://blog.felipe.lessa.nom.br/?p=68">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>I&#8217;m very pleased to announce a preview release of <a href="http://hackage.haskell.org/package/esqueleto">esqueleto</a>, a bare bones, type-safe EDSL for SQL queries.</p>
+<p><span id="more-68"></span></p>
+<p>On the first part of this blog post I&#8217;ll talk about persistent and HaskellDB.  You may jump <a href="#esqueleto">right into where I talk about esqueleto</a> if you want, though.</p>
+<h2>Background</h2>
+<p><a href="http://www.yesodweb.com/">Yesod</a> is very modular, and each of its components may be used separately.  You may also take libraries from other web frameworks.  However, it&#8217;s more convenient to use Yesod with its standard set of libraries.</p>
+<p>One of those libraries is <a href="http://hackage.haskell.org/package/persistent">persistent</a>. It fills the role of communicating with the database: serialization and deserialization of data types, insertions, updates, queries, schema migration, and so on.  It currently has both SQL and NoSQL backends, such as <a href="http://hackage.haskell.org/package/persistent-mysql">persistent-mysql</a>, <a href="http://hackage.haskell.org/package/persistent-postgresql">persistent-postgresql</a>, <a href="http://hackage.haskell.org/package/persistent-sqlite">persistent-sqlite</a> and <a href="http://hackage.haskell.org/package/persistent-mongoDB">persistent-mongoDB</a>.</p>
+<h2>Persistent&#8217;s weakness</h2>
+<p>Even though persistent&#8217;s use of Template Haskell has been criticized by some, it&#8217;s almost consensual that its largest drawback lies on its query API.  For example, if you want to see all of John&#8217;s posts, and you know that John&#8217;s key on the database is <code class="codecolorer haskell default"><span class="haskell">johnId</span></code>, then you may write:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">posts <span style="color: #339933; font-weight: bold;">&lt;-</span> selectList <span style="color: green;">&#91;</span>BlogPostAuthorId <span style="color: #339933; font-weight: bold;">==.</span> johnId<span style="color: green;">&#93;</span> <span style="color: green;">&#91;</span><span style="color: green;">&#93;</span></div></div>
+<p>Even though the meaning of those lists is somewhat cryptic, it&#8217;s not a bad line of code.  However, what if you didn&#8217;t know John&#8217;s key, just its e-mail (assuming that there is an uniqueness constraint on e-mails)?  Unfortunately, with persistent you&#8217;ll need either two queries:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">Entity johnId john <span style="color: #339933; font-weight: bold;">&lt;-</span> getBy <span style="color: green;">&#40;</span>UniqueEmail john'sEmail<span style="color: green;">&#41;</span><br />
+posts <span style="color: #339933; font-weight: bold;">&lt;-</span> selectList <span style="color: green;">&#91;</span>BlogPostAuthorId <span style="color: #339933; font-weight: bold;">==.</span> johnId<span style="color: green;">&#93;</span> <span style="color: green;">&#91;</span><span style="color: green;">&#93;</span></div></div>
+<p>Or you could do it in one query using the ad hoc <a href="http://hackage.haskell.org/packages/archive/persistent/1.0.1/doc/html/Database-Persist-Query-Join-Sql.html">Database.Persist.Query.Join.Sql</a> module:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">runJoin <span style="color: #339933; font-weight: bold;">$</span> SelectOneMany<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: green;">&#123;</span> somFilterOne &nbsp; &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#91;</span> PersonEmail <span style="color: #339933; font-weight: bold;">==.</span> john'sEmail <span style="color: green;">&#93;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">,</span> somOrderOne &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#91;</span><span style="color: green;">&#93;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">,</span> somFilterMany &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#91;</span><span style="color: green;">&#93;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">,</span> somOrderMany &nbsp; &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#91;</span><span style="color: green;">&#93;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">,</span> somFilterKeys &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#40;</span>BlogPostAuthorId <span style="color: #339933; font-weight: bold;">&lt;-.</span><span style="color: green;">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">,</span> somGetKey &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">=</span> blogPostAuthorId<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">,</span> somIncludeNoMatch <span style="color: #339933; font-weight: bold;">=</span> False<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: green;">&#125;</span></div></div>
+<p>Compare to the equivalent SQL query:</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="sql codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #993333; font-weight: bold;">SELECT</span> BlogPost<span style="color: #66cc66;">.*</span><br />
+<span style="color: #993333; font-weight: bold;">FROM</span> Person <span style="color: #993333; font-weight: bold;">INNER</span> <span style="color: #993333; font-weight: bold;">JOIN</span> BlogPost<br />
+<span style="color: #993333; font-weight: bold;">ON</span> Person<span style="color: #66cc66;">.</span>id <span style="color: #66cc66;">=</span> BlogPost<span style="color: #66cc66;">.</span>authorId<br />
+<span style="color: #993333; font-weight: bold;">WHERE</span> Person<span style="color: #66cc66;">.</span>email <span style="color: #66cc66;">=</span> ?</div></div>
+<p>But it gets even worse: you have support only for simple queries (using <code class="codecolorer haskell default"><span class="haskell">selectList</span></code>) and for simple one-to-many joins (using the ad hoc <code class="codecolorer haskell default"><span class="haskell">SelectOneMany</span></code>).  If you need anything else then you&#8217;re on your own.  For instance, there&#8217;s no support for doing many-to-many joins.</p>
+<p>For these reasons I&#8217;ve created the <a href="http://hackage.haskell.org/packages/archive/persistent/1.0.1/doc/html/Database-Persist-GenericSql.html#v:rawSql"><code class="codecolorer haskell default"><span class="haskell">rawSql</span></code></a> function <a href="https://github.com/yesodweb/persistent/pull/34">8 month ago</a>.  It was nice to be able to write raw SQL queries and still be able to use persistent to deserialize the results, but we still get all the drawbacks of using raw SQL queries:</p>
+<ul>
+<li>No compile-time checks whatsoever.  You could alleviate this problem using <a href="http://hackage.haskell.org/package/hssqlppp">hssqlppp</a>, for example, but you&#8217;d still not get compile-time checks for the types of your entities&#8212;there would still be plenty of ways of shooting yourself in the foot.</li>
+<li>No composability.  Suppose you have a query for people and their latest blog post.  You can&#8217;t reuse this query to reorder the results or filter them.</li>
+<li>Zero coolness factor.  C&#8217;mon, we&#8217;re not using Haskell for nothing! =)</li>
+</ul>
+<h2>HaskellDB: a solution?</h2>
+<p><a href="http://hackage.haskell.org/package/haskelldb">HaskellDB</a> is a type-safe EDSL that allows you to write SQL queries using relational algebra.  It&#8217;s as old as Parsec, having been introduced in 1999!</p>
+<p>Recently some people have been showing interest in using it with Yesod.  Last month <a href="https://groups.google.com/d/msg/yesodweb/nQjQuwydfI8/vB9mM47uZ0AJ">Mats Rauhala</a> wrote the following summary about his opinion at the time on Yesod&#8217;s mailing list:</p>
+<blockquote><p>
+1. Direct sql<br />
+  &#8211; No, or very little type safety<br />
+  &#8211; No, or very little compile time checks<br />
+  &#8211; Raw queries are ugly<br />
+  + Full power of SQL</p>
+<p>2. ORM<br />
+  + Type safety (ala persistent)<br />
+  &#8211; No control over queries<br />
+  &#8211; No proper join support(?, persistent)<br />
+  + Abstract<br />
+  +- High-level</p>
+<p>3. Relational algebra<br />
+  + Type safety (ala HaskellDB)<br />
+  + Great control over queries<br />
+  + Good control over abstractions<br />
+  + It&#8217;s algebra, therefore fits Haskell (tongue in cheek)<br />
+  &#8211; Forgotten (HaskellDB)
+</p></blockquote>
+<p>Although it&#8217;s rather painful to setup HaskellDB&#8217;s tables, I&#8217;ll won&#8217;t count that as a big drawback since some Template Haskell could certainly solve this shortcoming.  Its lack of migration capabilities is not a huge problem, too, since you may use persistent just for the migrations (although I&#8217;m not sure if anyone has ever put something like this into production).</p>
+<p>HaskellDB&#8217;s biggest drawback is being a relational algebra library.  &#8220;What?&#8221;, I hear you say.  I like relational algebra as much as the next functional programmer, but it comes with two drawbacks, one of them being a major one:</p>
+<ol>
+<li>Being something different than what we&#8217;re used to means that it takes some time to learn how to use it and get productive.  This is a minor drawback, but nevertheless it is a drawback.</li>
+<li>However, the biggest drawback is that <strong>it&#8217;s very hard to map into efficient SQL</strong>.  Back in 2008, Geoff Wilson <a href="http://pseudofish.com/blog/2008/05/18/haskelldb-performance/">wrote a blog post about HaskellDB&#8217;s performance</a>.  A simple <code class="codecolorer sql default"><span class="sql"><span style="color: #993333; font-weight: bold;">INNER</span> <span style="color: #993333; font-weight: bold;">JOIN</span></span></code> was taking between 40x and <strong>160x</strong> more time to execute when using HaskellDB and comparing against a handwritten SQL query.</li>
+</ol>
+<p>While I&#8217;m sure that some work has been done on HaskellDB&#8217;s optimizer since that blog post, Chris Done <a href="http://chrisdone.com/posts/2011-11-06-haskelldb-tutorial.html">found out last November</a> that it still isn&#8217;t very good:</p>
+<blockquote><p>
+Don’t expect good performance from HaskellDB if you’re using MySQL.
+</p></blockquote>
+<p>Even if I started using PostgreSQL, I wouldn&#8217;t want to rely on its optimizer when doing, say, a join between five tables on HaskellDB.  (If you didn&#8217;t already know, I&#8217;m <a href="http://hackage.haskell.org/package/persistent-mysql">persistent-mysql</a>&#8216;s author.)</p>
+<p>Please don&#8217;t get me wrong, HaskellDB is amazing!  But it won&#8217;t work for my production systems.</p>
+<p><a name="esqueleto"></a></p>
+<h2>Esqueleto rises</h2>
+<p>Last Sunday my co-worker was bitten by a nasty bug due to a raw SQL query.  He changed an entity&#8217;s field so that it would be optional.  After fixing all type errors, he found out that some parts of the application were not working, but no error messages were to be found anywhere.  Turns out an implicit join in a raw SQL query started dropping rows from the result since the value was <code class="codecolorer sql default"><span class="sql"><span style="color: #993333; font-weight: bold;">NULL</span></span></code>.  After we found the bug, he proceeded to show me <a href="http://squeryl.org/">Squeryl</a>. My initial thought after seeing the examples was: how could I write this in Haskell?</p>
+<p>Thus <a href="http://hackage.haskell.org/package/esqueleto">esqueleto</a> was born.  It&#8217;s a bare bones, type-safe EDSL for SQL-queries. Like HaskellDB, it has composable, type-checked queries.  Unlike HaskellDB, it&#8217;s not relational algebra, it&#8217;s SQL.  I was inspired by Squeryl but created esqueleto from scratch.</p>
+<p>It sits on top of persistent and requires no further setup: if you&#8217;re already using persistent then you already have everything it takes to use esqueleto.  Although I haven&#8217;t tested, yet, it should work on any SQL backend.</p>
+<p>Let&#8217;s remember the first query we did on the beginning of this post:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">selectList <span style="color: green;">&#91;</span>BlogPostAuthorId <span style="color: #339933; font-weight: bold;">==.</span> johnId<span style="color: green;">&#93;</span> <span style="color: green;">&#91;</span><span style="color: green;">&#93;</span></div></div>
+<p>You could write the same query in plain SQL as:</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="sql codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #993333; font-weight: bold;">SELECT</span> BlogPost<span style="color: #66cc66;">.*</span><br />
+<span style="color: #993333; font-weight: bold;">FROM</span> BlogPost<br />
+<span style="color: #993333; font-weight: bold;">WHERE</span> BlogPost<span style="color: #66cc66;">.</span>authorId <span style="color: #66cc66;">=</span> ?</div></div>
+<p>With esqueleto, you may say:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">select <span style="color: #339933; font-weight: bold;">$</span><br />
+from <span style="color: #339933; font-weight: bold;">$</span> \b <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+where<span style="color: #339933; font-weight: bold;">_</span> <span style="color: green;">&#40;</span>b <span style="color: #339933; font-weight: bold;">^.</span> BlogPostAuthorId <span style="color: #339933; font-weight: bold;">==.</span> val johnId<span style="color: green;">&#41;</span><br />
+<span style="font-weight: bold;">return</span> b</div></div>
+<p>Arguably more verbose than persistent&#8217;s <code class="codecolorer haskell default"><span class="haskell">selectList</span></code>, but extremely close to the handwriten SQL: just take the <code class="codecolorer haskell default"><span class="haskell"><span style="font-weight: bold;">return</span></span></code> and move it to the top!</p>
+<p>Better still, the SQL that esqueleto generates is:</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="sql codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #993333; font-weight: bold;">SELECT</span> BlogPost<span style="color: #66cc66;">.</span>id<span style="color: #66cc66;">,</span> BlogPost<span style="color: #66cc66;">.</span>title<br />
+<span style="color: #993333; font-weight: bold;">FROM</span> BlogPost<br />
+<span style="color: #993333; font-weight: bold;">WHERE</span> BlogPost<span style="color: #66cc66;">.</span>authorId <span style="color: #66cc66;">=</span> ?</div></div>
+<p>I&#8217;m not kidding!  The only difference from the handwritten query is the explicit list of columns, which is needed for correctness (the order your database returns the columns may not be what persistent expects).</p>
+<p>Remember the one-to-many join?  Here&#8217;s the esqueleto version:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">select <span style="color: #339933; font-weight: bold;">$</span><br />
+from <span style="color: #339933; font-weight: bold;">$</span> \<span style="color: green;">&#40;</span>p `InnerJoin` b<span style="color: green;">&#41;</span> <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+on <span style="color: green;">&#40;</span>p <span style="color: #339933; font-weight: bold;">^.</span> PersonId <span style="color: #339933; font-weight: bold;">==.</span> b <span style="color: #339933; font-weight: bold;">^.</span> BlogPostAuthorId<span style="color: green;">&#41;</span><br />
+where<span style="color: #339933; font-weight: bold;">_</span> <span style="color: green;">&#40;</span>p <span style="color: #339933; font-weight: bold;">^.</span> PersonEmail <span style="color: #339933; font-weight: bold;">==.</span> val john'sEmail<span style="color: green;">&#41;</span><br />
+<span style="font-weight: bold;">return</span> b</div></div>
+<p>The SQL esqueleto generates for this query is:</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="sql codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #993333; font-weight: bold;">SELECT</span> BlogPost<span style="color: #66cc66;">.</span>id<span style="color: #66cc66;">,</span> BlogPost<span style="color: #66cc66;">.</span>title<br />
+<span style="color: #993333; font-weight: bold;">FROM</span> Person <span style="color: #993333; font-weight: bold;">INNER</span> <span style="color: #993333; font-weight: bold;">JOIN</span> BlogPost<br />
+<span style="color: #993333; font-weight: bold;">ON</span> Person<span style="color: #66cc66;">.</span>id <span style="color: #66cc66;">=</span> BlogPost<span style="color: #66cc66;">.</span>authorId<br />
+<span style="color: #993333; font-weight: bold;">WHERE</span> Person<span style="color: #66cc66;">.</span>email <span style="color: #66cc66;">=</span> ?</div></div>
+<p>Let&#8217;s take <a href="http://pseudofish.com/blog/2008/05/18/haskelldb-performance/">Geoff Wilson&#8217;s post</a> as an example again.  Since this is a preview release of esqueleto, it does not have support for <code class="codecolorer sql default"><span class="sql"><span style="color: #993333; font-weight: bold;">IN</span></span></code> yet, so I&#8217;ll rewrite his code slightly. The HaskellDB code he wrote was:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">query db <span style="color: #339933; font-weight: bold;">$</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+&nbsp; s <span style="color: #339933; font-weight: bold;">&lt;-</span> table S<span style="color: #339933; font-weight: bold;">.</span>stock<br />
+&nbsp; e <span style="color: #339933; font-weight: bold;">&lt;-</span> table E<span style="color: #339933; font-weight: bold;">.</span>end<span style="color: #339933; font-weight: bold;">_</span>of<span style="color: #339933; font-weight: bold;">_</span>day<br />
+&nbsp; restrict <span style="color: green;">&#40;</span>s<span style="color: #339933; font-weight: bold;">!</span>S<span style="color: #339933; font-weight: bold;">.</span>stock<span style="color: #339933; font-weight: bold;">_</span>id <span style="color: #339933; font-weight: bold;">.==.</span> e<span style="color: #339933; font-weight: bold;">!</span>E<span style="color: #339933; font-weight: bold;">.</span>stock<span style="color: #339933; font-weight: bold;">_</span>id <span style="color: #339933; font-weight: bold;">.&amp;&amp;.</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; s<span style="color: #339933; font-weight: bold;">!</span>S<span style="color: #339933; font-weight: bold;">.</span>ticker <span style="color: #339933; font-weight: bold;">.==.</span> constant ticker <span style="color: #339933; font-weight: bold;">.&amp;&amp;.</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; e<span style="color: #339933; font-weight: bold;">!</span>E<span style="color: #339933; font-weight: bold;">.</span>trade<span style="color: #339933; font-weight: bold;">_</span>date <span style="color: #339933; font-weight: bold;">.==.</span> constant stockDate<span style="color: green;">&#41;</span><br />
+&nbsp; r <span style="color: #339933; font-weight: bold;">&lt;-</span> project <span style="color: green;">&#40;</span>closing<span style="color: #339933; font-weight: bold;">_</span>price <span style="color: #339933; font-weight: bold;">&lt;&lt;</span> e<span style="color: #339933; font-weight: bold;">!</span>E<span style="color: #339933; font-weight: bold;">.</span>closing<span style="color: #339933; font-weight: bold;">_</span>price #<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; trade<span style="color: #339933; font-weight: bold;">_</span>date &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">&lt;&lt;</span> e<span style="color: #339933; font-weight: bold;">!</span>E<span style="color: #339933; font-weight: bold;">.</span>trade<span style="color: #339933; font-weight: bold;">_</span>date<span style="color: green;">&#41;</span><br />
+&nbsp; <span style="font-weight: bold;">return</span> r</div></div>
+<p>The SQL that HaskellDB generated on 2008 was (adapted):</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="sql codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #993333; font-weight: bold;">SELECT</span> closing_price2 <span style="color: #993333; font-weight: bold;">AS</span> closing_price<span style="color: #66cc66;">,</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp;trade_date2 <span style="color: #993333; font-weight: bold;">AS</span> trade_date<br />
+<span style="color: #993333; font-weight: bold;">FROM</span> <span style="color: #66cc66;">&#40;</span><span style="color: #993333; font-weight: bold;">SELECT</span> stock_id <span style="color: #993333; font-weight: bold;">AS</span> stock_id2<span style="color: #66cc66;">,</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;trade_date <span style="color: #993333; font-weight: bold;">AS</span> trade_date2<span style="color: #66cc66;">,</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;closing_price <span style="color: #993333; font-weight: bold;">AS</span> closing_price2<br />
+&nbsp; &nbsp; &nbsp; <span style="color: #993333; font-weight: bold;">FROM</span> end_of_day <span style="color: #993333; font-weight: bold;">AS</span> T1<span style="color: #66cc66;">&#41;</span> <span style="color: #993333; font-weight: bold;">AS</span> T1<span style="color: #66cc66;">,</span><br />
+&nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#40;</span><span style="color: #993333; font-weight: bold;">SELECT</span> stock_id <span style="color: #993333; font-weight: bold;">AS</span> stock_id1<span style="color: #66cc66;">,</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;ticker <span style="color: #993333; font-weight: bold;">AS</span> ticker1<br />
+&nbsp; &nbsp; &nbsp; <span style="color: #993333; font-weight: bold;">FROM</span> stock <span style="color: #993333; font-weight: bold;">AS</span> T1<span style="color: #66cc66;">&#41;</span> <span style="color: #993333; font-weight: bold;">AS</span> T2<br />
+<span style="color: #993333; font-weight: bold;">WHERE</span> stock_id1 <span style="color: #66cc66;">=</span> stock_id2<br />
+&nbsp; <span style="color: #993333; font-weight: bold;">AND</span> ticker1 <span style="color: #66cc66;">=</span> <span style="color: #ff0000;">'FXJ'</span><br />
+&nbsp; <span style="color: #993333; font-weight: bold;">AND</span> trade_date2 <span style="color: #66cc66;">=</span> <span style="color: #ff0000;">'2008-02-14 00:00:00'</span>;</div></div>
+<p>His handwritten SQL was (adapted as well):</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="sql codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #993333; font-weight: bold;">SELECT</span> e<span style="color: #66cc66;">.</span>closing_price <span style="color: #993333; font-weight: bold;">AS</span> closing_price<span style="color: #66cc66;">,</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp;e<span style="color: #66cc66;">.</span>trade_date <span style="color: #993333; font-weight: bold;">AS</span> trade_date<br />
+<span style="color: #993333; font-weight: bold;">FROM</span><br />
+&nbsp; &nbsp; stock s<span style="color: #66cc66;">,</span> end_of_day e<br />
+<span style="color: #993333; font-weight: bold;">WHERE</span><br />
+&nbsp; &nbsp; s<span style="color: #66cc66;">.</span>stock_id <span style="color: #66cc66;">=</span> e<span style="color: #66cc66;">.</span>stock_id<br />
+&nbsp; &nbsp; <span style="color: #993333; font-weight: bold;">AND</span> s<span style="color: #66cc66;">.</span>ticker <span style="color: #66cc66;">=</span> <span style="color: #ff0000;">'FXJ'</span><br />
+&nbsp; &nbsp; <span style="color: #993333; font-weight: bold;">AND</span> e<span style="color: #66cc66;">.</span>trade_date <span style="color: #66cc66;">=</span> <span style="color: #ff0000;">'2008-02-14 00:00:00'</span>;</div></div>
+<p>The same query could be written using persistent and esqueleto as:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">select <span style="color: #339933; font-weight: bold;">$</span><br />
+from <span style="color: #339933; font-weight: bold;">$</span> \<span style="color: green;">&#40;</span>s<span style="color: #339933; font-weight: bold;">,</span> e<span style="color: green;">&#41;</span> <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+where<span style="color: #339933; font-weight: bold;">_</span> <span style="color: green;">&#40;</span>s <span style="color: #339933; font-weight: bold;">^.</span> StockId <span style="color: #339933; font-weight: bold;">==.</span> e <span style="color: #339933; font-weight: bold;">^.</span> EndOfDayStockId <span style="color: #339933; font-weight: bold;">&amp;&amp;.</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; s <span style="color: #339933; font-weight: bold;">^.</span> StockTicker <span style="color: #339933; font-weight: bold;">==.</span> val ticker <span style="color: #339933; font-weight: bold;">&amp;&amp;.</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; s <span style="color: #339933; font-weight: bold;">^.</span> EndOfDayTradeDate <span style="color: #339933; font-weight: bold;">==.</span> val stockDate<span style="color: green;">&#41;</span><br />
+<span style="font-weight: bold;">return</span> <span style="color: green;">&#40;</span>e <span style="color: #339933; font-weight: bold;">^.</span> EndOfDayClosingPrice<span style="color: #339933; font-weight: bold;">,</span> e <span style="color: #339933; font-weight: bold;">^.</span> EndOfDayTradeDate<span style="color: green;">&#41;</span></div></div>
+<p>The generated SQL would be:</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="sql codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #993333; font-weight: bold;">SELECT</span> end_of_day<span style="color: #66cc66;">.</span>closing_price<span style="color: #66cc66;">,</span> end_of_day<span style="color: #66cc66;">.</span>trade_date<br />
+<span style="color: #993333; font-weight: bold;">FROM</span> stock<span style="color: #66cc66;">,</span> end_of_day<br />
+<span style="color: #993333; font-weight: bold;">WHERE</span> stock<span style="color: #66cc66;">.</span>stock_id <span style="color: #66cc66;">=</span> end_of_day<span style="color: #66cc66;">.</span>stock_id <span style="color: #993333; font-weight: bold;">AND</span> <span style="color: #66cc66;">&#40;</span>stock<span style="color: #66cc66;">.</span>ticker <span style="color: #66cc66;">=</span> ? <span style="color: #993333; font-weight: bold;">AND</span> end_of_day<span style="color: #66cc66;">.</span>trade_date <span style="color: #66cc66;">=</span> ?<span style="color: #66cc66;">&#41;</span></div></div>
+<h2>Conclusion</h2>
+<p>The full power of raw SQL.  Type-checked queries, no type signatures required.  Complete control over the resulting SQL.  The robustness and performance of persistent.  And with only 800 source lines of code (+ 400 SLOC for the test suite).  What&#8217;s not to like about esqueleto? =D</p>
+<p>This is just a preview release.  I&#8217;m eager to hear what you have to say about it.  Send pull requests, open issues, comment about it <a href="http://www.reddit.com/r/haskell/comments/zh3h6/announcing_esqueleto_a_typesafe_edsl_for_sql/">on reddit</a> or send e-mails to Yesod&#8217;s mailing list.  Or, even better, give it a spin a let me know how it went!  Its <a href="http://hackage.haskell.org/packages/archive/esqueleto/latest/doc/html/Database-Esqueleto.html">Haddock documentation</a> should get you started.</p>
+<p>Thanks for reading this rather long blog post! =)</p>
+]]></content:encoded>
+			<wfw:commentRss>http://blog.felipe.lessa.nom.br/?feed=rss2&#038;p=68</wfw:commentRss>
+		<slash:comments>7</slash:comments>
+		</item>
+		<item>
+		<title>Abstracting permissions with Yesod</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=7</link>
+		<comments>http://blog.felipe.lessa.nom.br/?p=7#comments</comments>
+		<pubDate>Mon, 16 Jan 2012 11:55:04 +0000</pubDate>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[Haskell]]></category>
+		<category><![CDATA[Yesod]]></category>
+
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=7</guid>
+		<description><![CDATA[Yesod is a terrific framework for web applications in Haskell.  It has many, many built-in features.  One of them is that there&#8217;s nice support for authentication and authorization.  In this post I&#8217;m interested in talking about how you could write &#8230; <a href="http://blog.felipe.lessa.nom.br/?p=7">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p><a href="http://www.yesodweb.com/">Yesod</a> is a terrific framework for web applications in <a href="http://www.haskell.org/">Haskell</a>.  It has many, many built-in features.  One of them is that there&#8217;s nice support for authentication and authorization.  In this post I&#8217;m interested in talking about how you could write your authorization code such that it&#8217;s harder to make mistakes.</p>
+<p><span id="more-7"></span></p>
+<p>As shown on the <a href="http://www.yesodweb.com/blog/2012/01/blog-example">recent example</a> of creating a blog web app, Yesod&#8217;s approach to authorization lies within the <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> function:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #06c; font-weight: bold;">class</span> <span style="color: #339933; font-weight: bold;">...</span> <span style="color: #339933; font-weight: bold;">=&gt;</span> Yesod a <span style="color: #06c; font-weight: bold;">where</span><br />
+&nbsp; <span style="color: #339933; font-weight: bold;">...</span><br />
+&nbsp; isAuthorized <span style="color: #339933; font-weight: bold;">::</span> Route a <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: #cccc00; font-weight: bold;">Bool</span> <span style="color: #339933; font-weight: bold;">-&gt;</span> GHandler s a AuthResult<br />
+&nbsp; <span style="color: #339933; font-weight: bold;">...</span></div></div>
+<p>So <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> takes a <code class="codecolorer haskell default"><span class="haskell">Route a</span></code>, such as <code class="codecolorer haskell default"><span class="haskell">EntryR <span style="color: red;">10</span></span></code>, and a <code class="codecolorer haskell default"><span class="haskell"><span style="color: #cccc00; font-weight: bold;">Bool</span></span></code> telling if the request may do writes (e.g. POST or PUT) or not (e.g. GET or HEAD).  It must return an <code class="codecolorer haskell default"><span class="haskell">AuthResult</span></code> that decides if the user is <code class="codecolorer haskell default"><span class="haskell">Authorized</span></code>, <code class="codecolorer haskell default"><span class="haskell">Unauthorized</span></code> or if he needs to be authenticated first (<code class="codecolorer haskell default"><span class="haskell">AuthenticationRequired</span></code>).</p>
+<p>While keeping authorization code in a single place is nice, using <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> alone makes it very difficult to test your authorization code.  Using the <a href="http://www.yesodweb.com/blog/2012/01/blog-example">blog example</a> again, only the admin should be able to create blog posts.  So let&#8217;s take a look at the example code that decides if the user should be authorized to post to the blog:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">isAuthorized BlogR True <span style="color: #339933; font-weight: bold;">=</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+&nbsp; mauth <span style="color: #339933; font-weight: bold;">&lt;-</span> maybeAuth<br />
+&nbsp; <span style="color: #06c; font-weight: bold;">case</span> mauth <span style="color: #06c; font-weight: bold;">of</span><br />
+&nbsp; &nbsp; Nothing <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="font-weight: bold;">return</span> AuthenticationRequired<br />
+&nbsp; &nbsp; Just <span style="color: green;">&#40;</span><span style="color: #339933; font-weight: bold;">_,</span> user<span style="color: green;">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">|</span> isAdmin user <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="font-weight: bold;">return</span> Authorized<br />
+&nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">|</span> <span style="font-weight: bold;">otherwise</span> &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">-&gt;</span> unauthorizedI MsgNotAnAdmin</div></div>
+<p>There are many things going on here:</p>
+<ol>
+<li>There&#8217;s authentication code that checks if the current user is logged in via <code class="codecolorer haskell default"><span class="haskell">maybeAuth</span></code>.</li>
+<li>If the user is not logged in, it returns <code class="codecolorer haskell default"><span class="haskell">AuthenticationRequired</span></code>.</li>
+<li>Otherwise the user&#8217;s credentials are checked to see if he should be authorized or not.</li>
+</ol>
+<p>Step 1 is pretty standard housekeeping-style code.  Steps 2 and 3, however, are part of your business logic that decides who should be able to do what.  This means that you should be able to create (a) an unit test that asserts that the admin can create blog posts and (b) an unit test that asserts that a non-admin can&#8217;t create blog posts.  Unfortunately, with the code above writing unit tests is really difficult.  You not only need to artificially run the <code class="codecolorer haskell default"><span class="haskell">GHandler</span></code> monad (boring), but you need to fake the current session so that Step 1&#8242;s <code class="codecolorer haskell default"><span class="haskell">maybeAuth</span></code> gets the right information (difficult).  Even then, your <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> function is allowed to do anything, since it&#8217;s inside <code class="codecolorer haskell default"><span class="haskell">GHandler</span></code>.</p>
+<p>Enter permissions.  What we&#8217;re really trying to say in the code above is that (a) to create a blog post you need the &#8220;post&#8221; permission and (b) admin has &#8220;post&#8221; permission, non-admins don&#8217;t.  So let&#8217;s split these things!  First of all, we need a list of the permissions that we&#8217;ll need:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #06c; font-weight: bold;">data</span> Permission <span style="color: #339933; font-weight: bold;">=</span> Post <span style="color: #339933; font-weight: bold;">|</span> Comment</div></div>
+<p>You should read these constructors names with &#8220;permission to&#8221; before their names.  For example, the admin has permission to <code class="codecolorer haskell default"><span class="haskell">Post</span></code> and any logged user has permission to <code class="codecolorer haskell default"><span class="haskell">Comment</span></code>.</p>
+<p>Each request needs to decide which permissions it requires.  This is one of the most important pieces of your application&#8217;s security, since forgetting to ask for permissions could lead to catastrophic problems.  Instead of having this core piece of your app diluted in <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code>, we use a simple, clear, pure function called <code class="codecolorer haskell default"><span class="haskell">permissionsRequiredFor</span></code>.  The idea is to make <code class="codecolorer haskell default"><span class="haskell">permissionsRequiredFor</span></code> as simple as possible, such that with code review alone you could determine if you&#8217;re asking for the right permissions.</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">permissionsRequiredFor <span style="color: #339933; font-weight: bold;">::</span> Route Blog <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: #cccc00; font-weight: bold;">Bool</span> <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: green;">&#91;</span>Permission<span style="color: green;">&#93;</span><br />
+permissionsRequiredFor BlogR &nbsp; &nbsp; &nbsp;True <span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#91;</span>Post<span style="color: green;">&#93;</span><br />
+permissionsRequiredFor <span style="color: green;">&#40;</span>EntryR <span style="color: #339933; font-weight: bold;">_</span><span style="color: green;">&#41;</span> True <span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#91;</span>Comment<span style="color: green;">&#93;</span><br />
+permissionsRequiredFor <span style="color: #339933; font-weight: bold;">_</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">_</span> &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#91;</span><span style="color: green;">&#93;</span></div></div>
+<p>We also need to decide if the currently logged user has the necessary permissions or not.  This is the other important piece of your authorization puzzle, and a piece that we need to make easily testable.  In order to do so, we avoid <code class="codecolorer haskell default"><span class="haskell">maybeAuth</span></code> and take the user as an argument.</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">hasPermissionTo <span style="color: #339933; font-weight: bold;">::</span> <span style="color: green;">&#40;</span>UserId<span style="color: #339933; font-weight: bold;">,</span> User<span style="color: green;">&#41;</span> <br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">-&gt;</span> Permission<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">-&gt;</span> YesodDB sub Blog AuthResult<br />
+<span style="color: green;">&#40;</span><span style="color: #339933; font-weight: bold;">_,</span> user<span style="color: green;">&#41;</span> `hasPermissionTo` Post<br />
+&nbsp; <span style="color: #339933; font-weight: bold;">|</span> isAdmin user <span style="color: #339933; font-weight: bold;">=</span> <span style="font-weight: bold;">return</span> Authorized<br />
+&nbsp; <span style="color: #339933; font-weight: bold;">|</span> <span style="font-weight: bold;">otherwise</span> &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">=</span> lift <span style="color: #339933; font-weight: bold;">$</span> unauthorizedI MsgNotAnAdmin<br />
+<span style="color: #339933; font-weight: bold;">_</span> `hasPermissionTo` Comment <span style="color: #339933; font-weight: bold;">=</span> <span style="font-weight: bold;">return</span> Authorized<br />
+<br />
+<br />
+isAuthorizedTo <span style="color: #339933; font-weight: bold;">::</span> <span style="color: #cccc00; font-weight: bold;">Maybe</span> <span style="color: green;">&#40;</span>UserId<span style="color: #339933; font-weight: bold;">,</span> User<span style="color: green;">&#41;</span> <br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: green;">&#91;</span>Permission<span style="color: green;">&#93;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">-&gt;</span> YesodDB sub Blog AuthResult<br />
+<span style="color: #339933; font-weight: bold;">_</span> &nbsp; &nbsp; &nbsp; `isAuthorizedTo` <span style="color: green;">&#91;</span><span style="color: green;">&#93;</span> &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">=</span> <span style="font-weight: bold;">return</span> Authorized<br />
+Nothing `isAuthorizedTo` <span style="color: green;">&#40;</span><span style="color: #339933; font-weight: bold;">_</span>:<span style="color: #339933; font-weight: bold;">_</span><span style="color: green;">&#41;</span> &nbsp;<span style="color: #339933; font-weight: bold;">=</span> <span style="font-weight: bold;">return</span> AuthenticationRequired<br />
+Just u &nbsp;`isAuthorizedTo` <span style="color: green;">&#40;</span>p:ps<span style="color: green;">&#41;</span> <span style="color: #339933; font-weight: bold;">=</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+&nbsp; r <span style="color: #339933; font-weight: bold;">&lt;-</span> u `hasPermissionTo` p<br />
+&nbsp; <span style="color: #06c; font-weight: bold;">case</span> r <span style="color: #06c; font-weight: bold;">of</span><br />
+&nbsp; &nbsp; Authorized <span style="color: #339933; font-weight: bold;">-&gt;</span> Just u `isAuthorizedTo` ps<br />
+&nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">_</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="font-weight: bold;">return</span> r <span style="color: #5d478b; font-style: italic;">-- unauthorized</span></div></div>
+<p>The <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code> function decides if the user has a given permission or not.  While in this example <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code> could have been a pure function, in general you may need to access the database.  The <code class="codecolorer haskell default"><span class="haskell">isAuthorizedTo</span></code> function then (a) decides if the user needs to be authenticated and (b) checks all permissions required from the list using <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code>.</p>
+<p>Finally, we need to implement <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> gluing everything together:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">isAuthorized route isWrite <span style="color: #339933; font-weight: bold;">=</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+&nbsp; mauth <span style="color: #339933; font-weight: bold;">&lt;-</span> maybeAuth<br />
+&nbsp; runDB <span style="color: #339933; font-weight: bold;">$</span> mauth `isAuthorizedTo` permissionsRequiredFor route isWrite</div></div>
+<p>Ok, so what did we gain by writing three more functions?</p>
+<ul>
+<li>You can easily review <code class="codecolorer haskell default"><span class="haskell">permissionsRequiredFor</span></code> to see if you didn&#8217;t leave a restricted route in the open.</li>
+<li>If you don&#8217;t use the wildcards on the last line of <code class="codecolorer haskell default"><span class="haskell">permissionsRequiredFor</span></code> and instead list all of your routes one by one, then you&#8217;d get a compiler warning and a runtime error every time you forgot to set the permissions of a newly added route.</li>
+<li>If you have many routes that needed the same permissions, you don&#8217;t need to recode the permission code everywhere.  You just need to code it once on <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code> and then ask for that permission on each of your routes. In my experience, the set of permissions (i.e. the <code class="codecolorer haskell default"><span class="haskell">Permission</span></code> data type) is a lot smaller than the set of possible routes.</li>
+<li>You may easily create unit tests for <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code>, increasing your confidence on your code&#8217;s correctness.</li>
+</ul>
+<p>I should also note that this approach is easily extendable.  For example, suppose that you wanted to restrict the visibility of some of your blog posts.  You could change the <code class="codecolorer haskell default"><span class="haskell">Permission</span></code> data type into:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #06c; font-weight: bold;">data</span> Permission <span style="color: #339933; font-weight: bold;">=</span> Post <span style="color: #339933; font-weight: bold;">|</span> CommentOn EntryId <span style="color: #339933; font-weight: bold;">|</span> View EntryId</div></div>
+<p>Now your <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code> function is able to give a different answer depending on which blog post we&#8217;re talking about.</p>
+<p>So far this approach has been successfully used on my day job&#8217;s Yesod application.  It looks like a cousin of Yesod&#8217;s i18n support using data types.  </p>
+<p>Thanks for reading along this far!  Please use the comment section below to say what think of this approach. =)</p>
+]]></content:encoded>
+			<wfw:commentRss>http://blog.felipe.lessa.nom.br/?feed=rss2&#038;p=7</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+	</channel>
+</rss>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<title>Announcing serversession | Felipe Lessa</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="stylesheet" type="text/css" media="all" href="http://blog.felipe.lessa.nom.br/wp-content/themes/twentyten/style.css" />
+<link rel="pingback" href="http://blog.felipe.lessa.nom.br/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Feed" href="http://blog.felipe.lessa.nom.br/?feed=rss2" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Comments Feed" href="http://blog.felipe.lessa.nom.br/?feed=comments-rss2" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Announcing serversession Comments Feed" href="http://blog.felipe.lessa.nom.br/?feed=rss2&#038;p=153" />
+<link rel='stylesheet' id='openid-css'  href='http://blog.felipe.lessa.nom.br/wp-content/plugins/openid/f/openid.css?ver=519' type='text/css' media='all' />
+<link rel='stylesheet' id='codecolorer-css'  href='http://blog.felipe.lessa.nom.br/wp-content/plugins/codecolorer/codecolorer.css?ver=0.9.9' type='text/css' media='screen' />
+<!-- This site uses the Yoast Google Analytics plugin v5.1.1 - Universal disabled - https://yoast.com/wordpress/plugins/google-analytics/ -->
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-28368350-1']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+
+</script>
+<!-- / Yoast Google Analytics -->
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-includes/js/jquery/jquery.js?ver=1.10.2'></script>
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-content/plugins/openid/f/openid.js?ver=519'></script>
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-includes/js/comment-reply.min.js?ver=3.8.5'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.felipe.lessa.nom.br/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.felipe.lessa.nom.br/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Using stack on NixOS' href='http://blog.felipe.lessa.nom.br/?p=146' />
+<meta name="generator" content="WordPress 3.8.5" />
+<link rel='canonical' href='http://blog.felipe.lessa.nom.br/?p=153' />
+<link rel='shortlink' href='http://blog.felipe.lessa.nom.br/?p=153' />
+<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #f1f1f1; }
+</style>
+</head>
+
+<body class="single single-post postid-153 single-format-standard custom-background">
+<div id="wrapper" class="hfeed">
+	<div id="header">
+		<div id="masthead">
+			<div id="branding" role="banner">
+								<div id="site-title">
+					<span>
+						<a href="http://blog.felipe.lessa.nom.br/" title="Felipe Lessa" rel="home">Felipe Lessa</a>
+					</span>
+				</div>
+				<div id="site-description">Some random blog posts</div>
+
+										<img src="http://blog.felipe.lessa.nom.br/wp-content/themes/twentyten/images/headers/cherryblossoms.jpg" width="940" height="198" alt="" />
+								</div><!-- #branding -->
+
+			<div id="access" role="navigation">
+			  				<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+								<div class="menu"><ul><li ><a href="http://blog.felipe.lessa.nom.br/">Home</a></li><li class="page_item page-item-56"><a href="http://blog.felipe.lessa.nom.br/?page_id=56">About</a></li></ul></div>
+			</div><!-- #access -->
+		</div><!-- #masthead -->
+	</div><!-- #header -->
+
+	<div id="main">
+
+		<div id="container">
+			<div id="content" role="main">
+
+			
+
+				<div id="nav-above" class="navigation">
+					<div class="nav-previous"><a href="http://blog.felipe.lessa.nom.br/?p=146" rel="prev"><span class="meta-nav">&larr;</span> Using stack on NixOS</a></div>
+					<div class="nav-next"></div>
+				</div><!-- #nav-above -->
+
+				<div id="post-153" class="post-153 post type-post status-publish format-standard hentry category-haskell">
+					<h1 class="entry-title">Announcing serversession</h1>
+
+					<div class="entry-meta">
+						<span class="meta-prep meta-prep-author">Posted on</span> <a href="http://blog.felipe.lessa.nom.br/?p=153" title="01:06" rel="bookmark"><span class="entry-date">02/01/2016</span></a> <span class="meta-sep">by</span> <span class="author vcard"><a class="url fn n" href="http://blog.felipe.lessa.nom.br/?author=1" title="View all posts by Felipe Lessa">Felipe Lessa</a></span>					</div><!-- .entry-meta -->
+
+					<div class="entry-content">
+						<p>I&#8217;m pleased to announce the <a href="https://github.com/yesodweb/serversession" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/yesodweb/serversession', 'serversession family of packages']);"  title="serversession's GitHub page"><strong>serversession family of packages</strong></a>.</p>
+<h2> Background</h2>
+<p>HTTP is a stateless protocol.  Cookies are used to create <strong>sessions</strong> out of otherwise independent requests made by the browser to the server.  There are many ways of managing sessions via cookies, but they can be mostly separated into two big camps:</p>
+<dl>
+<dt>Client-side sessions</dt>
+<dd>The cookie data contains the session data.  For example, it could contain a shopper&#8217;s login and cart contents.</dd>
+<dt>Server-side sessions</dt>
+<dd>The cookie data contains a session identifier, and the session data is kept on a database indexed by the session identifiers.</dd>
+</dl>
+<p><span id="more-153"></span></p>
+<p>The <a href="http://hackage.haskell.org/package/clientsession" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://hackage.haskell.org/package/clientsession', 'clientsession']);"  title="clientsession package on Hackage">clientsession</a> package has existed for many years already.  It&#8217;s both <a href="http://hackage.haskell.org/package/yesod-core-1.4.18.1/docs/Yesod-Core.html#v:makeSessionBackend" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://hackage.haskell.org/package/yesod-core-1.4.18.1/docs/Yesod-Core.html#v:makeSessionBackend', 'Yesod']);"  title="Yesod.Core">Yesod</a>&#8216;s and <a href="http://hackage.haskell.org/package/snap-0.14.0.6/docs/Snap-Snaplet-Session-Backends-CookieSession.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://hackage.haskell.org/package/snap-0.14.0.6/docs/Snap-Snaplet-Session-Backends-CookieSession.html', 'Snap']);"  title="Snap.Snaplet.Session.Backends.CookieSession">Snap</a>&#8216;s de facto session backend.  It performs well and is battle tested by many different people and companies.</p>
+<p>However, there are many reasons why one may want to favor server-side sessions over client-side ones:</p>
+<ul>
+<li>Saving <strong>arbitrary amounts of session data</strong> without being constrained by cookie size limits.  Even if your data fits on a cookie, you may want to spare having to bounce all that data around on every request and response.</li>
+<li><strong>Securely invalidating a session</strong>.  User logout with client-side sessions erases the cookie from the user&#8217;s browser but doesn&#8217;t invalidate its data.  The old cookie is still valid until its expiration.  Server-side sessions, however, can be securely invalidate by simply erasing them from your session database.  This can be a critical feature depending on your needs.</li>
+</ul>
+<p>The biggest disadvantage of server-side sessions is that they need more server-side resources.  Not only it needs space for sessions storage, but it also incurs the overhead of zero to two DB transactions per HTTP request.</p>
+<p>One solution isn&#8217;t inherently better than the other.  It all depends on your use case.  And if your use case needs server-side sessions, this is your lucky day.</p>
+<h2> The serversession packages </h2>
+<p>I&#8217;d like to fill the gap that currently exists on the Haskell ecosystem with respect to server-side session support.  Preferably once and for all.  That&#8217;s why there are many serversession packages.</p>
+<p>The main one, aptly called <a href="https://hackage.haskell.org/package/serversession" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://hackage.haskell.org/package/serversession', 'serversession']);"  title="serversession's page on Hackage"><strong>serversession</strong></a>, contains the core logic about server-side sessions.  It&#8217;s abstracted over a <strong>backend</strong> which will store the session&#8217;s data (usually a database).  And it&#8217;s meant to be used by a <strong>frontend</strong>, such as Yesod or Snap.  Besides having a nice <a href="https://travis-ci.org/yesodweb/serversession" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://travis-ci.org/yesodweb/serversession', 'test suite']);"  title="serversession's page on Travis-CI">test suite</a>, it&#8217;s also unencumbered by the minutia of dealing with databases and thus is easier to review.  It also defines a standard test suite that every backend needs to pass.</p>
+<p>Out-of-the-box you&#8217;ll find support for many different backends:</p>
+<ul>
+<li>The <a href="https://hackage.haskell.org/package/serversession-backend-persistent" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://hackage.haskell.org/package/serversession-backend-persistent', 'serversession-backend-persistent']);"  title="serversession-backend-persistent's page on Hackage"><strong>serversession-backend-persistent</strong></a> package allows one to use any SQL database that persistent supports, including PostgreSQL, MySQL, and SQLite.</li>
+<li>Through the <a href="https://hackage.haskell.org/package/serversession-backend-acid-state" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://hackage.haskell.org/package/serversession-backend-acid-state', 'serversession-backend-acid-state']);"  title="serversession-backend-acid-state's page on Hackage"><strong>serversession-backend-acid-state</strong></a> package you may use <a href="https://hackage.haskell.org/package/acid-state" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://hackage.haskell.org/package/acid-state', 'acid-state']);"  title="acid-state's page on Hackage">acid-state</a>. This backend keeps sessions in memory but provides ACID guarantees using a transaction log.</li>
+<li>We also support Redis via the <a href="https://hackage.haskell.org/package/serversession-backend-redis" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://hackage.haskell.org/package/serversession-backend-redis', 'serversession-backend-redis']);"  title="serversession-backend-redis's page on Hackage"><strong>serversession-backend-redis</strong></a> package.</li>
+</ul>
+<p>We also already officially support the most popular frontends:</p>
+<ul>
+<li>Yesod, through the <a href="https://hackage.haskell.org/package/serversession-frontend-yesod" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://hackage.haskell.org/package/serversession-frontend-yesod', 'serversession-frontend-yesod']);"  title="serversession-frontend-yesod's page on Hackage"><strong>serversession-frontend-yesod</strong></a> package.  Provides a drop-in replacement for clientsession. </li>
+<li>Snap, through the <a href="https://hackage.haskell.org/package/serversession-frontend-snap" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://hackage.haskell.org/package/serversession-frontend-snap', 'serversession-frontend-snap']);"  title="serversession-frontend-snap's page on Hackage"><strong>serversession-frontend-snap</strong></a> package.  Also provides a drop-in replacement for clientsession. </li>
+<li>Even plain WAI apps, through the <a href="https://hackage.haskell.org/package/serversession-frontend-wai" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://hackage.haskell.org/package/serversession-frontend-wai', 'serversession-frontend-wai']);"  title="serversession-frontend-wai's page on Hackage"><strong>serversession-frontend-wai</strong></a> package.
+</ul>
+<p>Adding a new backend is very straightforward, specially because there&#8217;s already a test suite for free.  Adding a new frontend is a bit more complicated depending on how well your frontend&#8217;s concept of sessions maps to serversession&#8217;s.  If you&#8217;d like to support your favorite backend/frontend, please send your contributions back upstream so they become official packages as well!</p>
+<h2> Usage example </h2>
+<p>If you have an Yesod app, you&#8217;re probably using persistent.  Changing your app to support serversession is just a matter of setting up the session storage entities and changing Yesod&#8217;s default session backend (not to be confused with a serversession backend).</p>
+<p>To setup the entities, you&#8217;ll have to teach persistent how to set them up on your database.  Please check <a href="http://www.stackage.org/package/serversession-backend-persistent" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.stackage.org/package/serversession-backend-persistent', 'serversession-backend-persistent&#8217;s docs']);"  title="serversession-backend-persistent's page on Stackage">serversession-backend-persistent&#8217;s docs</a> for details, but it all boils down to changing your migration Template Haskell code from:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer"><span class="co1">-- On Model.hs</span><br />
+share <span class="br0">&#91;</span>mkPersist sqlSettings<span class="sy0">,</span> mkMigrate <span class="st0">&quot;migrateAll&quot;</span><span class="br0">&#93;</span></div></div>
+<p>to:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer"><span class="co1">-- On Model.hs</span><br />
+share <span class="br0">&#91;</span>mkPersist sqlSettings<span class="sy0">,</span> mkSave <span class="st0">&quot;entityDefs&quot;</span><span class="br0">&#93;</span><br />
+<br />
+<span class="co1">-- On Application.hs</span><br />
+mkMigrate <span class="st0">&quot;migrateAll&quot;</span> <span class="br0">&#40;</span>serverSessionDefs <span class="br0">&#40;</span>Proxy <span class="sy0">::</span> Proxy SessionMap<span class="br0">&#41;</span> <span class="sy0">++</span> entityDefs<span class="br0">&#41;</span></div></div>
+<p>Changing the default session backend is even easier.  Again, please read <a href="http://www.stackage.org/package/serversession-frontend-yesod" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.stackage.org/package/serversession-frontend-yesod', 'the docs']);"  title="serversession-frontend-yesod's page on Stackage">the docs</a>, but you&#8217;ll just add the following to your <code class="codecolorer haskell default"><span class="haskell"><span class="kw1">instance</span> Yesod App</span></code>:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer">&nbsp; &nbsp; makeSessionBackend <span class="sy0">=</span> simpleBackend <span class="kw3">id</span> <span class="sy0">.</span> SqlStorage <span class="sy0">.</span> appConnPool</div></div>
+<p>And you&#8217;re set!  Please take a look at the <a href="https://github.com/yesodweb/serversession/tree/master/examples/serversession-example-yesod-persistent" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/yesodweb/serversession/tree/master/examples/serversession-example-yesod-persistent', 'included example project']);"  title="Example project using serversession with Yesod and persistent on GitHub">included example project</a> to see how everything fits together.</p>
+<h2>Final words</h2>
+<p>One of clientsession&#8217;s biggest success was in being used by many different projects.  This is desirable both for reducing duplicate community efforts and for increasing the number of eyeballs over a security-related piece of code.  I&#8217;d like to make serversession equally successful in the same way, which is why it supports from the get-go both the major Haskell web frameworks that today use clientsession by default.</p>
+<p>I&#8217;d like to invite your criticism and feedback.  And your success stories as well! </p>
+<p>Happy New Year!</p>
+											</div><!-- .entry-content -->
+
+
+					<div class="entry-utility">
+						This entry was posted in <a href="http://blog.felipe.lessa.nom.br/?cat=3" title="View all posts in Haskell" rel="category">Haskell</a>. Bookmark the <a href="http://blog.felipe.lessa.nom.br/?p=153" title="Permalink to Announcing serversession" rel="bookmark">permalink</a>.											</div><!-- .entry-utility -->
+				</div><!-- #post-## -->
+
+				<div id="nav-below" class="navigation">
+					<div class="nav-previous"><a href="http://blog.felipe.lessa.nom.br/?p=146" rel="prev"><span class="meta-nav">&larr;</span> Using stack on NixOS</a></div>
+					<div class="nav-next"></div>
+				</div><!-- #nav-below -->
+
+				
+			<div id="comments">
+
+
+
+								<div id="respond" class="comment-respond">
+				<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="?p=153#respond" style="display:none;">Cancel reply</a></small></h3>
+									<form action="http://blog.felipe.lessa.nom.br/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+																			<p class="comment-notes">Your email address will not be published. Required fields are marked <span class="required">*</span></p>							<p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="text" value="" size="30" /></p>
+												<p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p>						<p class="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href=&quot;&quot; title=&quot;&quot;&gt; &lt;abbr title=&quot;&quot;&gt; &lt;acronym title=&quot;&quot;&gt; &lt;b&gt; &lt;blockquote cite=&quot;&quot;&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=&quot;&quot;&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=&quot;&quot;&gt; &lt;strike&gt; &lt;strong&gt; </code></p>						<p class="form-submit">
+							<input name="submit" type="submit" id="submit" value="Post Comment" />
+							<input type='hidden' name='comment_post_ID' value='153' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+						</p>
+						<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="57f2e20daa" /></p>		<span id="openid_comment">
+			<label>
+				<input type="checkbox" id="login_with_openid" name="login_with_openid" checked="checked" />
+				Authenticate this comment using <span class="openid_link">OpenID</span>.			</label>
+		</span>
+		<script type="text/javascript">jQuery(function(){ add_openid_to_comment_form('http://blog.felipe.lessa.nom.br/index.php', '68f5010493') })</script>
+					</form>
+							</div><!-- #respond -->
+			
+</div><!-- #comments -->
+
+
+			</div><!-- #content -->
+		</div><!-- #container -->
+
+
+		<div id="primary" class="widget-area" role="complementary">
+			<ul class="xoxo">
+
+
+			<li id="search" class="widget-container widget_search">
+				<form role="search" method="get" id="searchform" class="searchform" action="http://blog.felipe.lessa.nom.br/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form>			</li>
+
+			<li id="archives" class="widget-container">
+				<h3 class="widget-title">Archives</h3>
+				<ul>
+						<li><a href='http://blog.felipe.lessa.nom.br/?m=201601'>January 2016</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201509'>September 2015</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201505'>May 2015</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201312'>December 2013</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201211'>November 2012</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201209'>September 2012</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201201'>January 2012</a></li>
+				</ul>
+			</li>
+
+			<li id="meta" class="widget-container">
+				<h3 class="widget-title">Meta</h3>
+				<ul>
+										<li><a href="http://blog.felipe.lessa.nom.br/wp-login.php">Log in</a></li>
+									</ul>
+			</li>
+
+					</ul>
+		</div><!-- #primary .widget-area -->
+
+	</div><!-- #main -->
+
+	<div id="footer" role="contentinfo">
+		<div id="colophon">
+
+
+
+			<div id="site-info">
+				<a href="http://blog.felipe.lessa.nom.br/" title="Felipe Lessa" rel="home">
+					Felipe Lessa				</a>
+			</div><!-- #site-info -->
+
+			<div id="site-generator">
+								<a href="http://wordpress.org/" title="Semantic Personal Publishing Platform">Proudly powered by WordPress.</a>
+			</div><!-- #site-generator -->
+
+		</div><!-- #colophon -->
+	</div><!-- #footer -->
+
+</div><!-- #wrapper -->
+
+</body>
+</html>

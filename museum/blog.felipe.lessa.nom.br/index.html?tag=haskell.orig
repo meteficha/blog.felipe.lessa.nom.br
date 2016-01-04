@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<title>Haskell | Felipe Lessa</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="stylesheet" type="text/css" media="all" href="http://blog.felipe.lessa.nom.br/wp-content/themes/twentyten/style.css" />
+<link rel="pingback" href="http://blog.felipe.lessa.nom.br/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Feed" href="http://blog.felipe.lessa.nom.br/?feed=rss2" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Comments Feed" href="http://blog.felipe.lessa.nom.br/?feed=comments-rss2" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Haskell Tag Feed" href="http://blog.felipe.lessa.nom.br/?feed=rss2&#038;tag=haskell" />
+<link rel='stylesheet' id='openid-css'  href='http://blog.felipe.lessa.nom.br/wp-content/plugins/openid/f/openid.css?ver=519' type='text/css' media='all' />
+<link rel='stylesheet' id='codecolorer-css'  href='http://blog.felipe.lessa.nom.br/wp-content/plugins/codecolorer/codecolorer.css?ver=0.9.9' type='text/css' media='screen' />
+<!-- This site uses the Yoast Google Analytics plugin v5.1.1 - Universal disabled - https://yoast.com/wordpress/plugins/google-analytics/ -->
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-28368350-1']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+
+</script>
+<!-- / Yoast Google Analytics -->
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-includes/js/jquery/jquery.js?ver=1.10.2'></script>
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-content/plugins/openid/f/openid.js?ver=519'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.felipe.lessa.nom.br/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.felipe.lessa.nom.br/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 3.8.5" />
+<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #f1f1f1; }
+</style>
+</head>
+
+<body class="archive tag tag-haskell tag-3 custom-background">
+<div id="wrapper" class="hfeed">
+	<div id="header">
+		<div id="masthead">
+			<div id="branding" role="banner">
+								<div id="site-title">
+					<span>
+						<a href="http://blog.felipe.lessa.nom.br/" title="Felipe Lessa" rel="home">Felipe Lessa</a>
+					</span>
+				</div>
+				<div id="site-description">Some random blog posts</div>
+
+										<img src="http://blog.felipe.lessa.nom.br/wp-content/themes/twentyten/images/headers/cherryblossoms.jpg" width="940" height="198" alt="" />
+								</div><!-- #branding -->
+
+			<div id="access" role="navigation">
+			  				<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+								<div class="menu"><ul><li ><a href="http://blog.felipe.lessa.nom.br/">Home</a></li><li class="page_item page-item-56"><a href="http://blog.felipe.lessa.nom.br/?page_id=56">About</a></li></ul></div>
+			</div><!-- #access -->
+		</div><!-- #masthead -->
+	</div><!-- #header -->
+
+	<div id="main">
+
+		<div id="container">
+			<div id="content" role="main">
+
+				<h1 class="page-title">Tag Archives: <span>Haskell</span></h1>
+
+
+
+
+
+
+			<div id="post-68" class="post-68 post type-post status-publish format-standard hentry category-haskell tag-edsl tag-esqueleto tag-haskell tag-persistent tag-sql tag-type-safe tag-yesod">
+			<h2 class="entry-title"><a href="http://blog.felipe.lessa.nom.br/?p=68" rel="bookmark">Announcing esqueleto, a type-safe EDSL for SQL queries</a></h2>
+
+			<div class="entry-meta">
+				<span class="meta-prep meta-prep-author">Posted on</span> <a href="http://blog.felipe.lessa.nom.br/?p=68" title="19:51" rel="bookmark"><span class="entry-date">06/09/2012</span></a> <span class="meta-sep">by</span> <span class="author vcard"><a class="url fn n" href="http://blog.felipe.lessa.nom.br/?author=1" title="View all posts by Felipe Lessa">Felipe Lessa</a></span>			</div><!-- .entry-meta -->
+
+				<div class="entry-summary">
+				<p>I&#8217;m very pleased to announce a preview release of esqueleto, a bare bones, type-safe EDSL for SQL queries.</p>
+			</div><!-- .entry-summary -->
+	
+			<div class="entry-utility">
+									<span class="cat-links">
+						<span class="entry-utility-prep entry-utility-prep-cat-links">Posted in</span> <a href="http://blog.felipe.lessa.nom.br/?cat=3" title="View all posts in Haskell" rel="category">Haskell</a>					</span>
+					<span class="meta-sep">|</span>
+													<span class="tag-links">
+						<span class="entry-utility-prep entry-utility-prep-tag-links">Tagged</span> <a href="http://blog.felipe.lessa.nom.br/?tag=edsl" rel="tag">EDSL</a>, <a href="http://blog.felipe.lessa.nom.br/?tag=esqueleto" rel="tag">esqueleto</a>, <a href="http://blog.felipe.lessa.nom.br/?tag=haskell" rel="tag">Haskell</a>, <a href="http://blog.felipe.lessa.nom.br/?tag=persistent" rel="tag">persistent</a>, <a href="http://blog.felipe.lessa.nom.br/?tag=sql" rel="tag">SQL</a>, <a href="http://blog.felipe.lessa.nom.br/?tag=type-safe" rel="tag">type-safe</a>, <a href="http://blog.felipe.lessa.nom.br/?tag=yesod" rel="tag">Yesod</a>					</span>
+					<span class="meta-sep">|</span>
+								<span class="comments-link"><a href="http://blog.felipe.lessa.nom.br/?p=68#comments" title="Comment on Announcing esqueleto, a type-safe EDSL for SQL queries">7 Comments</a></span>
+							</div><!-- .entry-utility -->
+		</div><!-- #post-## -->
+
+		
+	
+
+
+			<div id="post-7" class="post-7 post type-post status-publish format-standard hentry category-uncategorized tag-haskell tag-yesod">
+			<h2 class="entry-title"><a href="http://blog.felipe.lessa.nom.br/?p=7" rel="bookmark">Abstracting permissions with Yesod</a></h2>
+
+			<div class="entry-meta">
+				<span class="meta-prep meta-prep-author">Posted on</span> <a href="http://blog.felipe.lessa.nom.br/?p=7" title="09:55" rel="bookmark"><span class="entry-date">16/01/2012</span></a> <span class="meta-sep">by</span> <span class="author vcard"><a class="url fn n" href="http://blog.felipe.lessa.nom.br/?author=1" title="View all posts by Felipe Lessa">Felipe Lessa</a></span>			</div><!-- .entry-meta -->
+
+				<div class="entry-summary">
+				<p>Yesod is a terrific framework for web applications in Haskell.  It has many, many built-in features.  One of them is that there&#8217;s nice support for authentication and authorization.  In this post I&#8217;m interested in talking about how you could write &hellip; <a href="http://blog.felipe.lessa.nom.br/?p=7" onclick="_gaq.push(['_trackEvent', 'outbound-article-int', 'http://blog.felipe.lessa.nom.br/?p=7', 'Continue reading &rarr;']);" >Continue reading <span class="meta-nav">&rarr;</span></a></p>
+			</div><!-- .entry-summary -->
+	
+			<div class="entry-utility">
+									<span class="cat-links">
+						<span class="entry-utility-prep entry-utility-prep-cat-links">Posted in</span> <a href="http://blog.felipe.lessa.nom.br/?cat=1" title="View all posts in Uncategorized" rel="category">Uncategorized</a>					</span>
+					<span class="meta-sep">|</span>
+													<span class="tag-links">
+						<span class="entry-utility-prep entry-utility-prep-tag-links">Tagged</span> <a href="http://blog.felipe.lessa.nom.br/?tag=haskell" rel="tag">Haskell</a>, <a href="http://blog.felipe.lessa.nom.br/?tag=yesod" rel="tag">Yesod</a>					</span>
+					<span class="meta-sep">|</span>
+								<span class="comments-link"><a href="http://blog.felipe.lessa.nom.br/?p=7#respond" title="Comment on Abstracting permissions with Yesod">Leave a comment</a></span>
+							</div><!-- .entry-utility -->
+		</div><!-- #post-## -->
+
+		
+	
+
+			</div><!-- #content -->
+		</div><!-- #container -->
+
+
+		<div id="primary" class="widget-area" role="complementary">
+			<ul class="xoxo">
+
+
+			<li id="search" class="widget-container widget_search">
+				<form role="search" method="get" id="searchform" class="searchform" action="http://blog.felipe.lessa.nom.br/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form>			</li>
+
+			<li id="archives" class="widget-container">
+				<h3 class="widget-title">Archives</h3>
+				<ul>
+						<li><a href='http://blog.felipe.lessa.nom.br/?m=201601'>January 2016</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201509'>September 2015</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201505'>May 2015</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201312'>December 2013</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201211'>November 2012</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201209'>September 2012</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201201'>January 2012</a></li>
+				</ul>
+			</li>
+
+			<li id="meta" class="widget-container">
+				<h3 class="widget-title">Meta</h3>
+				<ul>
+										<li><a href="http://blog.felipe.lessa.nom.br/wp-login.php">Log in</a></li>
+									</ul>
+			</li>
+
+					</ul>
+		</div><!-- #primary .widget-area -->
+
+	</div><!-- #main -->
+
+	<div id="footer" role="contentinfo">
+		<div id="colophon">
+
+
+
+			<div id="site-info">
+				<a href="http://blog.felipe.lessa.nom.br/" title="Felipe Lessa" rel="home">
+					Felipe Lessa				</a>
+			</div><!-- #site-info -->
+
+			<div id="site-generator">
+								<a href="http://wordpress.org/" title="Semantic Personal Publishing Platform">Proudly powered by WordPress.</a>
+			</div><!-- #site-generator -->
+
+		</div><!-- #colophon -->
+	</div><!-- #footer -->
+
+</div><!-- #wrapper -->
+
+</body>
+</html>

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Felipe Lessa &#187; Haskell</title>
+	<atom:link href="http://blog.felipe.lessa.nom.br?feed=rss2&#038;tag=haskell" rel="self" type="application/rss+xml" />
+	<link>http://blog.felipe.lessa.nom.br</link>
+	<description>Some random blog posts</description>
+	<lastBuildDate>Sat, 02 Jan 2016 18:10:42 +0000</lastBuildDate>
+	<language>en-US</language>
+		<sy:updatePeriod>hourly</sy:updatePeriod>
+		<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=3.8.5</generator>
+	<item>
+		<title>Announcing esqueleto, a type-safe EDSL for SQL queries</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=68</link>
+		<comments>http://blog.felipe.lessa.nom.br/?p=68#comments</comments>
+		<pubDate>Thu, 06 Sep 2012 22:51:09 +0000</pubDate>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+				<category><![CDATA[Haskell]]></category>
+		<category><![CDATA[EDSL]]></category>
+		<category><![CDATA[esqueleto]]></category>
+		<category><![CDATA[persistent]]></category>
+		<category><![CDATA[SQL]]></category>
+		<category><![CDATA[type-safe]]></category>
+		<category><![CDATA[Yesod]]></category>
+
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=68</guid>
+		<description><![CDATA[I&#8217;m very pleased to announce a preview release of esqueleto, a bare bones, type-safe EDSL for SQL queries. On the first part of this blog post I&#8217;ll talk about persistent and HaskellDB. You may jump right into where I talk &#8230; <a href="http://blog.felipe.lessa.nom.br/?p=68">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>I&#8217;m very pleased to announce a preview release of <a href="http://hackage.haskell.org/package/esqueleto">esqueleto</a>, a bare bones, type-safe EDSL for SQL queries.</p>
+<p><span id="more-68"></span></p>
+<p>On the first part of this blog post I&#8217;ll talk about persistent and HaskellDB.  You may jump <a href="#esqueleto">right into where I talk about esqueleto</a> if you want, though.</p>
+<h2>Background</h2>
+<p><a href="http://www.yesodweb.com/">Yesod</a> is very modular, and each of its components may be used separately.  You may also take libraries from other web frameworks.  However, it&#8217;s more convenient to use Yesod with its standard set of libraries.</p>
+<p>One of those libraries is <a href="http://hackage.haskell.org/package/persistent">persistent</a>. It fills the role of communicating with the database: serialization and deserialization of data types, insertions, updates, queries, schema migration, and so on.  It currently has both SQL and NoSQL backends, such as <a href="http://hackage.haskell.org/package/persistent-mysql">persistent-mysql</a>, <a href="http://hackage.haskell.org/package/persistent-postgresql">persistent-postgresql</a>, <a href="http://hackage.haskell.org/package/persistent-sqlite">persistent-sqlite</a> and <a href="http://hackage.haskell.org/package/persistent-mongoDB">persistent-mongoDB</a>.</p>
+<h2>Persistent&#8217;s weakness</h2>
+<p>Even though persistent&#8217;s use of Template Haskell has been criticized by some, it&#8217;s almost consensual that its largest drawback lies on its query API.  For example, if you want to see all of John&#8217;s posts, and you know that John&#8217;s key on the database is <code class="codecolorer haskell default"><span class="haskell">johnId</span></code>, then you may write:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">posts <span style="color: #339933; font-weight: bold;">&lt;-</span> selectList <span style="color: green;">&#91;</span>BlogPostAuthorId <span style="color: #339933; font-weight: bold;">==.</span> johnId<span style="color: green;">&#93;</span> <span style="color: green;">&#91;</span><span style="color: green;">&#93;</span></div></div>
+<p>Even though the meaning of those lists is somewhat cryptic, it&#8217;s not a bad line of code.  However, what if you didn&#8217;t know John&#8217;s key, just its e-mail (assuming that there is an uniqueness constraint on e-mails)?  Unfortunately, with persistent you&#8217;ll need either two queries:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">Entity johnId john <span style="color: #339933; font-weight: bold;">&lt;-</span> getBy <span style="color: green;">&#40;</span>UniqueEmail john'sEmail<span style="color: green;">&#41;</span><br />
+posts <span style="color: #339933; font-weight: bold;">&lt;-</span> selectList <span style="color: green;">&#91;</span>BlogPostAuthorId <span style="color: #339933; font-weight: bold;">==.</span> johnId<span style="color: green;">&#93;</span> <span style="color: green;">&#91;</span><span style="color: green;">&#93;</span></div></div>
+<p>Or you could do it in one query using the ad hoc <a href="http://hackage.haskell.org/packages/archive/persistent/1.0.1/doc/html/Database-Persist-Query-Join-Sql.html">Database.Persist.Query.Join.Sql</a> module:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">runJoin <span style="color: #339933; font-weight: bold;">$</span> SelectOneMany<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: green;">&#123;</span> somFilterOne &nbsp; &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#91;</span> PersonEmail <span style="color: #339933; font-weight: bold;">==.</span> john'sEmail <span style="color: green;">&#93;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">,</span> somOrderOne &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#91;</span><span style="color: green;">&#93;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">,</span> somFilterMany &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#91;</span><span style="color: green;">&#93;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">,</span> somOrderMany &nbsp; &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#91;</span><span style="color: green;">&#93;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">,</span> somFilterKeys &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#40;</span>BlogPostAuthorId <span style="color: #339933; font-weight: bold;">&lt;-.</span><span style="color: green;">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">,</span> somGetKey &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">=</span> blogPostAuthorId<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">,</span> somIncludeNoMatch <span style="color: #339933; font-weight: bold;">=</span> False<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: green;">&#125;</span></div></div>
+<p>Compare to the equivalent SQL query:</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="sql codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #993333; font-weight: bold;">SELECT</span> BlogPost<span style="color: #66cc66;">.*</span><br />
+<span style="color: #993333; font-weight: bold;">FROM</span> Person <span style="color: #993333; font-weight: bold;">INNER</span> <span style="color: #993333; font-weight: bold;">JOIN</span> BlogPost<br />
+<span style="color: #993333; font-weight: bold;">ON</span> Person<span style="color: #66cc66;">.</span>id <span style="color: #66cc66;">=</span> BlogPost<span style="color: #66cc66;">.</span>authorId<br />
+<span style="color: #993333; font-weight: bold;">WHERE</span> Person<span style="color: #66cc66;">.</span>email <span style="color: #66cc66;">=</span> ?</div></div>
+<p>But it gets even worse: you have support only for simple queries (using <code class="codecolorer haskell default"><span class="haskell">selectList</span></code>) and for simple one-to-many joins (using the ad hoc <code class="codecolorer haskell default"><span class="haskell">SelectOneMany</span></code>).  If you need anything else then you&#8217;re on your own.  For instance, there&#8217;s no support for doing many-to-many joins.</p>
+<p>For these reasons I&#8217;ve created the <a href="http://hackage.haskell.org/packages/archive/persistent/1.0.1/doc/html/Database-Persist-GenericSql.html#v:rawSql"><code class="codecolorer haskell default"><span class="haskell">rawSql</span></code></a> function <a href="https://github.com/yesodweb/persistent/pull/34">8 month ago</a>.  It was nice to be able to write raw SQL queries and still be able to use persistent to deserialize the results, but we still get all the drawbacks of using raw SQL queries:</p>
+<ul>
+<li>No compile-time checks whatsoever.  You could alleviate this problem using <a href="http://hackage.haskell.org/package/hssqlppp">hssqlppp</a>, for example, but you&#8217;d still not get compile-time checks for the types of your entities&#8212;there would still be plenty of ways of shooting yourself in the foot.</li>
+<li>No composability.  Suppose you have a query for people and their latest blog post.  You can&#8217;t reuse this query to reorder the results or filter them.</li>
+<li>Zero coolness factor.  C&#8217;mon, we&#8217;re not using Haskell for nothing! =)</li>
+</ul>
+<h2>HaskellDB: a solution?</h2>
+<p><a href="http://hackage.haskell.org/package/haskelldb">HaskellDB</a> is a type-safe EDSL that allows you to write SQL queries using relational algebra.  It&#8217;s as old as Parsec, having been introduced in 1999!</p>
+<p>Recently some people have been showing interest in using it with Yesod.  Last month <a href="https://groups.google.com/d/msg/yesodweb/nQjQuwydfI8/vB9mM47uZ0AJ">Mats Rauhala</a> wrote the following summary about his opinion at the time on Yesod&#8217;s mailing list:</p>
+<blockquote><p>
+1. Direct sql<br />
+  &#8211; No, or very little type safety<br />
+  &#8211; No, or very little compile time checks<br />
+  &#8211; Raw queries are ugly<br />
+  + Full power of SQL</p>
+<p>2. ORM<br />
+  + Type safety (ala persistent)<br />
+  &#8211; No control over queries<br />
+  &#8211; No proper join support(?, persistent)<br />
+  + Abstract<br />
+  +- High-level</p>
+<p>3. Relational algebra<br />
+  + Type safety (ala HaskellDB)<br />
+  + Great control over queries<br />
+  + Good control over abstractions<br />
+  + It&#8217;s algebra, therefore fits Haskell (tongue in cheek)<br />
+  &#8211; Forgotten (HaskellDB)
+</p></blockquote>
+<p>Although it&#8217;s rather painful to setup HaskellDB&#8217;s tables, I&#8217;ll won&#8217;t count that as a big drawback since some Template Haskell could certainly solve this shortcoming.  Its lack of migration capabilities is not a huge problem, too, since you may use persistent just for the migrations (although I&#8217;m not sure if anyone has ever put something like this into production).</p>
+<p>HaskellDB&#8217;s biggest drawback is being a relational algebra library.  &#8220;What?&#8221;, I hear you say.  I like relational algebra as much as the next functional programmer, but it comes with two drawbacks, one of them being a major one:</p>
+<ol>
+<li>Being something different than what we&#8217;re used to means that it takes some time to learn how to use it and get productive.  This is a minor drawback, but nevertheless it is a drawback.</li>
+<li>However, the biggest drawback is that <strong>it&#8217;s very hard to map into efficient SQL</strong>.  Back in 2008, Geoff Wilson <a href="http://pseudofish.com/blog/2008/05/18/haskelldb-performance/">wrote a blog post about HaskellDB&#8217;s performance</a>.  A simple <code class="codecolorer sql default"><span class="sql"><span style="color: #993333; font-weight: bold;">INNER</span> <span style="color: #993333; font-weight: bold;">JOIN</span></span></code> was taking between 40x and <strong>160x</strong> more time to execute when using HaskellDB and comparing against a handwritten SQL query.</li>
+</ol>
+<p>While I&#8217;m sure that some work has been done on HaskellDB&#8217;s optimizer since that blog post, Chris Done <a href="http://chrisdone.com/posts/2011-11-06-haskelldb-tutorial.html">found out last November</a> that it still isn&#8217;t very good:</p>
+<blockquote><p>
+Don’t expect good performance from HaskellDB if you’re using MySQL.
+</p></blockquote>
+<p>Even if I started using PostgreSQL, I wouldn&#8217;t want to rely on its optimizer when doing, say, a join between five tables on HaskellDB.  (If you didn&#8217;t already know, I&#8217;m <a href="http://hackage.haskell.org/package/persistent-mysql">persistent-mysql</a>&#8216;s author.)</p>
+<p>Please don&#8217;t get me wrong, HaskellDB is amazing!  But it won&#8217;t work for my production systems.</p>
+<p><a name="esqueleto"></a></p>
+<h2>Esqueleto rises</h2>
+<p>Last Sunday my co-worker was bitten by a nasty bug due to a raw SQL query.  He changed an entity&#8217;s field so that it would be optional.  After fixing all type errors, he found out that some parts of the application were not working, but no error messages were to be found anywhere.  Turns out an implicit join in a raw SQL query started dropping rows from the result since the value was <code class="codecolorer sql default"><span class="sql"><span style="color: #993333; font-weight: bold;">NULL</span></span></code>.  After we found the bug, he proceeded to show me <a href="http://squeryl.org/">Squeryl</a>. My initial thought after seeing the examples was: how could I write this in Haskell?</p>
+<p>Thus <a href="http://hackage.haskell.org/package/esqueleto">esqueleto</a> was born.  It&#8217;s a bare bones, type-safe EDSL for SQL-queries. Like HaskellDB, it has composable, type-checked queries.  Unlike HaskellDB, it&#8217;s not relational algebra, it&#8217;s SQL.  I was inspired by Squeryl but created esqueleto from scratch.</p>
+<p>It sits on top of persistent and requires no further setup: if you&#8217;re already using persistent then you already have everything it takes to use esqueleto.  Although I haven&#8217;t tested, yet, it should work on any SQL backend.</p>
+<p>Let&#8217;s remember the first query we did on the beginning of this post:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">selectList <span style="color: green;">&#91;</span>BlogPostAuthorId <span style="color: #339933; font-weight: bold;">==.</span> johnId<span style="color: green;">&#93;</span> <span style="color: green;">&#91;</span><span style="color: green;">&#93;</span></div></div>
+<p>You could write the same query in plain SQL as:</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="sql codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #993333; font-weight: bold;">SELECT</span> BlogPost<span style="color: #66cc66;">.*</span><br />
+<span style="color: #993333; font-weight: bold;">FROM</span> BlogPost<br />
+<span style="color: #993333; font-weight: bold;">WHERE</span> BlogPost<span style="color: #66cc66;">.</span>authorId <span style="color: #66cc66;">=</span> ?</div></div>
+<p>With esqueleto, you may say:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">select <span style="color: #339933; font-weight: bold;">$</span><br />
+from <span style="color: #339933; font-weight: bold;">$</span> \b <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+where<span style="color: #339933; font-weight: bold;">_</span> <span style="color: green;">&#40;</span>b <span style="color: #339933; font-weight: bold;">^.</span> BlogPostAuthorId <span style="color: #339933; font-weight: bold;">==.</span> val johnId<span style="color: green;">&#41;</span><br />
+<span style="font-weight: bold;">return</span> b</div></div>
+<p>Arguably more verbose than persistent&#8217;s <code class="codecolorer haskell default"><span class="haskell">selectList</span></code>, but extremely close to the handwriten SQL: just take the <code class="codecolorer haskell default"><span class="haskell"><span style="font-weight: bold;">return</span></span></code> and move it to the top!</p>
+<p>Better still, the SQL that esqueleto generates is:</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="sql codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #993333; font-weight: bold;">SELECT</span> BlogPost<span style="color: #66cc66;">.</span>id<span style="color: #66cc66;">,</span> BlogPost<span style="color: #66cc66;">.</span>title<br />
+<span style="color: #993333; font-weight: bold;">FROM</span> BlogPost<br />
+<span style="color: #993333; font-weight: bold;">WHERE</span> BlogPost<span style="color: #66cc66;">.</span>authorId <span style="color: #66cc66;">=</span> ?</div></div>
+<p>I&#8217;m not kidding!  The only difference from the handwritten query is the explicit list of columns, which is needed for correctness (the order your database returns the columns may not be what persistent expects).</p>
+<p>Remember the one-to-many join?  Here&#8217;s the esqueleto version:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">select <span style="color: #339933; font-weight: bold;">$</span><br />
+from <span style="color: #339933; font-weight: bold;">$</span> \<span style="color: green;">&#40;</span>p `InnerJoin` b<span style="color: green;">&#41;</span> <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+on <span style="color: green;">&#40;</span>p <span style="color: #339933; font-weight: bold;">^.</span> PersonId <span style="color: #339933; font-weight: bold;">==.</span> b <span style="color: #339933; font-weight: bold;">^.</span> BlogPostAuthorId<span style="color: green;">&#41;</span><br />
+where<span style="color: #339933; font-weight: bold;">_</span> <span style="color: green;">&#40;</span>p <span style="color: #339933; font-weight: bold;">^.</span> PersonEmail <span style="color: #339933; font-weight: bold;">==.</span> val john'sEmail<span style="color: green;">&#41;</span><br />
+<span style="font-weight: bold;">return</span> b</div></div>
+<p>The SQL esqueleto generates for this query is:</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="sql codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #993333; font-weight: bold;">SELECT</span> BlogPost<span style="color: #66cc66;">.</span>id<span style="color: #66cc66;">,</span> BlogPost<span style="color: #66cc66;">.</span>title<br />
+<span style="color: #993333; font-weight: bold;">FROM</span> Person <span style="color: #993333; font-weight: bold;">INNER</span> <span style="color: #993333; font-weight: bold;">JOIN</span> BlogPost<br />
+<span style="color: #993333; font-weight: bold;">ON</span> Person<span style="color: #66cc66;">.</span>id <span style="color: #66cc66;">=</span> BlogPost<span style="color: #66cc66;">.</span>authorId<br />
+<span style="color: #993333; font-weight: bold;">WHERE</span> Person<span style="color: #66cc66;">.</span>email <span style="color: #66cc66;">=</span> ?</div></div>
+<p>Let&#8217;s take <a href="http://pseudofish.com/blog/2008/05/18/haskelldb-performance/">Geoff Wilson&#8217;s post</a> as an example again.  Since this is a preview release of esqueleto, it does not have support for <code class="codecolorer sql default"><span class="sql"><span style="color: #993333; font-weight: bold;">IN</span></span></code> yet, so I&#8217;ll rewrite his code slightly. The HaskellDB code he wrote was:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">query db <span style="color: #339933; font-weight: bold;">$</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+&nbsp; s <span style="color: #339933; font-weight: bold;">&lt;-</span> table S<span style="color: #339933; font-weight: bold;">.</span>stock<br />
+&nbsp; e <span style="color: #339933; font-weight: bold;">&lt;-</span> table E<span style="color: #339933; font-weight: bold;">.</span>end<span style="color: #339933; font-weight: bold;">_</span>of<span style="color: #339933; font-weight: bold;">_</span>day<br />
+&nbsp; restrict <span style="color: green;">&#40;</span>s<span style="color: #339933; font-weight: bold;">!</span>S<span style="color: #339933; font-weight: bold;">.</span>stock<span style="color: #339933; font-weight: bold;">_</span>id <span style="color: #339933; font-weight: bold;">.==.</span> e<span style="color: #339933; font-weight: bold;">!</span>E<span style="color: #339933; font-weight: bold;">.</span>stock<span style="color: #339933; font-weight: bold;">_</span>id <span style="color: #339933; font-weight: bold;">.&amp;&amp;.</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; s<span style="color: #339933; font-weight: bold;">!</span>S<span style="color: #339933; font-weight: bold;">.</span>ticker <span style="color: #339933; font-weight: bold;">.==.</span> constant ticker <span style="color: #339933; font-weight: bold;">.&amp;&amp;.</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; e<span style="color: #339933; font-weight: bold;">!</span>E<span style="color: #339933; font-weight: bold;">.</span>trade<span style="color: #339933; font-weight: bold;">_</span>date <span style="color: #339933; font-weight: bold;">.==.</span> constant stockDate<span style="color: green;">&#41;</span><br />
+&nbsp; r <span style="color: #339933; font-weight: bold;">&lt;-</span> project <span style="color: green;">&#40;</span>closing<span style="color: #339933; font-weight: bold;">_</span>price <span style="color: #339933; font-weight: bold;">&lt;&lt;</span> e<span style="color: #339933; font-weight: bold;">!</span>E<span style="color: #339933; font-weight: bold;">.</span>closing<span style="color: #339933; font-weight: bold;">_</span>price #<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; trade<span style="color: #339933; font-weight: bold;">_</span>date &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">&lt;&lt;</span> e<span style="color: #339933; font-weight: bold;">!</span>E<span style="color: #339933; font-weight: bold;">.</span>trade<span style="color: #339933; font-weight: bold;">_</span>date<span style="color: green;">&#41;</span><br />
+&nbsp; <span style="font-weight: bold;">return</span> r</div></div>
+<p>The SQL that HaskellDB generated on 2008 was (adapted):</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="sql codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #993333; font-weight: bold;">SELECT</span> closing_price2 <span style="color: #993333; font-weight: bold;">AS</span> closing_price<span style="color: #66cc66;">,</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp;trade_date2 <span style="color: #993333; font-weight: bold;">AS</span> trade_date<br />
+<span style="color: #993333; font-weight: bold;">FROM</span> <span style="color: #66cc66;">&#40;</span><span style="color: #993333; font-weight: bold;">SELECT</span> stock_id <span style="color: #993333; font-weight: bold;">AS</span> stock_id2<span style="color: #66cc66;">,</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;trade_date <span style="color: #993333; font-weight: bold;">AS</span> trade_date2<span style="color: #66cc66;">,</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;closing_price <span style="color: #993333; font-weight: bold;">AS</span> closing_price2<br />
+&nbsp; &nbsp; &nbsp; <span style="color: #993333; font-weight: bold;">FROM</span> end_of_day <span style="color: #993333; font-weight: bold;">AS</span> T1<span style="color: #66cc66;">&#41;</span> <span style="color: #993333; font-weight: bold;">AS</span> T1<span style="color: #66cc66;">,</span><br />
+&nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">&#40;</span><span style="color: #993333; font-weight: bold;">SELECT</span> stock_id <span style="color: #993333; font-weight: bold;">AS</span> stock_id1<span style="color: #66cc66;">,</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;ticker <span style="color: #993333; font-weight: bold;">AS</span> ticker1<br />
+&nbsp; &nbsp; &nbsp; <span style="color: #993333; font-weight: bold;">FROM</span> stock <span style="color: #993333; font-weight: bold;">AS</span> T1<span style="color: #66cc66;">&#41;</span> <span style="color: #993333; font-weight: bold;">AS</span> T2<br />
+<span style="color: #993333; font-weight: bold;">WHERE</span> stock_id1 <span style="color: #66cc66;">=</span> stock_id2<br />
+&nbsp; <span style="color: #993333; font-weight: bold;">AND</span> ticker1 <span style="color: #66cc66;">=</span> <span style="color: #ff0000;">'FXJ'</span><br />
+&nbsp; <span style="color: #993333; font-weight: bold;">AND</span> trade_date2 <span style="color: #66cc66;">=</span> <span style="color: #ff0000;">'2008-02-14 00:00:00'</span>;</div></div>
+<p>His handwritten SQL was (adapted as well):</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="sql codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #993333; font-weight: bold;">SELECT</span> e<span style="color: #66cc66;">.</span>closing_price <span style="color: #993333; font-weight: bold;">AS</span> closing_price<span style="color: #66cc66;">,</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp;e<span style="color: #66cc66;">.</span>trade_date <span style="color: #993333; font-weight: bold;">AS</span> trade_date<br />
+<span style="color: #993333; font-weight: bold;">FROM</span><br />
+&nbsp; &nbsp; stock s<span style="color: #66cc66;">,</span> end_of_day e<br />
+<span style="color: #993333; font-weight: bold;">WHERE</span><br />
+&nbsp; &nbsp; s<span style="color: #66cc66;">.</span>stock_id <span style="color: #66cc66;">=</span> e<span style="color: #66cc66;">.</span>stock_id<br />
+&nbsp; &nbsp; <span style="color: #993333; font-weight: bold;">AND</span> s<span style="color: #66cc66;">.</span>ticker <span style="color: #66cc66;">=</span> <span style="color: #ff0000;">'FXJ'</span><br />
+&nbsp; &nbsp; <span style="color: #993333; font-weight: bold;">AND</span> e<span style="color: #66cc66;">.</span>trade_date <span style="color: #66cc66;">=</span> <span style="color: #ff0000;">'2008-02-14 00:00:00'</span>;</div></div>
+<p>The same query could be written using persistent and esqueleto as:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">select <span style="color: #339933; font-weight: bold;">$</span><br />
+from <span style="color: #339933; font-weight: bold;">$</span> \<span style="color: green;">&#40;</span>s<span style="color: #339933; font-weight: bold;">,</span> e<span style="color: green;">&#41;</span> <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+where<span style="color: #339933; font-weight: bold;">_</span> <span style="color: green;">&#40;</span>s <span style="color: #339933; font-weight: bold;">^.</span> StockId <span style="color: #339933; font-weight: bold;">==.</span> e <span style="color: #339933; font-weight: bold;">^.</span> EndOfDayStockId <span style="color: #339933; font-weight: bold;">&amp;&amp;.</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; s <span style="color: #339933; font-weight: bold;">^.</span> StockTicker <span style="color: #339933; font-weight: bold;">==.</span> val ticker <span style="color: #339933; font-weight: bold;">&amp;&amp;.</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; s <span style="color: #339933; font-weight: bold;">^.</span> EndOfDayTradeDate <span style="color: #339933; font-weight: bold;">==.</span> val stockDate<span style="color: green;">&#41;</span><br />
+<span style="font-weight: bold;">return</span> <span style="color: green;">&#40;</span>e <span style="color: #339933; font-weight: bold;">^.</span> EndOfDayClosingPrice<span style="color: #339933; font-weight: bold;">,</span> e <span style="color: #339933; font-weight: bold;">^.</span> EndOfDayTradeDate<span style="color: green;">&#41;</span></div></div>
+<p>The generated SQL would be:</p>
+<div class="codecolorer-container sql default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="sql codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #993333; font-weight: bold;">SELECT</span> end_of_day<span style="color: #66cc66;">.</span>closing_price<span style="color: #66cc66;">,</span> end_of_day<span style="color: #66cc66;">.</span>trade_date<br />
+<span style="color: #993333; font-weight: bold;">FROM</span> stock<span style="color: #66cc66;">,</span> end_of_day<br />
+<span style="color: #993333; font-weight: bold;">WHERE</span> stock<span style="color: #66cc66;">.</span>stock_id <span style="color: #66cc66;">=</span> end_of_day<span style="color: #66cc66;">.</span>stock_id <span style="color: #993333; font-weight: bold;">AND</span> <span style="color: #66cc66;">&#40;</span>stock<span style="color: #66cc66;">.</span>ticker <span style="color: #66cc66;">=</span> ? <span style="color: #993333; font-weight: bold;">AND</span> end_of_day<span style="color: #66cc66;">.</span>trade_date <span style="color: #66cc66;">=</span> ?<span style="color: #66cc66;">&#41;</span></div></div>
+<h2>Conclusion</h2>
+<p>The full power of raw SQL.  Type-checked queries, no type signatures required.  Complete control over the resulting SQL.  The robustness and performance of persistent.  And with only 800 source lines of code (+ 400 SLOC for the test suite).  What&#8217;s not to like about esqueleto? =D</p>
+<p>This is just a preview release.  I&#8217;m eager to hear what you have to say about it.  Send pull requests, open issues, comment about it <a href="http://www.reddit.com/r/haskell/comments/zh3h6/announcing_esqueleto_a_typesafe_edsl_for_sql/">on reddit</a> or send e-mails to Yesod&#8217;s mailing list.  Or, even better, give it a spin a let me know how it went!  Its <a href="http://hackage.haskell.org/packages/archive/esqueleto/latest/doc/html/Database-Esqueleto.html">Haddock documentation</a> should get you started.</p>
+<p>Thanks for reading this rather long blog post! =)</p>
+]]></content:encoded>
+			<wfw:commentRss>http://blog.felipe.lessa.nom.br/?feed=rss2&#038;p=68</wfw:commentRss>
+		<slash:comments>7</slash:comments>
+		</item>
+		<item>
+		<title>Abstracting permissions with Yesod</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=7</link>
+		<comments>http://blog.felipe.lessa.nom.br/?p=7#comments</comments>
+		<pubDate>Mon, 16 Jan 2012 11:55:04 +0000</pubDate>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[Haskell]]></category>
+		<category><![CDATA[Yesod]]></category>
+
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=7</guid>
+		<description><![CDATA[Yesod is a terrific framework for web applications in Haskell.  It has many, many built-in features.  One of them is that there&#8217;s nice support for authentication and authorization.  In this post I&#8217;m interested in talking about how you could write &#8230; <a href="http://blog.felipe.lessa.nom.br/?p=7">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p><a href="http://www.yesodweb.com/">Yesod</a> is a terrific framework for web applications in <a href="http://www.haskell.org/">Haskell</a>.  It has many, many built-in features.  One of them is that there&#8217;s nice support for authentication and authorization.  In this post I&#8217;m interested in talking about how you could write your authorization code such that it&#8217;s harder to make mistakes.</p>
+<p><span id="more-7"></span></p>
+<p>As shown on the <a href="http://www.yesodweb.com/blog/2012/01/blog-example">recent example</a> of creating a blog web app, Yesod&#8217;s approach to authorization lies within the <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> function:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #06c; font-weight: bold;">class</span> <span style="color: #339933; font-weight: bold;">...</span> <span style="color: #339933; font-weight: bold;">=&gt;</span> Yesod a <span style="color: #06c; font-weight: bold;">where</span><br />
+&nbsp; <span style="color: #339933; font-weight: bold;">...</span><br />
+&nbsp; isAuthorized <span style="color: #339933; font-weight: bold;">::</span> Route a <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: #cccc00; font-weight: bold;">Bool</span> <span style="color: #339933; font-weight: bold;">-&gt;</span> GHandler s a AuthResult<br />
+&nbsp; <span style="color: #339933; font-weight: bold;">...</span></div></div>
+<p>So <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> takes a <code class="codecolorer haskell default"><span class="haskell">Route a</span></code>, such as <code class="codecolorer haskell default"><span class="haskell">EntryR <span style="color: red;">10</span></span></code>, and a <code class="codecolorer haskell default"><span class="haskell"><span style="color: #cccc00; font-weight: bold;">Bool</span></span></code> telling if the request may do writes (e.g. POST or PUT) or not (e.g. GET or HEAD).  It must return an <code class="codecolorer haskell default"><span class="haskell">AuthResult</span></code> that decides if the user is <code class="codecolorer haskell default"><span class="haskell">Authorized</span></code>, <code class="codecolorer haskell default"><span class="haskell">Unauthorized</span></code> or if he needs to be authenticated first (<code class="codecolorer haskell default"><span class="haskell">AuthenticationRequired</span></code>).</p>
+<p>While keeping authorization code in a single place is nice, using <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> alone makes it very difficult to test your authorization code.  Using the <a href="http://www.yesodweb.com/blog/2012/01/blog-example">blog example</a> again, only the admin should be able to create blog posts.  So let&#8217;s take a look at the example code that decides if the user should be authorized to post to the blog:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">isAuthorized BlogR True <span style="color: #339933; font-weight: bold;">=</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+&nbsp; mauth <span style="color: #339933; font-weight: bold;">&lt;-</span> maybeAuth<br />
+&nbsp; <span style="color: #06c; font-weight: bold;">case</span> mauth <span style="color: #06c; font-weight: bold;">of</span><br />
+&nbsp; &nbsp; Nothing <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="font-weight: bold;">return</span> AuthenticationRequired<br />
+&nbsp; &nbsp; Just <span style="color: green;">&#40;</span><span style="color: #339933; font-weight: bold;">_,</span> user<span style="color: green;">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">|</span> isAdmin user <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="font-weight: bold;">return</span> Authorized<br />
+&nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">|</span> <span style="font-weight: bold;">otherwise</span> &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">-&gt;</span> unauthorizedI MsgNotAnAdmin</div></div>
+<p>There are many things going on here:</p>
+<ol>
+<li>There&#8217;s authentication code that checks if the current user is logged in via <code class="codecolorer haskell default"><span class="haskell">maybeAuth</span></code>.</li>
+<li>If the user is not logged in, it returns <code class="codecolorer haskell default"><span class="haskell">AuthenticationRequired</span></code>.</li>
+<li>Otherwise the user&#8217;s credentials are checked to see if he should be authorized or not.</li>
+</ol>
+<p>Step 1 is pretty standard housekeeping-style code.  Steps 2 and 3, however, are part of your business logic that decides who should be able to do what.  This means that you should be able to create (a) an unit test that asserts that the admin can create blog posts and (b) an unit test that asserts that a non-admin can&#8217;t create blog posts.  Unfortunately, with the code above writing unit tests is really difficult.  You not only need to artificially run the <code class="codecolorer haskell default"><span class="haskell">GHandler</span></code> monad (boring), but you need to fake the current session so that Step 1&#8242;s <code class="codecolorer haskell default"><span class="haskell">maybeAuth</span></code> gets the right information (difficult).  Even then, your <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> function is allowed to do anything, since it&#8217;s inside <code class="codecolorer haskell default"><span class="haskell">GHandler</span></code>.</p>
+<p>Enter permissions.  What we&#8217;re really trying to say in the code above is that (a) to create a blog post you need the &#8220;post&#8221; permission and (b) admin has &#8220;post&#8221; permission, non-admins don&#8217;t.  So let&#8217;s split these things!  First of all, we need a list of the permissions that we&#8217;ll need:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #06c; font-weight: bold;">data</span> Permission <span style="color: #339933; font-weight: bold;">=</span> Post <span style="color: #339933; font-weight: bold;">|</span> Comment</div></div>
+<p>You should read these constructors names with &#8220;permission to&#8221; before their names.  For example, the admin has permission to <code class="codecolorer haskell default"><span class="haskell">Post</span></code> and any logged user has permission to <code class="codecolorer haskell default"><span class="haskell">Comment</span></code>.</p>
+<p>Each request needs to decide which permissions it requires.  This is one of the most important pieces of your application&#8217;s security, since forgetting to ask for permissions could lead to catastrophic problems.  Instead of having this core piece of your app diluted in <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code>, we use a simple, clear, pure function called <code class="codecolorer haskell default"><span class="haskell">permissionsRequiredFor</span></code>.  The idea is to make <code class="codecolorer haskell default"><span class="haskell">permissionsRequiredFor</span></code> as simple as possible, such that with code review alone you could determine if you&#8217;re asking for the right permissions.</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">permissionsRequiredFor <span style="color: #339933; font-weight: bold;">::</span> Route Blog <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: #cccc00; font-weight: bold;">Bool</span> <span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: green;">&#91;</span>Permission<span style="color: green;">&#93;</span><br />
+permissionsRequiredFor BlogR &nbsp; &nbsp; &nbsp;True <span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#91;</span>Post<span style="color: green;">&#93;</span><br />
+permissionsRequiredFor <span style="color: green;">&#40;</span>EntryR <span style="color: #339933; font-weight: bold;">_</span><span style="color: green;">&#41;</span> True <span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#91;</span>Comment<span style="color: green;">&#93;</span><br />
+permissionsRequiredFor <span style="color: #339933; font-weight: bold;">_</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">_</span> &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">=</span> <span style="color: green;">&#91;</span><span style="color: green;">&#93;</span></div></div>
+<p>We also need to decide if the currently logged user has the necessary permissions or not.  This is the other important piece of your authorization puzzle, and a piece that we need to make easily testable.  In order to do so, we avoid <code class="codecolorer haskell default"><span class="haskell">maybeAuth</span></code> and take the user as an argument.</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">hasPermissionTo <span style="color: #339933; font-weight: bold;">::</span> <span style="color: green;">&#40;</span>UserId<span style="color: #339933; font-weight: bold;">,</span> User<span style="color: green;">&#41;</span> <br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">-&gt;</span> Permission<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">-&gt;</span> YesodDB sub Blog AuthResult<br />
+<span style="color: green;">&#40;</span><span style="color: #339933; font-weight: bold;">_,</span> user<span style="color: green;">&#41;</span> `hasPermissionTo` Post<br />
+&nbsp; <span style="color: #339933; font-weight: bold;">|</span> isAdmin user <span style="color: #339933; font-weight: bold;">=</span> <span style="font-weight: bold;">return</span> Authorized<br />
+&nbsp; <span style="color: #339933; font-weight: bold;">|</span> <span style="font-weight: bold;">otherwise</span> &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">=</span> lift <span style="color: #339933; font-weight: bold;">$</span> unauthorizedI MsgNotAnAdmin<br />
+<span style="color: #339933; font-weight: bold;">_</span> `hasPermissionTo` Comment <span style="color: #339933; font-weight: bold;">=</span> <span style="font-weight: bold;">return</span> Authorized<br />
+<br />
+<br />
+isAuthorizedTo <span style="color: #339933; font-weight: bold;">::</span> <span style="color: #cccc00; font-weight: bold;">Maybe</span> <span style="color: green;">&#40;</span>UserId<span style="color: #339933; font-weight: bold;">,</span> User<span style="color: green;">&#41;</span> <br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="color: green;">&#91;</span>Permission<span style="color: green;">&#93;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">-&gt;</span> YesodDB sub Blog AuthResult<br />
+<span style="color: #339933; font-weight: bold;">_</span> &nbsp; &nbsp; &nbsp; `isAuthorizedTo` <span style="color: green;">&#91;</span><span style="color: green;">&#93;</span> &nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">=</span> <span style="font-weight: bold;">return</span> Authorized<br />
+Nothing `isAuthorizedTo` <span style="color: green;">&#40;</span><span style="color: #339933; font-weight: bold;">_</span>:<span style="color: #339933; font-weight: bold;">_</span><span style="color: green;">&#41;</span> &nbsp;<span style="color: #339933; font-weight: bold;">=</span> <span style="font-weight: bold;">return</span> AuthenticationRequired<br />
+Just u &nbsp;`isAuthorizedTo` <span style="color: green;">&#40;</span>p:ps<span style="color: green;">&#41;</span> <span style="color: #339933; font-weight: bold;">=</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+&nbsp; r <span style="color: #339933; font-weight: bold;">&lt;-</span> u `hasPermissionTo` p<br />
+&nbsp; <span style="color: #06c; font-weight: bold;">case</span> r <span style="color: #06c; font-weight: bold;">of</span><br />
+&nbsp; &nbsp; Authorized <span style="color: #339933; font-weight: bold;">-&gt;</span> Just u `isAuthorizedTo` ps<br />
+&nbsp; &nbsp; <span style="color: #339933; font-weight: bold;">_</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #339933; font-weight: bold;">-&gt;</span> <span style="font-weight: bold;">return</span> r <span style="color: #5d478b; font-style: italic;">-- unauthorized</span></div></div>
+<p>The <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code> function decides if the user has a given permission or not.  While in this example <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code> could have been a pure function, in general you may need to access the database.  The <code class="codecolorer haskell default"><span class="haskell">isAuthorizedTo</span></code> function then (a) decides if the user needs to be authenticated and (b) checks all permissions required from the list using <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code>.</p>
+<p>Finally, we need to implement <code class="codecolorer haskell default"><span class="haskell">isAuthorized</span></code> gluing everything together:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">isAuthorized route isWrite <span style="color: #339933; font-weight: bold;">=</span> <span style="color: #06c; font-weight: bold;">do</span><br />
+&nbsp; mauth <span style="color: #339933; font-weight: bold;">&lt;-</span> maybeAuth<br />
+&nbsp; runDB <span style="color: #339933; font-weight: bold;">$</span> mauth `isAuthorizedTo` permissionsRequiredFor route isWrite</div></div>
+<p>Ok, so what did we gain by writing three more functions?</p>
+<ul>
+<li>You can easily review <code class="codecolorer haskell default"><span class="haskell">permissionsRequiredFor</span></code> to see if you didn&#8217;t leave a restricted route in the open.</li>
+<li>If you don&#8217;t use the wildcards on the last line of <code class="codecolorer haskell default"><span class="haskell">permissionsRequiredFor</span></code> and instead list all of your routes one by one, then you&#8217;d get a compiler warning and a runtime error every time you forgot to set the permissions of a newly added route.</li>
+<li>If you have many routes that needed the same permissions, you don&#8217;t need to recode the permission code everywhere.  You just need to code it once on <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code> and then ask for that permission on each of your routes. In my experience, the set of permissions (i.e. the <code class="codecolorer haskell default"><span class="haskell">Permission</span></code> data type) is a lot smaller than the set of possible routes.</li>
+<li>You may easily create unit tests for <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code>, increasing your confidence on your code&#8217;s correctness.</li>
+</ul>
+<p>I should also note that this approach is easily extendable.  For example, suppose that you wanted to restrict the visibility of some of your blog posts.  You could change the <code class="codecolorer haskell default"><span class="haskell">Permission</span></code> data type into:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="haskell codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #06c; font-weight: bold;">data</span> Permission <span style="color: #339933; font-weight: bold;">=</span> Post <span style="color: #339933; font-weight: bold;">|</span> CommentOn EntryId <span style="color: #339933; font-weight: bold;">|</span> View EntryId</div></div>
+<p>Now your <code class="codecolorer haskell default"><span class="haskell">hasPermissionTo</span></code> function is able to give a different answer depending on which blog post we&#8217;re talking about.</p>
+<p>So far this approach has been successfully used on my day job&#8217;s Yesod application.  It looks like a cousin of Yesod&#8217;s i18n support using data types.  </p>
+<p>Thanks for reading along this far!  Please use the comment section below to say what think of this approach. =)</p>
+]]></content:encoded>
+			<wfw:commentRss>http://blog.felipe.lessa.nom.br/?feed=rss2&#038;p=7</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+	</channel>
+</rss>

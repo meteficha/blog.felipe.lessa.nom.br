@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments for Felipe Lessa</title>
+	<atom:link href="http://blog.felipe.lessa.nom.br?feed=comments-rss2" rel="self" type="application/rss+xml" />
+	<link>http://blog.felipe.lessa.nom.br</link>
+	<description>Some random blog posts</description>
+	<lastBuildDate>Thu, 19 Nov 2015 11:51:35 +0000</lastBuildDate>
+		<sy:updatePeriod>hourly</sy:updatePeriod>
+		<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=3.8.5</generator>
+	<item>
+		<title>Comment on Announcing esqueleto, a type-safe EDSL for SQL queries by Felipe Lessa</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=68#comment-4367</link>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+		<pubDate>Thu, 19 Nov 2015 11:51:35 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=68#comment-4367</guid>
+		<description><![CDATA[I haven&#039;t myself, but many people use it in production.  Maybe someone else has!]]></description>
+		<content:encoded><![CDATA[<p>I haven&#8217;t myself, but many people use it in production.  Maybe someone else has!</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Comment on Announcing esqueleto, a type-safe EDSL for SQL queries by Juan</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=68#comment-4366</link>
+		<dc:creator><![CDATA[Juan]]></dc:creator>
+		<pubDate>Thu, 19 Nov 2015 11:48:00 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=68#comment-4366</guid>
+		<description><![CDATA[I am wondering if you have applied Esqueleto or HaskellDB to some sort of Big Graph or Graph processing on Big Data project.]]></description>
+		<content:encoded><![CDATA[<p>I am wondering if you have applied Esqueleto or HaskellDB to some sort of Big Graph or Graph processing on Big Data project.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Comment on Using stack on NixOS by Felipe Lessa</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=146#comment-4256</link>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+		<pubDate>Wed, 23 Sep 2015 12:28:26 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=146#comment-4256</guid>
+		<description><![CDATA[Hmmm... Well, I guess I prefer just having to be careful about Nix garbage collections (which don&#039;t have to be frequent anyway, thanks to nix-store --optimize) and not having to worry about when nix-build was safe to be used again.  But thanks a lot for your suggestion! :)]]></description>
+		<content:encoded><![CDATA[<p>Hmmm&#8230; Well, I guess I prefer just having to be careful about Nix garbage collections (which don&#8217;t have to be frequent anyway, thanks to nix-store &#8211;optimize) and not having to worry about when nix-build was safe to be used again.  But thanks a lot for your suggestion! <img src="http://blog.felipe.lessa.nom.br/wp-includes/images/smilies/icon_smile.gif" alt=":)" class="wp-smiley" /> </p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Comment on Using stack on NixOS by Luca Bruno</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=146#comment-4255</link>
+		<dc:creator><![CDATA[Luca Bruno]]></dc:creator>
+		<pubDate>Wed, 23 Sep 2015 08:34:54 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=146#comment-4255</guid>
+		<description><![CDATA[Yes, unless you don&#039;t run nix-build when the symlink is already existing.]]></description>
+		<content:encoded><![CDATA[<p>Yes, unless you don&#8217;t run nix-build when the symlink is already existing.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Comment on Using Caps Lock as Menu/Apps keys on Emacs by Felipe Lessa</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=137#comment-4252</link>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+		<pubDate>Tue, 22 Sep 2015 19:07:12 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=137#comment-4252</guid>
+		<description><![CDATA[That straightforward way is using xmodmap. Check here for some examples: https://wiki.archlinux.org/index.php/Xmodmap. However, xmodmap won’t play well with GNOME, as your settings will get periodically overwritten.]]></description>
+		<content:encoded><![CDATA[<p>That straightforward way is using xmodmap. Check here for some examples: <a href="https://wiki.archlinux.org/index.php/Xmodmap" rel="nofollow">https://wiki.archlinux.org/index.php/Xmodmap</a>. However, xmodmap won’t play well with GNOME, as your settings will get periodically overwritten.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Comment on Using stack on NixOS by Felipe Lessa</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=146#comment-4251</link>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+		<pubDate>Tue, 22 Sep 2015 19:06:41 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=146#comment-4251</guid>
+		<description><![CDATA[Luca, what would happen if the system’s zlib was upgraded and the nix-build command was executed again? Wouldn’t it return the new zlib’s path and overwrite the zlib symlink created by the previous –out-link?]]></description>
+		<content:encoded><![CDATA[<p>Luca, what would happen if the system’s zlib was upgraded and the nix-build command was executed again? Wouldn’t it return the new zlib’s path and overwrite the zlib symlink created by the previous –out-link?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Comment on Using stack on NixOS by Luca Bruno</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=146#comment-4249</link>
+		<dc:creator><![CDATA[Luca Bruno]]></dc:creator>
+		<pubDate>Tue, 22 Sep 2015 18:12:56 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=146#comment-4249</guid>
+		<description><![CDATA[Instead of --no-out-link you can --out-link zlib and --out-link postgresql, and they will not be garbage collected until you delete the symlinks.]]></description>
+		<content:encoded><![CDATA[<p>Instead of &#8211;no-out-link you can &#8211;out-link zlib and &#8211;out-link postgresql, and they will not be garbage collected until you delete the symlinks.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Comment on Using Caps Lock as Menu/Apps keys on Emacs by Andreas Hoenen</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=137#comment-4244</link>
+		<dc:creator><![CDATA[Andreas Hoenen]]></dc:creator>
+		<pubDate>Sun, 20 Sep 2015 09:27:50 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=137#comment-4244</guid>
+		<description><![CDATA[Hi Felipe,
+you mention a straightforward way of assigning the Hyper and Super keys to different modifiers (e.g. by moving one to Mod3), care to give the details?
+I have set CapsLock to Hyper like you tried, but the only way of putting it to Mod3 I know of is to patch file &quot;/usr/share/X11/xkb/symbols/capslock&quot;, which has the disadvantage that it is under OS control and thus will be reverted every time the OS (Debian) package gets upgraded:
+
+$ diff capslock~ capslock
+--- capslock~	2015-09-18 21:32:39.000000000 +0200
++++ capslock	2015-09-19 20:22:25.978356155 +0200
+@@ -48,7 +48,7 @@
+ hidden partial modifier_keys
+ xkb_symbols &quot;hyper&quot; {
+     key  { [ Hyper_L ] };
+-    modifier_map Mod4 {  };
++    modifier_map Mod3 {  };
+ };
+ 
+ hidden partial modifier_keys]]></description>
+		<content:encoded><![CDATA[<p>Hi Felipe,<br />
+you mention a straightforward way of assigning the Hyper and Super keys to different modifiers (e.g. by moving one to Mod3), care to give the details?<br />
+I have set CapsLock to Hyper like you tried, but the only way of putting it to Mod3 I know of is to patch file &#8220;/usr/share/X11/xkb/symbols/capslock&#8221;, which has the disadvantage that it is under OS control and thus will be reverted every time the OS (Debian) package gets upgraded:</p>
+<p>$ diff capslock~ capslock<br />
+&#8212; capslock~	2015-09-18 21:32:39.000000000 +0200<br />
++++ capslock	2015-09-19 20:22:25.978356155 +0200<br />
+@@ -48,7 +48,7 @@<br />
+ hidden partial modifier_keys<br />
+ xkb_symbols &#8220;hyper&#8221; {<br />
+     key  { [ Hyper_L ] };<br />
+-    modifier_map Mod4 {  };<br />
++    modifier_map Mod3 {  };<br />
+ };</p>
+<p> hidden partial modifier_keys</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Comment on Sensors detective by ThecaTTony</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=93#comment-4067</link>
+		<dc:creator><![CDATA[ThecaTTony]]></dc:creator>
+		<pubDate>Fri, 28 Nov 2014 10:24:31 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=93#comment-4067</guid>
+		<description><![CDATA[Thanks from Argentina!]]></description>
+		<content:encoded><![CDATA[<p>Thanks from Argentina!</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Comment on Sensors detective by Graeme</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=93#comment-2105</link>
+		<dc:creator><![CDATA[Graeme]]></dc:creator>
+		<pubDate>Sun, 17 Aug 2014 17:35:28 +0000</pubDate>
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=93#comment-2105</guid>
+		<description><![CDATA[Many thanks Felipe. I have an Asus M5A97 R 2.0 mobo, and have used your file as a basis, setting useful alarm limits.]]></description>
+		<content:encoded><![CDATA[<p>Many thanks Felipe. I have an Asus M5A97 R 2.0 mobo, and have used your file as a basis, setting useful alarm limits.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>

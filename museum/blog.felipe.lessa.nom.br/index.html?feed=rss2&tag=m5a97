@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Felipe Lessa &#187; m5a97</title>
+	<atom:link href="http://blog.felipe.lessa.nom.br?feed=rss2&#038;tag=m5a97" rel="self" type="application/rss+xml" />
+	<link>http://blog.felipe.lessa.nom.br</link>
+	<description>Some random blog posts</description>
+	<lastBuildDate>Sat, 02 Jan 2016 18:10:42 +0000</lastBuildDate>
+	<language>en-US</language>
+		<sy:updatePeriod>hourly</sy:updatePeriod>
+		<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=3.8.5</generator>
+	<item>
+		<title>Sensors detective</title>
+		<link>http://blog.felipe.lessa.nom.br/?p=93</link>
+		<comments>http://blog.felipe.lessa.nom.br/?p=93#comments</comments>
+		<pubDate>Sun, 08 Dec 2013 23:54:47 +0000</pubDate>
+		<dc:creator><![CDATA[Felipe Lessa]]></dc:creator>
+				<category><![CDATA[Hacking]]></category>
+		<category><![CDATA[asus]]></category>
+		<category><![CDATA[bios]]></category>
+		<category><![CDATA[linux]]></category>
+		<category><![CDATA[m5a97]]></category>
+		<category><![CDATA[sensors]]></category>
+
+		<guid isPermaLink="false">http://blog.felipe.lessa.nom.br/?p=93</guid>
+		<description><![CDATA[I have an Asus M5A97 PRO motherboard, which includes the common set of sensors. The lm-sensors free software correctly detects two chips, k10temp-pci-00c3 and it8721-isa-0290, corresponding to my Phenom II and my motherboard, respectively. However, by default the output of &#8230; <a href="http://blog.felipe.lessa.nom.br/?p=93">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>I have an Asus M5A97 PRO motherboard, which includes the common set of sensors.  The lm-sensors free software correctly detects two chips, <code class="codecolorer text default"><span class="text">k10temp-pci-00c3</span></code> and <code class="codecolorer text default"><span class="text">it8721-isa-0290</span></code>, corresponding to my Phenom II and my motherboard, respectively.  However, by default the output of sensors looks like:</p>
+<p><span id="more-93"></span></p>
+<div class="codecolorer-container python default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="python codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">k10temp-pci-00c3<br />
+Adapter: PCI adapter<br />
+temp1: &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">27.0</span>°C &nbsp;<span style="color: black;">&#40;</span>high <span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">70.0</span>°C<span style="color: black;">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: black;">&#40;</span>crit <span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">90.0</span>°C<span style="color: #66cc66;">,</span> hyst <span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">85.0</span>°C<span style="color: black;">&#41;</span><br />
+<br />
+it8721-isa-<span style="color: #ff4500;">0290</span><br />
+Adapter: ISA adapter<br />
+in0: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">2.82</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.62</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.62</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
+in1: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">2.81</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.06</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.34</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
+in2: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">1.30</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">1.66</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">1.12</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
++3.3V: &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">3.29</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">4.68</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.79</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
+in4: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">0.61</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.36</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.94</span> V<span style="color: black;">&#41;</span><br />
+in5: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">2.52</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.14</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">1.01</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
+in6: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">0.00</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">1.73</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.11</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
+3VSB: &nbsp; &nbsp; &nbsp; &nbsp; +<span style="color: #ff4500;">0.77</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.24</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">4.13</span> V<span style="color: black;">&#41;</span><br />
+Vbat: &nbsp; &nbsp; &nbsp; &nbsp; +<span style="color: #ff4500;">3.36</span> V &nbsp;<br />
+fan1: &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff4500;">1288</span> RPM &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;<span style="color: #ff4500;">105</span> RPM<span style="color: black;">&#41;</span><br />
+fan2: &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #ff4500;">1192</span> RPM &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp; <span style="color: #ff4500;">16</span> RPM<span style="color: black;">&#41;</span><br />
+fan3: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff4500;">0</span> RPM &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp; <span style="color: #ff4500;">10</span> RPM<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
+temp1: &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">37.0</span>°C &nbsp;<span style="color: black;">&#40;</span>low &nbsp;<span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">72.0</span>°C<span style="color: #66cc66;">,</span> high <span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">10.0</span>°C<span style="color: black;">&#41;</span> &nbsp;ALARM &nbsp;sensor <span style="color: #66cc66;">=</span> thermistor<br />
+temp2: &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">30.0</span>°C &nbsp;<span style="color: black;">&#40;</span>low &nbsp;<span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">15.0</span>°C<span style="color: #66cc66;">,</span> high <span style="color: #66cc66;">=</span> -<span style="color: #ff4500;">128.0</span>°C<span style="color: black;">&#41;</span> &nbsp;ALARM &nbsp;sensor <span style="color: #66cc66;">=</span> thermistor<br />
+temp3: &nbsp; &nbsp; &nbsp; -<span style="color: #ff4500;">128.0</span>°C &nbsp;<span style="color: black;">&#40;</span>low &nbsp;<span style="color: #66cc66;">=</span> -<span style="color: #ff4500;">55.0</span>°C<span style="color: #66cc66;">,</span> high <span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">49.0</span>°C<span style="color: black;">&#41;</span> &nbsp;sensor <span style="color: #66cc66;">=</span> disabled<br />
+intrusion0: &nbsp;OK</div></div>
+<p>Well, not exactly useful.  But it turns out that we can do better than that with a little work. The <a href="http://www.lm-sensors.org/wiki/VoltageLabelsAndScaling">lm-sensors wiki page about voltage labels and scaling</a> describes a simple method by which one may make sense of their motherboard&#8217;s sensors.</p>
+<p>My motherboard&#8217;s sensors chip model is IT8721F, which measures raw values ranging from 0 to 3.06V in steps of 12 mV (8 bits of precision).  In order to fit its range, voltage rails such as +5V get a scaling factor.  Our job is to figure out which is the scaling factor and which input of the sensor is measuring it.</p>
+<p>We start by collecting samples of the correct data.  I didn&#8217;t bother resetting my computer to look at my own BIOS, and instead just searched the web for screenshots of M5A97&#8242;s BIOS screen.  In the end I had collected the following samples:</p>
+<div class="codecolorer-container python default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="python codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">Temperature: <br />
+&nbsp; CPU: <span style="color: #ff4500;">33.0</span> <span style="color: #ff4500;">37.0</span> <span style="color: #ff4500;">39.0</span> <span style="color: #ff4500;">40.0</span> <span style="color: #ff4500;">42.0</span> <span style="color: #ff4500;">44.0</span><br />
+&nbsp; MB: &nbsp;<span style="color: #ff4500;">30.0</span> <span style="color: #ff4500;">31.0</span> <span style="color: #ff4500;">32.0</span> <span style="color: #ff4500;">37.0</span><br />
+<br />
+Voltage <span style="color: black;">&#40;</span>it8721<span style="color: #66cc66;">,</span> <span style="color: #ff4500;">0</span> to <span style="color: #ff4500;">3.06</span> V<span style="color: #66cc66;">,</span> <span style="color: #ff4500;">1</span> bit <span style="color: #66cc66;">=</span> <span style="color: #ff4500;">12</span> mV<span style="color: black;">&#41;</span>:<br />
+&nbsp; Vcore: &nbsp;<span style="color: #ff4500;">1.248</span> &nbsp;<span style="color: #ff4500;">1.308</span> &nbsp;<span style="color: #ff4500;">1.320</span> &nbsp;<span style="color: #ff4500;">1.332</span> &nbsp;<span style="color: #ff4500;">1.356</span> &nbsp;<span style="color: #ff4500;">1.380</span> &nbsp;<span style="color: #ff4500;">1.428</span> &nbsp;<span style="color: #ff4500;">1.440</span><br />
+&nbsp; +3.3V: &nbsp;<span style="color: #ff4500;">3.216</span> &nbsp;<span style="color: #ff4500;">3.264</span> &nbsp;<span style="color: #ff4500;">3.288</span> &nbsp;<span style="color: #ff4500;">3.312</span> &nbsp;<span style="color: #ff4500;">3.336</span> &nbsp;<span style="color: #ff4500;">3.360</span><br />
+<br />
+&nbsp; +5V: &nbsp; &nbsp;<span style="color: #ff4500;">4.885</span> &nbsp;<span style="color: #ff4500;">4.971</span> &nbsp;<span style="color: #ff4500;">4.992</span> &nbsp;<span style="color: #ff4500;">5.057</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;--- <span style="color: #ff4500;">86</span> --- <span style="color: #ff4500;">21</span> --- <span style="color: #ff4500;">65</span> ---<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">=</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #66cc66;">=</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff4500;">2</span>*<span style="color: #ff4500;">21</span> + <span style="color: #ff4500;">2</span>*<span style="color: #ff4500;">22</span> &nbsp; &nbsp; <span style="color: #ff4500;">21</span> + <span style="color: #ff4500;">2</span>*<span style="color: #ff4500;">22</span><br />
+<br />
+&nbsp; +12V: &nbsp;<span style="color: #ff4500;">11.685</span> <span style="color: #ff4500;">11.943</span> <span style="color: #ff4500;">11.994</span> <span style="color: #ff4500;">12.046</span> <span style="color: #ff4500;">12.097</span> <span style="color: #ff4500;">12.149</span> <span style="color: #ff4500;">12.200</span> <br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-- <span style="color: #ff4500;">258</span> -- <span style="color: #ff4500;">51</span> --- <span style="color: #ff4500;">52</span> --- <span style="color: #ff4500;">51</span> --- <span style="color: #ff4500;">52</span> --- <span style="color: #ff4500;">51</span> ----<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color: #66cc66;">=</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: #ff4500;">2</span>*<span style="color: #ff4500;">51</span> + <span style="color: #ff4500;">3</span>*<span style="color: #ff4500;">52</span></div></div>
+<p>The +3.3V sensor had already been correctly named by lm-sensors (in3).  The Vcore sensor (CPU) is quite easy since it&#8217;s not scaled (in2). +5V and +12V are the tricky ones.</p>
+<p>As you can see on the snippet above, I&#8217;ve sorted the samples I&#8217;ve collected and calculated the differences in mV between them.  Looking at the +12V samples first, we see a pattern of alternately adding 51 or 52 mV, thus we deduce that the measurements have steps of 51.5 mV between them.  This works out to a scaling factor of 51.5/12.  The +5V is analogous and we calculate a scaling factor of 21.5/12 for it.</p>
+<p>(Up to this point, something has been bothering me.  If we take a look at sample 12.200 V, for example, we&#8217;d expect it to be a multiple of 51.5 mV.  However, the closest multiple is 237 * 51.5 mV = 12.2055 V.  No matter how you round that number, you&#8217;ll never get 12.200 V.  I wonder if I calculated something wrong.)</p>
+<p>There remains the problem of correctly labeling the inputs.  Labelling the fan and temperature sensors is quite straightforward. On the other hand, labelling +5V and +12V correctly is quite tricky, since both in0 and in1 have raw values that look okay for both +5V and +12V.  At this point I&#8217;ve rebooted my machine and took note of my own data:</p>
+<p><img src="https://lh3.googleusercontent.com/-iIa3cTfSQ7Y/UqT-XZt5k3I/AAAAAAAALo0/uXrJ3uPwTcI/w1149-h862-no/IMG_20131208_211835.jpg" alt="M5A97 PRO BIOS screenshot showing sensor data." /></p>
+<p>Then I&#8217;ve booted into my Arch Linux and took the raw data from lm-sensors (pasted at the end of this post). Based on it, I guesstimated that in0 corresponds to +12V while in1 corresponds to +5V.  This leaves us with in4 to in6, which I chose to just ignore.</p>
+<p>And, finally, it seems that <a href="https://www.kernel.org/doc/Documentation/hwmon/k10temp">the temperature reported by the k10temp isn&#8217;t real temperature</a>, instead it&#8217;s a relative temperature.  It&#8217;s mostly meaningless since the motherboard correctly informs the CPU temperature.</p>
+<p>The end result is:</p>
+<div class="codecolorer-container python default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="python codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">$ sensors<br />
+k10temp-pci-00c3<br />
+Adapter: PCI adapter<br />
+CPU Temp <span style="color: black;">&#40;</span>rel<span style="color: black;">&#41;</span>: &nbsp;+<span style="color: #ff4500;">26.5</span>°C &nbsp;<span style="color: black;">&#40;</span>high <span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">70.0</span>°C<span style="color: black;">&#41;</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="color: black;">&#40;</span>crit <span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">90.0</span>°C<span style="color: #66cc66;">,</span> hyst <span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">85.0</span>°C<span style="color: black;">&#41;</span><br />
+<br />
+it8721-isa-<span style="color: #ff4500;">0290</span><br />
+Adapter: ISA adapter<br />
++12V: &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">12.10</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">2.68</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">2.68</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
++5V: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">5.03</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.11</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.60</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
+Vcore: &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">1.45</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">1.66</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">1.12</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
++3.3V: &nbsp; &nbsp; &nbsp; &nbsp;+<span style="color: #ff4500;">3.29</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">4.68</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.79</span> V<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
+3VSB: &nbsp; &nbsp; &nbsp; &nbsp; +<span style="color: #ff4500;">0.77</span> V &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">0.24</span> V<span style="color: #66cc66;">,</span> <span style="color: #008000;">max</span> <span style="color: #66cc66;">=</span> &nbsp;+<span style="color: #ff4500;">4.13</span> V<span style="color: black;">&#41;</span><br />
+Vbat: &nbsp; &nbsp; &nbsp; &nbsp; +<span style="color: #ff4500;">3.36</span> V &nbsp;<br />
+CPU Fan: &nbsp; &nbsp; <span style="color: #ff4500;">1290</span> RPM &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp;<span style="color: #ff4500;">105</span> RPM<span style="color: black;">&#41;</span><br />
+Chassis Fan: <span style="color: #ff4500;">1192</span> RPM &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp; <span style="color: #ff4500;">16</span> RPM<span style="color: black;">&#41;</span><br />
+Power Fan: &nbsp; &nbsp; &nbsp;<span style="color: #ff4500;">0</span> RPM &nbsp;<span style="color: black;">&#40;</span><span style="color: #008000;">min</span> <span style="color: #66cc66;">=</span> &nbsp; <span style="color: #ff4500;">10</span> RPM<span style="color: black;">&#41;</span> &nbsp;ALARM<br />
+CPU Temp: &nbsp; &nbsp; +<span style="color: #ff4500;">37.0</span>°C &nbsp;<span style="color: black;">&#40;</span>low &nbsp;<span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">72.0</span>°C<span style="color: #66cc66;">,</span> high <span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">10.0</span>°C<span style="color: black;">&#41;</span> &nbsp;ALARM &nbsp;sensor <span style="color: #66cc66;">=</span> thermistor<br />
+M/B Temp: &nbsp; &nbsp; +<span style="color: #ff4500;">30.0</span>°C &nbsp;<span style="color: black;">&#40;</span>low &nbsp;<span style="color: #66cc66;">=</span> +<span style="color: #ff4500;">15.0</span>°C<span style="color: #66cc66;">,</span> high <span style="color: #66cc66;">=</span> -<span style="color: #ff4500;">128.0</span>°C<span style="color: black;">&#41;</span> &nbsp;ALARM &nbsp;sensor <span style="color: #66cc66;">=</span> thermistor</div></div>
+<p>Much better!  If you have the same motherboard as mine and want to have this beauty, just drop this snippet in your <code class="codecolorer text default"><span class="text">/etc/sensors.conf</span></code>:</p>
+<div class="codecolorer-container bash default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="bash codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #666666; font-style: italic;"># Asus M5A97 PRO &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><br />
+chip <span style="color: #ff0000;">&quot;k10temp-pci-00c3&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label temp1 <span style="color: #ff0000;">&quot;CPU Temp (rel)&quot;</span><br />
+<br />
+chip <span style="color: #ff0000;">&quot;it8721-*&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label &nbsp;in0 <span style="color: #ff0000;">&quot;+12V&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label &nbsp;in1 <span style="color: #ff0000;">&quot;+5V&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label &nbsp;in2 <span style="color: #ff0000;">&quot;Vcore&quot;</span><br />
+&nbsp; &nbsp; &nbsp;ignore in4<br />
+&nbsp; &nbsp; &nbsp;ignore in5<br />
+&nbsp; &nbsp; &nbsp;ignore in6<br />
+<br />
+&nbsp; &nbsp; &nbsp;compute in0 &nbsp;<span style="color: #000000; font-weight: bold;">@</span> <span style="color: #000000; font-weight: bold;">*</span> <span style="color: #7a0874; font-weight: bold;">&#40;</span><span style="color: #000000;">515</span><span style="color: #000000; font-weight: bold;">/</span><span style="color: #000000;">120</span><span style="color: #7a0874; font-weight: bold;">&#41;</span>, <span style="color: #000000; font-weight: bold;">@</span> <span style="color: #000000; font-weight: bold;">/</span> <span style="color: #7a0874; font-weight: bold;">&#40;</span><span style="color: #000000;">515</span><span style="color: #000000; font-weight: bold;">/</span><span style="color: #000000;">120</span><span style="color: #7a0874; font-weight: bold;">&#41;</span><br />
+&nbsp; &nbsp; &nbsp;compute in1 &nbsp;<span style="color: #000000; font-weight: bold;">@</span> <span style="color: #000000; font-weight: bold;">*</span> <span style="color: #7a0874; font-weight: bold;">&#40;</span><span style="color: #000000;">215</span><span style="color: #000000; font-weight: bold;">/</span><span style="color: #000000;">120</span><span style="color: #7a0874; font-weight: bold;">&#41;</span>, <span style="color: #000000; font-weight: bold;">@</span> <span style="color: #000000; font-weight: bold;">/</span> <span style="color: #7a0874; font-weight: bold;">&#40;</span><span style="color: #000000;">215</span><span style="color: #000000; font-weight: bold;">/</span><span style="color: #000000;">120</span><span style="color: #7a0874; font-weight: bold;">&#41;</span><br />
+<br />
+&nbsp; &nbsp; &nbsp;ignore temp3<br />
+&nbsp; &nbsp; &nbsp;label temp1 <span style="color: #ff0000;">&quot;CPU Temp&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label temp2 <span style="color: #ff0000;">&quot;M/B Temp&quot;</span><br />
+<br />
+&nbsp; &nbsp; &nbsp;label fan1 <span style="color: #ff0000;">&quot;CPU Fan&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label fan2 <span style="color: #ff0000;">&quot;Chassis Fan&quot;</span><br />
+&nbsp; &nbsp; &nbsp;label fan3 <span style="color: #ff0000;">&quot;Power Fan&quot;</span><br />
+<br />
+&nbsp; &nbsp; &nbsp;ignore intrusion0</div></div>
+<p>I&#8217;ve posted the configuration snippet above to the lm-sensors mailing list as well, so hopefully it will make it to the <a href="http://www.lm-sensors.org/wiki/Configurations">lm-sensors configurations wiki page</a> :).</p>
+<hr />
+<p>The raw data after the BIOS screenshot:</p>
+<div class="codecolorer-container python default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;"><div class="python codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">k10temp-pci-00c3<br />
+Adapter: PCI adapter<br />
+temp1:<br />
+&nbsp; temp1_input: <span style="color: #ff4500;">30.125</span><br />
+&nbsp; temp1_max: <span style="color: #ff4500;">70.000</span><br />
+&nbsp; temp1_crit: <span style="color: #ff4500;">90.000</span><br />
+&nbsp; temp1_crit_hyst: <span style="color: #ff4500;">85.000</span><br />
+<br />
+it8721-isa-<span style="color: #ff4500;">0290</span><br />
+Adapter: ISA adapter<br />
+in0:<br />
+&nbsp; in0_input: <span style="color: #ff4500;">2.820</span><br />
+&nbsp; in0_min: <span style="color: #ff4500;">0.624</span><br />
+&nbsp; in0_max: <span style="color: #ff4500;">0.624</span><br />
+&nbsp; in0_alarm: <span style="color: #ff4500;">1.000</span><br />
+in1:<br />
+&nbsp; in1_input: <span style="color: #ff4500;">2.808</span><br />
+&nbsp; in1_min: <span style="color: #ff4500;">0.060</span><br />
+&nbsp; in1_max: <span style="color: #ff4500;">0.336</span><br />
+&nbsp; in1_alarm: <span style="color: #ff4500;">1.000</span><br />
+in2:<br />
+&nbsp; in2_input: <span style="color: #ff4500;">1.452</span><br />
+&nbsp; in2_min: <span style="color: #ff4500;">1.656</span><br />
+&nbsp; in2_max: <span style="color: #ff4500;">1.116</span><br />
+&nbsp; in2_alarm: <span style="color: #ff4500;">1.000</span><br />
++3.3V:<br />
+&nbsp; in3_input: <span style="color: #ff4500;">3.288</span><br />
+&nbsp; in3_min: <span style="color: #ff4500;">4.680</span><br />
+&nbsp; in3_max: <span style="color: #ff4500;">0.792</span><br />
+&nbsp; in3_alarm: <span style="color: #ff4500;">1.000</span><br />
+in4:<br />
+&nbsp; in4_input: <span style="color: #ff4500;">0.612</span><br />
+&nbsp; in4_min: <span style="color: #ff4500;">0.360</span><br />
+&nbsp; in4_max: <span style="color: #ff4500;">0.936</span><br />
+&nbsp; in4_alarm: <span style="color: #ff4500;">0.000</span><br />
+in5:<br />
+&nbsp; in5_input: <span style="color: #ff4500;">2.520</span><br />
+&nbsp; in5_min: <span style="color: #ff4500;">0.144</span><br />
+&nbsp; in5_max: <span style="color: #ff4500;">1.008</span><br />
+&nbsp; in5_alarm: <span style="color: #ff4500;">1.000</span><br />
+in6:<br />
+&nbsp; in6_input: <span style="color: #ff4500;">0.000</span><br />
+&nbsp; in6_min: <span style="color: #ff4500;">1.728</span><br />
+&nbsp; in6_max: <span style="color: #ff4500;">0.108</span><br />
+&nbsp; in6_alarm: <span style="color: #ff4500;">1.000</span><br />
+3VSB:<br />
+&nbsp; in7_input: <span style="color: #ff4500;">0.768</span><br />
+&nbsp; in7_min: <span style="color: #ff4500;">0.240</span><br />
+&nbsp; in7_max: <span style="color: #ff4500;">4.128</span><br />
+&nbsp; in7_alarm: <span style="color: #ff4500;">0.000</span><br />
+Vbat:<br />
+&nbsp; in8_input: <span style="color: #ff4500;">3.360</span><br />
+fan1:<br />
+&nbsp; fan1_input: <span style="color: #ff4500;">1454.000</span><br />
+&nbsp; fan1_min: <span style="color: #ff4500;">105.000</span><br />
+&nbsp; fan1_alarm: <span style="color: #ff4500;">0.000</span><br />
+fan2:<br />
+&nbsp; fan2_input: <span style="color: #ff4500;">1194.000</span><br />
+&nbsp; fan2_min: <span style="color: #ff4500;">16.000</span><br />
+&nbsp; fan2_alarm: <span style="color: #ff4500;">0.000</span><br />
+fan3:<br />
+&nbsp; fan3_input: <span style="color: #ff4500;">0.000</span><br />
+&nbsp; fan3_min: <span style="color: #ff4500;">10.000</span><br />
+&nbsp; fan3_alarm: <span style="color: #ff4500;">1.000</span><br />
+temp1:<br />
+&nbsp; temp1_input: <span style="color: #ff4500;">40.000</span><br />
+&nbsp; temp1_max: <span style="color: #ff4500;">10.000</span><br />
+&nbsp; temp1_min: <span style="color: #ff4500;">72.000</span><br />
+&nbsp; temp1_alarm: <span style="color: #ff4500;">1.000</span><br />
+&nbsp; temp1_type: <span style="color: #ff4500;">4.000</span><br />
+&nbsp; temp1_offset: <span style="color: #ff4500;">0.000</span><br />
+temp2:<br />
+&nbsp; temp2_input: <span style="color: #ff4500;">30.000</span><br />
+&nbsp; temp2_max: -<span style="color: #ff4500;">128.000</span><br />
+&nbsp; temp2_min: <span style="color: #ff4500;">15.000</span><br />
+&nbsp; temp2_alarm: <span style="color: #ff4500;">1.000</span><br />
+&nbsp; temp2_type: <span style="color: #ff4500;">4.000</span><br />
+&nbsp; temp2_offset: <span style="color: #ff4500;">0.000</span><br />
+temp3:<br />
+&nbsp; temp3_input: -<span style="color: #ff4500;">128.000</span><br />
+&nbsp; temp3_max: <span style="color: #ff4500;">49.000</span><br />
+&nbsp; temp3_min: -<span style="color: #ff4500;">55.000</span><br />
+&nbsp; temp3_alarm: <span style="color: #ff4500;">0.000</span><br />
+&nbsp; temp3_type: <span style="color: #ff4500;">0.000</span><br />
+&nbsp; temp3_offset: <span style="color: #ff4500;">0.000</span><br />
+intrusion0:<br />
+&nbsp; intrusion0_alarm: <span style="color: #ff4500;">0.000</span></div></div>
+]]></content:encoded>
+			<wfw:commentRss>http://blog.felipe.lessa.nom.br/?feed=rss2&#038;p=93</wfw:commentRss>
+		<slash:comments>3</slash:comments>
+		</item>
+	</channel>
+</rss>

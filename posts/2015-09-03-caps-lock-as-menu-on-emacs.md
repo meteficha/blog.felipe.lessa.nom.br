@@ -6,7 +6,7 @@ I'm an <a href="http://ergoemacs.github.io/">ergoemacs-mode</a> user, a mode tha
 
 However, the keyboard on my new notebook doesn't have a dedicated Menu key.  Instead, one needs to press Fn+Right Ctrl, which is of course extremely painful.
 
-<a class="picture" href="/images/2015-09-menu-key-full.jpg" title="Full size image"><img alt="Picture of menu key on my notebook" src="/images/2015-09-menu-key.jpg" /> Menu key hidden on the Right Ctrl.</a>
+<a class="picture" target="_blank" href="/images/2015-09-menu-key-full.jpg" title="Full size image"><img alt="Picture of menu key on my notebook" src="/images/2015-09-menu-key.jpg" /> Menu key hidden on the Right Ctrl.</a>
 
 I've found a workaround, though.  A very hackish workaround.
 

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<title>Esqueleto now supports IN and EXISTS | Felipe Lessa</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="stylesheet" type="text/css" media="all" href="http://blog.felipe.lessa.nom.br/wp-content/themes/twentyten/style.css" />
+<link rel="pingback" href="http://blog.felipe.lessa.nom.br/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Feed" href="http://blog.felipe.lessa.nom.br/?feed=rss2" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Comments Feed" href="http://blog.felipe.lessa.nom.br/?feed=comments-rss2" />
+<link rel="alternate" type="application/rss+xml" title="Felipe Lessa &raquo; Esqueleto now supports IN and EXISTS Comments Feed" href="http://blog.felipe.lessa.nom.br/?feed=rss2&#038;p=83" />
+<link rel='stylesheet' id='openid-css'  href='http://blog.felipe.lessa.nom.br/wp-content/plugins/openid/f/openid.css?ver=519' type='text/css' media='all' />
+<link rel='stylesheet' id='codecolorer-css'  href='http://blog.felipe.lessa.nom.br/wp-content/plugins/codecolorer/codecolorer.css?ver=0.9.9' type='text/css' media='screen' />
+<!-- This site uses the Yoast Google Analytics plugin v5.1.1 - Universal disabled - https://yoast.com/wordpress/plugins/google-analytics/ -->
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-28368350-1']);
+	_gaq.push(['_gat._forceSSL']);
+	_gaq.push(['_trackPageview']);
+
+	(function () {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+
+</script>
+<!-- / Yoast Google Analytics -->
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-includes/js/jquery/jquery.js?ver=1.10.2'></script>
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-content/plugins/openid/f/openid.js?ver=519'></script>
+<script type='text/javascript' src='http://blog.felipe.lessa.nom.br/wp-includes/js/comment-reply.min.js?ver=3.8.5'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.felipe.lessa.nom.br/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.felipe.lessa.nom.br/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Announcing esqueleto, a type-safe EDSL for SQL queries' href='http://blog.felipe.lessa.nom.br/?p=68' />
+<link rel='next' title='Sensors detective' href='http://blog.felipe.lessa.nom.br/?p=93' />
+<meta name="generator" content="WordPress 3.8.5" />
+<link rel='canonical' href='http://blog.felipe.lessa.nom.br/?p=83' />
+<link rel='shortlink' href='http://blog.felipe.lessa.nom.br/?p=83' />
+<meta name='robots' content='noindex,follow' />
+<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #f1f1f1; }
+</style>
+</head>
+
+<body class="single single-post postid-83 single-format-standard custom-background">
+<div id="wrapper" class="hfeed">
+	<div id="header">
+		<div id="masthead">
+			<div id="branding" role="banner">
+								<div id="site-title">
+					<span>
+						<a href="http://blog.felipe.lessa.nom.br/" title="Felipe Lessa" rel="home">Felipe Lessa</a>
+					</span>
+				</div>
+				<div id="site-description">Some random blog posts</div>
+
+										<img src="http://blog.felipe.lessa.nom.br/wp-content/themes/twentyten/images/headers/cherryblossoms.jpg" width="940" height="198" alt="" />
+								</div><!-- #branding -->
+
+			<div id="access" role="navigation">
+			  				<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+								<div class="menu"><ul><li ><a href="http://blog.felipe.lessa.nom.br/">Home</a></li><li class="page_item page-item-56"><a href="http://blog.felipe.lessa.nom.br/?page_id=56">About</a></li></ul></div>
+			</div><!-- #access -->
+		</div><!-- #masthead -->
+	</div><!-- #header -->
+
+	<div id="main">
+
+		<div id="container">
+			<div id="content" role="main">
+
+			
+
+				<div id="nav-above" class="navigation">
+					<div class="nav-previous"><a href="http://blog.felipe.lessa.nom.br/?p=68" rel="prev"><span class="meta-nav">&larr;</span> Announcing esqueleto, a type-safe EDSL for SQL queries</a></div>
+					<div class="nav-next"><a href="http://blog.felipe.lessa.nom.br/?p=93" rel="next">Sensors detective <span class="meta-nav">&rarr;</span></a></div>
+				</div><!-- #nav-above -->
+
+				<div id="post-83" class="post-83 post type-post status-publish format-standard hentry category-haskell">
+					<h1 class="entry-title">Esqueleto now supports IN and EXISTS</h1>
+
+					<div class="entry-meta">
+						<span class="meta-prep meta-prep-author">Posted on</span> <a href="http://blog.felipe.lessa.nom.br/?p=83" title="13:57" rel="bookmark"><span class="entry-date">29/11/2012</span></a> <span class="meta-sep">by</span> <span class="author vcard"><a class="url fn n" href="http://blog.felipe.lessa.nom.br/?author=1" title="View all posts by Felipe Lessa">Felipe Lessa</a></span>					</div><!-- .entry-meta -->
+
+					<div class="entry-content">
+						<p>Since version 0.2.9 that I&#8217;ve just released, <a href="http://hackage.haskell.org/package/esqueleto" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://hackage.haskell.org/package/esqueleto', 'esqueleto']);" >esqueleto</a> supports <code class="codecolorer sql default"><span class="sql"><span class="kw1">IN</span></span></code> and <code class="codecolorer sql default"><span class="sql"><span class="kw1">EXISTS</span></span></code> operators (and their negated counterparts).  For example:</p>
+<div class="codecolorer-container haskell default" style="overflow:auto;white-space:nowrap;"><div class="haskell codecolorer">select <span class="sy0">$</span><br />
+from <span class="sy0">$</span> \person <span class="sy0">-&gt;</span> <span class="kw1">do</span><br />
+where<span class="sy0">_</span> <span class="sy0">$</span> exists <span class="sy0">$</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;from <span class="sy0">$</span> \post <span class="sy0">-&gt;</span> <span class="kw1">do</span><br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;where<span class="sy0">_</span> <span class="br0">&#40;</span>post <span class="sy0">^.</span> BlogPostAuthorId <span class="sy0">==.</span> person <span class="sy0">^.</span> PersonId<span class="br0">&#41;</span><br />
+<span class="kw3">return</span> person</div></div>
+<p>Enjoy! =)</p>
+<p>PS: I&#8217;ll try to post more in the future, so keep tuned =).</p>
+											</div><!-- .entry-content -->
+
+
+					<div class="entry-utility">
+						This entry was posted in <a href="http://blog.felipe.lessa.nom.br/?cat=3" title="View all posts in Haskell" rel="category">Haskell</a>. Bookmark the <a href="http://blog.felipe.lessa.nom.br/?p=83" title="Permalink to Esqueleto now supports IN and EXISTS" rel="bookmark">permalink</a>.											</div><!-- .entry-utility -->
+				</div><!-- #post-## -->
+
+				<div id="nav-below" class="navigation">
+					<div class="nav-previous"><a href="http://blog.felipe.lessa.nom.br/?p=68" rel="prev"><span class="meta-nav">&larr;</span> Announcing esqueleto, a type-safe EDSL for SQL queries</a></div>
+					<div class="nav-next"><a href="http://blog.felipe.lessa.nom.br/?p=93" rel="next">Sensors detective <span class="meta-nav">&rarr;</span></a></div>
+				</div><!-- #nav-below -->
+
+				
+			<div id="comments">
+
+
+			<h3 id="comments-title">3 Responses to <em>Esqueleto now supports IN and EXISTS</em></h3>
+
+
+			<ol class="commentlist">
+					<li class="comment even thread-even depth-1" id="li-comment-272">
+		<div id="comment-272">
+			<div class="comment-author vcard">
+				<img alt='' src='http://0.gravatar.com/avatar/c6144f7f9344e81cc35ed21b2d29a87c?s=40&amp;d=identicon&amp;r=PG' class='avatar avatar-40 photo' height='40' width='40' />				<cite class="fn">Erik de Castro Lopo</cite> <span class="says">says:</span>			</div><!-- .comment-author .vcard -->
+			
+			<div class="comment-meta commentmetadata"><a href="http://blog.felipe.lessa.nom.br/?p=83#comment-272">
+				30/11/2012 at 23:02</a>			</div><!-- .comment-meta .commentmetadata -->
+
+			<div class="comment-body"><p>Isn&#8217;t this just the same as writing:</p>
+<div class="codecolorer-container text default" style="overflow:auto;white-space:nowrap;"><div class="text codecolorer">select $ from $ \(person, post) -&gt;<br />
+&nbsp; &nbsp; where_ (post ^. BlogPostAuthorId ==. person ^. PersonId)<br />
+&nbsp; &nbsp; return person</div></div>
+</div>
+
+			<div class="reply">
+				<a class='comment-reply-link' href='?p=83&#038;replytocom=272#respond' onclick='return addComment.moveForm("comment-272", "272", "respond", "83")'>Reply</a>			</div><!-- .reply -->
+		</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-273">
+		<div id="comment-273">
+			<div class="comment-author vcard">
+				<img alt='' src='http://0.gravatar.com/avatar/c6144f7f9344e81cc35ed21b2d29a87c?s=40&amp;d=identicon&amp;r=PG' class='avatar avatar-40 photo' height='40' width='40' />				<cite class="fn">Erik de Castro Lopo</cite> <span class="says">says:</span>			</div><!-- .comment-author .vcard -->
+			
+			<div class="comment-meta commentmetadata"><a href="http://blog.felipe.lessa.nom.br/?p=83#comment-273">
+				30/11/2012 at 23:03</a>			</div><!-- .comment-meta .commentmetadata -->
+
+			<div class="comment-body"><p>select $<br />
+from $ \(person, post) -&gt;<br />
+         where_ (post ^. BlogPostAuthorId ==. person ^. PersonId)<br />
+         return person</p>
+</div>
+
+			<div class="reply">
+				<a class='comment-reply-link' href='?p=83&#038;replytocom=273#respond' onclick='return addComment.moveForm("comment-273", "273", "respond", "83")'>Reply</a>			</div><!-- .reply -->
+		</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-277">
+		<div id="comment-277">
+			<div class="comment-author vcard">
+				<img alt='' src='http://1.gravatar.com/avatar/7ed4c86260f44586c938ccdd56ff6590?s=40&amp;d=identicon&amp;r=PG' class='avatar avatar-40 photo' height='40' width='40' />				<cite class="fn">Felipe Lessa</cite> <span class="says">says:</span>			</div><!-- .comment-author .vcard -->
+			
+			<div class="comment-meta commentmetadata"><a href="http://blog.felipe.lessa.nom.br/?p=83#comment-277">
+				05/12/2012 at 17:25</a>			</div><!-- .comment-meta .commentmetadata -->
+
+			<div class="comment-body"><p>Erik: I guess you can always simulate IN and EXISTS using joins, but the query may get uglier and/or more inefficient on your backend.</p>
+</div>
+
+			<div class="reply">
+				<a class='comment-reply-link' href='?p=83&#038;replytocom=277#respond' onclick='return addComment.moveForm("comment-277", "277", "respond", "83")'>Reply</a>			</div><!-- .reply -->
+		</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+			</ol>
+
+
+	
+
+								<div id="respond" class="comment-respond">
+				<h3 id="reply-title" class="comment-reply-title">Leave a Reply to <a href="#comment-277">Felipe Lessa</a> <small><a rel="nofollow" id="cancel-comment-reply-link" href="?p=83#respond">Cancel reply</a></small></h3>
+									<form action="http://blog.felipe.lessa.nom.br/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+																			<p class="comment-notes">Your email address will not be published. Required fields are marked <span class="required">*</span></p>							<p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="text" value="" size="30" /></p>
+												<p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p>						<p class="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href=&quot;&quot; title=&quot;&quot;&gt; &lt;abbr title=&quot;&quot;&gt; &lt;acronym title=&quot;&quot;&gt; &lt;b&gt; &lt;blockquote cite=&quot;&quot;&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=&quot;&quot;&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=&quot;&quot;&gt; &lt;strike&gt; &lt;strong&gt; </code></p>						<p class="form-submit">
+							<input name="submit" type="submit" id="submit" value="Post Comment" />
+							<input type='hidden' name='comment_post_ID' value='83' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='277' />
+						</p>
+						<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="e7bd4997f7" /></p>		<span id="openid_comment">
+			<label>
+				<input type="checkbox" id="login_with_openid" name="login_with_openid" checked="checked" />
+				Authenticate this comment using <span class="openid_link">OpenID</span>.			</label>
+		</span>
+		<script type="text/javascript">jQuery(function(){ add_openid_to_comment_form('http://blog.felipe.lessa.nom.br/index.php', '68f5010493') })</script>
+					</form>
+							</div><!-- #respond -->
+			
+</div><!-- #comments -->
+
+
+			</div><!-- #content -->
+		</div><!-- #container -->
+
+
+		<div id="primary" class="widget-area" role="complementary">
+			<ul class="xoxo">
+
+
+			<li id="search" class="widget-container widget_search">
+				<form role="search" method="get" id="searchform" class="searchform" action="http://blog.felipe.lessa.nom.br/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form>			</li>
+
+			<li id="archives" class="widget-container">
+				<h3 class="widget-title">Archives</h3>
+				<ul>
+						<li><a href='http://blog.felipe.lessa.nom.br/?m=201601'>January 2016</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201509'>September 2015</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201505'>May 2015</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201312'>December 2013</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201211'>November 2012</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201209'>September 2012</a></li>
+	<li><a href='http://blog.felipe.lessa.nom.br/?m=201201'>January 2012</a></li>
+				</ul>
+			</li>
+
+			<li id="meta" class="widget-container">
+				<h3 class="widget-title">Meta</h3>
+				<ul>
+										<li><a href="http://blog.felipe.lessa.nom.br/wp-login.php">Log in</a></li>
+									</ul>
+			</li>
+
+					</ul>
+		</div><!-- #primary .widget-area -->
+
+	</div><!-- #main -->
+
+	<div id="footer" role="contentinfo">
+		<div id="colophon">
+
+
+
+			<div id="site-info">
+				<a href="http://blog.felipe.lessa.nom.br/" title="Felipe Lessa" rel="home">
+					Felipe Lessa				</a>
+			</div><!-- #site-info -->
+
+			<div id="site-generator">
+								<a href="http://wordpress.org/" title="Semantic Personal Publishing Platform">Proudly powered by WordPress.</a>
+			</div><!-- #site-generator -->
+
+		</div><!-- #colophon -->
+	</div><!-- #footer -->
+
+</div><!-- #wrapper -->
+
+</body>
+</html>

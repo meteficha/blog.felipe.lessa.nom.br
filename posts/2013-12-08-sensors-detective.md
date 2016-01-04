@@ -96,7 +96,7 @@ hand, labelling +5V and +12V correctly is quite tricky, since both in0
 and in1 have raw values that look okay for both +5V and +12V.  At this
 point I've rebooted my machine and took note of my own data:
 
-<a class="picture" href="/images/2013-12-bios-full.jpg" title="Full size image"><img src="/images/2013-12-bios.jpg" alt="Picture of my BIOS"> M5A97 PRO BIOS screenshot showing sensor data.</a>
+<a class="picture" target="_blank" href="/images/2013-12-bios-full.jpg" title="Full size image"><img src="/images/2013-12-bios.jpg" alt="Picture of my BIOS"> M5A97 PRO BIOS screenshot showing sensor data.</a>
 
 Then I've booted into my Arch Linux and took the raw data from
 lm-sensors (pasted at the end of this post). Based on it, I
