@@ -35,7 +35,7 @@ workings.  But at the end of the day, I'm not looking forward to
 having to manage a WordPress installation in the future.
 
 
-## 2009-2011/2016: My main web page for a long time <a class="button museum-live-button" target="_blank" href="/museum/www.felipe.lessa.nom.br/" title="Live version of old www.felipe.lessa.nom.br">see it live</a>
+## 2009-2011/2015: My main web page for a long time <a class="button museum-live-button" target="_blank" href="/museum/www.felipe.lessa.nom.br/" title="Live version of old www.felipe.lessa.nom.br">see it live</a>
 
 In December 1st, 2009, I went to Google Sites and created what would
 become my main web page for the next 6 years.  Even though I kept it
