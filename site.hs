@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-import Data.List (isPrefixOf)
+import Data.List (isInfixOf, isPrefixOf)
 import Data.Monoid ((<>))
 import Hakyll
 
@@ -17,11 +17,12 @@ main = hakyll $ do
     route   idRoute
     compile compressCssCompiler
 
-  match (fromList ["about.md", "contact.md", "museum.md"]) $ do
+  match (fromList ["about.md", "museum.md"]) $ do
     route   $ setExtension "html"
     compile $ pandocCompiler
       >>= loadAndApplyTemplate "templates/default.html" defaultContext
       >>= relativizeUrls
+      >>= removeHtmlExt
 
   match "posts/*" $ do
     route $ setExtension "html"
@@ -30,6 +31,7 @@ main = hakyll $ do
       >>= loadAndApplyTemplate "templates/post.html"  postCtx
       >>= loadAndApplyTemplate "templates/default.html" postCtx
       >>= relativizeUrls
+      >>= removeHtmlExt
 
   create ["archive.html"] $ do
     route idRoute
@@ -44,6 +46,7 @@ main = hakyll $ do
         >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
         >>= loadAndApplyTemplate "templates/default.html" archiveCtx
         >>= relativizeUrls
+        >>= removeHtmlExt
 
   match "index.html" $ do
     route idRoute
@@ -58,6 +61,7 @@ main = hakyll $ do
         >>= applyAsTemplate indexCtx
         >>= loadAndApplyTemplate "templates/default.html" indexCtx
         >>= relativizeUrls
+        >>= removeHtmlExt
 
   match "templates/*" $
     compile templateCompiler
@@ -80,6 +84,24 @@ postCtx =
     makeTeaser = demoteHeaders . takeUntilMore
     takeUntilMore xss@(x:xs) = if "<!--more-->" `isPrefixOf` xss then "" else x : takeUntilMore xs
     takeUntilMore ""         = "" :: String
+
+
+----------------------------------------------------------------------
+
+
+-- | Replace url of the form foo/bar.html by foo/bar.  Based on
+-- <https://biosphere.cc/software-engineering/beautify-hakyll-post-urls-removing-extension-timestamp/>.
+removeHtmlExt :: Item String -> Compiler (Item String)
+removeHtmlExt item = return $ fmap (withUrls removeIfLocal) item
+    where
+        removeIfLocal :: String -> String
+        removeIfLocal url =
+          case splitAt (length url - 5) url of
+            (url', ".html") | isLocal url -> url'
+            _                             -> url
+
+        isLocal :: String -> Bool
+        isLocal uri = not (isInfixOf "://" uri)
 
 
 ----------------------------------------------------------------------
