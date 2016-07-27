@@ -7,9 +7,9 @@ I've already had many pages on the internet.  This is where I'm
 keeping the ones I didn't lose over time:
 
 
-## 2012-2015: The blog before this one <a class="button museum-live-button" target="_blank" href="/museum/blog.felipe.lessa.nom.br/" title="Live version of old blog.felipe.lessa.nom.br">see it live</a>
+## 2012-2016: The blog before this one <a class="button museum-live-button" target="_blank" href="/museum/blog.felipe.lessa.nom.br/" title="Live version of old blog.felipe.lessa.nom.br">see it live</a>
 
-Commissioned on January 2012, discharged on January 2016, the blog
+Commissioned on January 2012, discharged on July 2016, the blog
 before this was based on WordPress.  It was managed through Ubuntu's
 .deb packages on a machine on AWS called `banana`.
 
