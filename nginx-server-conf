@@ -1,0 +1,24 @@
+server {
+  listen 80;      ## listen for ipv4
+  listen [::]:80; ## listen for ipv6
+
+  server_name meteficha.com;
+
+  access_log /var/log/nginx/meteficha-com.access.log;
+
+  location / {
+    root /var/www/meteficha.com/;
+    index index.html;
+    if ($request_uri ~ ^/(.*)\.html$) {
+       return 302 /$1;
+    }
+    try_files $uri $uri.html $uri/ =404;
+  }
+}
+
+server {
+  listen 80;
+  listen [::]:80;
+  server_name www.meteficha.com;
+  return 301 $scheme://meteficha.com$request_uri;
+}
