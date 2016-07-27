@@ -100,5 +100,5 @@ feedConf =
     , feedDescription = "Some random blog posts"
     , feedAuthorName  = "Felipe Almeida Lessa"
     , feedAuthorEmail = "felipe.lessa@gmail.com"
-    , feedRoot        = "http://blog.felipe.lessa.nom.br"
+    , feedRoot        = "http://meteficha.com"
     }

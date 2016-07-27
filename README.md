@@ -1,7 +1,7 @@
 # Felipe Lessa's blog
 
 This is the source code of my blog at
-[blog.felipe.lessa.nom.br](http://blog.felipe.lessa.nom.br).  I used
+[meteficha.com](http://meteficha.com).  I used
 to use Wordpress, but decided to change into a website written with
 Hakyll with my own CSS.
 
