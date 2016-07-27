@@ -5,7 +5,9 @@ This is the source code of my blog at
 to use Wordpress, but decided to change into a website written with
 Hakyll with my own CSS.
 
-As of now, the rewrite is still ongoing and this site isn't live yet.
+~~As of now, the rewrite is still ongoing and this site isn't live yet.~~
+
+Launched on July 27th, 2016! :)
 
 ## License
 
