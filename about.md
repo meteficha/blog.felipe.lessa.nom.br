@@ -2,7 +2,7 @@
 title: About
 ---
 
-I'm Felipe Lessa, a software developer from Brazil.  Nice to meet you!
+I'm Felipe Lessa, a Brazilian software engineer currently based in London.  Nice to meet you!
 If you'd like to contact me, send me an email at
 [felipe.lessa@gmail.com](mailto:felipe.lessa@gmail.com).
 
